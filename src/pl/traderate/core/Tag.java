@@ -22,8 +22,8 @@ package pl.traderate.core;
 
 import java.util.ArrayList;
 
-abstract class Position {
+class Tag {
 
-	private ArrayList<Trade> trades;
+	private ArrayList<JournalEntry> entries;
 
 }

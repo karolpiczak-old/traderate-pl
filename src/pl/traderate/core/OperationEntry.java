@@ -20,18 +20,5 @@
 
 package pl.traderate.core;
 
-import java.math.BigDecimal;
-
-/**
- *
- */
-abstract class Transaction extends JournalEntry {
-
-	String ticker;
-
-	BigDecimal quantity;
-
-	BigDecimal price;
-
-	BigDecimal commission;
+abstract class OperationEntry extends JournalEntry {
 }

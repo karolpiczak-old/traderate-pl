@@ -20,5 +20,13 @@
 
 package pl.traderate.core;
 
-abstract class Operation extends JournalEntry {
+import java.util.ArrayList;
+
+/**
+ *
+ */
+abstract class Holding {
+
+	private ArrayList<Position> positions;
+
 }

@@ -20,5 +20,5 @@
 
 package pl.traderate.core;
 
-abstract class CashOperation extends Operation {
+class CashWithdrawalEntry extends CashOperationEntry {
 }

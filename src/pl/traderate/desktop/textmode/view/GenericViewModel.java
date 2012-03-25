@@ -18,12 +18,11 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.desktop.textmode.view;
 
-import java.util.ArrayList;
+public abstract class GenericViewModel {
 
-abstract class Position {
+	protected GenericViewModel() {
 
-	private ArrayList<Trade> trades;
-
+	}
 }

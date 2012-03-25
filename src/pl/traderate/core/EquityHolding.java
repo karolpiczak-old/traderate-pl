@@ -18,15 +18,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.desktop;
+package pl.traderate.core;
 
-import pl.traderate.core.TradeRate;
-
-
-public class Main {
-
-	public static void main(String[] args) {
-		TradeRate tr = TradeRate.getInstance();
-		tr.test();
-	}
+class EquityHolding extends Holding {
 }

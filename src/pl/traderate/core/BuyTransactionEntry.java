@@ -20,10 +20,9 @@
 
 package pl.traderate.core;
 
-import java.util.ArrayList;
-
-abstract class Position {
-
-	private ArrayList<Trade> trades;
-
+/**
+ *
+ */
+abstract class BuyTransactionEntry extends TransactionEntry {
+	
 }

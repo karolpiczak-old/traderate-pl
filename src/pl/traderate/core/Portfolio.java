@@ -20,6 +20,8 @@
 
 package pl.traderate.core;
 
+import java.util.ArrayList;
+
 /**
  *
  */
@@ -27,7 +29,7 @@ class Portfolio {
 
 	private String name;
 
-	private JournalEntry[] entries;
+	private ArrayList<JournalEntry> entries;
 
 	/**
 	 * Reference to the parent portfolio.
@@ -39,23 +41,23 @@ class Portfolio {
 
 	private Portfolio[] children;
 
-	private Position[] positions;
+	private Holding[] holdings;
 
-	public Portfolio(String name) {
+	Portfolio(String name) {
 		this(name, null);
 	}
 	
-	public Portfolio(String name, Portfolio parent) {
+	Portfolio(String name, Portfolio parent) {
 		setName(name);
 
 		this.parent = parent;
 	}
 
-	public String getName() {
+	String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	void setName(String name) {
 		this.name = name;
 	}
 

@@ -20,5 +20,5 @@
 
 package pl.traderate.core;
 
-class BuyEquityTransaction extends BuyTransaction {
+class DerivativeHolding extends Holding {
 }

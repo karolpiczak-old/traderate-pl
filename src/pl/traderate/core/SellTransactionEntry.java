@@ -20,5 +20,9 @@
 
 package pl.traderate.core;
 
-class CashPosition extends Position {
+/**
+ *
+ */
+abstract class SellTransactionEntry extends TransactionEntry {
+
 }

@@ -18,7 +18,21 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.desktop.textmode.view;
 
-class SellEquityTransaction extends SellTransaction {
+public class HomeView extends GenericView {
+
+	HomeViewModel viewModel;
+	
+	public HomeView(HomeViewModel viewModel) {
+		super(viewModel);
+		
+		this.viewModel = (HomeViewModel) super.viewModel;
+	}
+
+	@Override
+	public void show() {
+		System.out.println("Welcome!");
+		System.out.println("This is TradeRate version " + viewModel.getVersion());
+	}
 }

@@ -20,9 +20,6 @@
 
 package pl.traderate.core;
 
-/**
- *
- */
-abstract class SellTransaction extends Transaction {
+class DerivativeTrade extends Trade {
 
 }

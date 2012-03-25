@@ -18,7 +18,15 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.desktop.textmode.view;
 
-class CashWithdrawal extends CashOperation {
+public abstract class GenericView {
+
+	GenericViewModel viewModel;
+
+	protected GenericView(GenericViewModel viewModel) {
+		this.viewModel = viewModel;
+	}
+
+	public abstract void show();
 }

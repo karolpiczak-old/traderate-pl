@@ -65,19 +65,10 @@ public final class TradeRate {
 		saveJournal();
 		journal = null;
 	}
-
-	public Journal getJournal() {
-		return journal;
-	}
-
-	public void test() {
-		createJournal("Dziennik testowy", "Jan Kowalski");
-		
-		journal.addAccount(new Account("Rachunek maklerski #1"));
-		journal.addAccount(new Account("Rachunek instrumentów pochodnych"));
-		journal.addAccount(new Account("Rachunek maklerski #2"));
-		journal.addPortfolio(new Portfolio("Portfel testowy #1", journal.getPortfolios().get(0)));
-//		journal.addEntry();
-//		journal.addEntry();
+	
+	public void addAccount(String name) {
+		if (journal != null) {
+			journal.addAccount(new Account(name));
+		}
 	}
 }

@@ -20,5 +20,18 @@
 
 package pl.traderate.core;
 
-class CashDeposit extends CashOperation {
+import java.math.BigDecimal;
+
+/**
+ *
+ */
+abstract class TransactionEntry extends JournalEntry {
+
+	String ticker;
+
+	BigDecimal quantity;
+
+	BigDecimal price;
+
+	BigDecimal commission;
 }

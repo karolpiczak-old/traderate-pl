@@ -21,4 +21,5 @@
 package pl.traderate.core;
 
 class FixedIncomePosition extends Position {
+
 }

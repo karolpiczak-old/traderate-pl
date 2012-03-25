@@ -18,12 +18,32 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.desktop.textmode;
 
-import java.util.ArrayList;
+import pl.traderate.core.TradeRate;
+import pl.traderate.desktop.textmode.presenter.HomePresenter;
 
-abstract class Position {
+public final class Router {
 
-	private ArrayList<Trade> trades;
+	private final static Router instance = new Router();
+	
+	private TradeRate model;
 
+	/**
+	 * Restricted constructor.
+	 *
+	 * Prevents direct instantiation.
+	 */
+	private Router() {
+		model = TradeRate.getInstance();
+	}
+
+	public static Router getInstance() {
+		return instance;
+	}
+
+	public void showHome() {
+		HomePresenter presenter = new HomePresenter(model);
+		presenter.show();
+	}
 }

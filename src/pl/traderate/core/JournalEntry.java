@@ -20,6 +20,7 @@
 
 package pl.traderate.core;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -35,5 +36,7 @@ abstract class JournalEntry {
 
 	private Account account;
 
-	private Portfolio[] portfolios;
+	private Portfolio portfolio;
+
+	private ArrayList<Tag> tags;
 }

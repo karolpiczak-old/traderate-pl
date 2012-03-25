@@ -18,12 +18,11 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.desktop.textmode;
 
-import java.util.ArrayList;
+public class Main {
 
-abstract class Position {
-
-	private ArrayList<Trade> trades;
-
+	public static void main(String[] args) {
+		Router.getInstance().showHome();
+	}
 }

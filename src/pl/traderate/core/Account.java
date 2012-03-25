@@ -20,6 +20,8 @@
 
 package pl.traderate.core;
 
+import java.util.ArrayList;
+
 /**
  *
  */
@@ -27,19 +29,19 @@ class Account {
 
 	private String name;
 
-	private JournalEntry[] entries;
+	private ArrayList<JournalEntry> entries;
 
-	private Position[] positions;
+	private ArrayList<Holding> holdings;
 
-	public Account(String name) {
+	Account(String name) {
 		setName(name);
 	}
 
-	public String getName() {
+	String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	void setName(String name) {
 		this.name = name;
 	}
 }

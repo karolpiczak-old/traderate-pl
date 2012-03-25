@@ -18,12 +18,21 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.desktop.textmode.view;
 
-import java.util.ArrayList;
+public class HomeViewModel extends GenericViewModel {
 
-abstract class Position {
+	private String version;
 
-	private ArrayList<Trade> trades;
+	public HomeViewModel() {
+		super();
+	}
 
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
 }
