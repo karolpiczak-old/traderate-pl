@@ -18,19 +18,36 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.desktop.event;
+package pl.traderate.desktop.view;
 
-import pl.traderate.desktop.presenter.*;
+import pl.traderate.desktop.presenter.MainPresenter;
 
-import java.util.EventObject;
+public class MainViewModel extends GenericViewModel {
 
-public class GenericViewEvent extends EventObject {
-
-	public GenericViewEvent(Object source) {
-		super(source);
-	}
+	protected MainView view;
 	
-	public void handle(GenericPresenter presenter) {}
+	private String version;
 
-	public void handle(MainPresenter presenter) {}
+	public MainViewModel(MainPresenter presenter) {
+		super(presenter);
+
+		view = new MainView(this, presenter);
+		addObserver(view);
+
+		// Make sure that both views reference the same object
+		super.view = view;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+		notifyChange();
+	}
+
+	public String getApplicationTitle() {
+		return "TradeRate " + getVersion();
+	}
 }

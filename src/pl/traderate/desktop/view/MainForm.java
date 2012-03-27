@@ -23,33 +23,57 @@ package pl.traderate.desktop.view;
 import javax.swing.*;
 import java.awt.*;
 
-public class HomeForm extends GenericForm {
+public class MainForm extends GenericForm {
 
-	HomeView view;
+	MainView view;
 	
 	JFrame frame;
 
-	JPanel panel;
+	JPanel root;
 
-	JLabel applicationName;
+	private JPanel statusbar;
 
-	JButton buttonOK;
+	private JPanel toolbar;
 
-	HomeForm(GenericView view) {
+	private JPanel mainPanel;
+
+	private JPanel navigationPanel;
+
+	private JProgressBar progressBar;
+
+	private JList tagList;
+
+	private JTree navigationTree;
+
+	private JTabbedPane tabs;
+
+	private JPanel sidebar;
+
+	private JLabel topNavigationLabel;
+
+	MainForm(GenericView view) {
 		super(view);
-		this.view = (HomeView) super.view;
+		this.view = (MainView) super.view;
 
-		frame = new JFrame("Home");
+		frame = new JFrame("Main");
 		frame.setMinimumSize(new Dimension(300, 300));
-		frame.setContentPane(panel);
+		frame.setContentPane(root);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 
-		buttonOK.addActionListener(this.view.new OnButtonOKClicked());
+	//	buttonOK.addActionListener(this.view.new OnButtonOKClicked());
 	}
 
 	void show() {
 		frame.setVisible(true);
+
 	}
 
+	private void createUIComponents() {
+		statusbar = new JPanel();
+		statusbar.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIManager.getDefaults().getColor("mid")));
+		
+		tabs = new JTabbedPane();
+		tabs.addTab("Podsumowanie", new SummaryForm().root);
+	}
 }

@@ -20,35 +20,35 @@
 
 package pl.traderate.desktop.view;
 
-import pl.traderate.desktop.presenter.HomePresenter;
+import pl.traderate.desktop.presenter.MainPresenter;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static pl.traderate.desktop.presenter.HomePresenter.Events;
+import static pl.traderate.desktop.presenter.MainPresenter.Events;
 
-public class HomeView extends GenericView {
+public class MainView extends GenericView {
 
-	private HomeViewModel viewModel;
+	private MainViewModel viewModel;
 
 	/**
 	 * Typecasted reference to the main form.
 	 *
 	 * Hides <tt>form</tt> from superclass for convenience only.
 	 */
-	private HomeForm form;
+	private MainForm form;
 
-	HomeView(HomeViewModel viewModel, HomePresenter presenter) {
+	MainView(MainViewModel viewModel, MainPresenter presenter) {
 		super(viewModel, presenter);
-		this.viewModel = (HomeViewModel) super.viewModel;
+		this.viewModel = (MainViewModel) super.viewModel;
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				form = new HomeForm(HomeView.this);
+				form = new MainForm(MainView.this);
 
 				// Make sure that both forms reference the same object
-				HomeView.super.form = form;
+				MainView.super.form = form;
 			}
 		});
 	}
@@ -59,7 +59,7 @@ public class HomeView extends GenericView {
 	protected void syncViewModel() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				form.applicationName.setText(viewModel.getApplicationTitle());
+				//form.applicationName.setText(viewModel.getApplicationTitle());
 			}
 		});
 	}

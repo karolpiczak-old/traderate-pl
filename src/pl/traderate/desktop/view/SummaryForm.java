@@ -20,34 +20,17 @@
 
 package pl.traderate.desktop.view;
 
-import pl.traderate.desktop.presenter.HomePresenter;
+import javax.swing.*;
 
-public class HomeViewModel extends GenericViewModel {
+public class SummaryForm {
 
-	protected HomeView view;
-	
-	private String version;
+	JPanel root;
 
-	public HomeViewModel(HomePresenter presenter) {
-		super(presenter);
+	JTable table1;
 
-		view = new HomeView(this, presenter);
-		addObserver(view);
+	JTable table2;
 
-		// Make sure that both views reference the same object
-		super.view = view;
-	}
+	public SummaryForm() {
 
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
-		notifyChange();
-	}
-
-	public String getApplicationTitle() {
-		return "TradeRate " + getVersion();
 	}
 }

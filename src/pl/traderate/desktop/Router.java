@@ -21,7 +21,7 @@
 package pl.traderate.desktop;
 
 import pl.traderate.core.TradeRate;
-import pl.traderate.desktop.presenter.HomePresenter;
+import pl.traderate.desktop.presenter.MainPresenter;
 
 public final class Router {
 
@@ -43,7 +43,7 @@ public final class Router {
 	}
 
 	public void goHome() {
-		HomePresenter presenter = new HomePresenter(model);
+		MainPresenter presenter = new MainPresenter(model);
 		presenter.show();
 		model.createJournal("Dziennik", "Jan Kowalski");
 		model.addAccount("Test");

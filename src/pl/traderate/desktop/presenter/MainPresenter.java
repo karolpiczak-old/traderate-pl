@@ -23,21 +23,21 @@ package pl.traderate.desktop.presenter;
 import pl.traderate.core.TradeRate;
 import pl.traderate.core.event.*;
 import pl.traderate.desktop.event.GenericViewEvent;
-import pl.traderate.desktop.view.HomeViewModel;
+import pl.traderate.desktop.view.MainViewModel;
 
 import javax.swing.*;
 import java.util.Date;
 
-public class HomePresenter extends GenericPresenter {
+public class MainPresenter extends GenericPresenter {
 
-	protected HomeViewModel viewModel;
+	protected MainViewModel viewModel;
 
 	protected HomeModelEventHandler modelEventHandler;
 
-	public HomePresenter(TradeRate model) {
+	public MainPresenter(TradeRate model) {
 		super(model);
 
-		viewModel = new HomeViewModel(this);
+		viewModel = new MainViewModel(this);
 		updateViewModel();
 
 		modelEventHandler = new HomeModelEventHandler();
@@ -90,7 +90,7 @@ public class HomePresenter extends GenericPresenter {
 				super(source);
 			}
 
-			public void handle(HomePresenter presenter) {
+			public void handle(MainPresenter presenter) {
 				presenter.viewModel.setVersion(new Date().toString());
 
 				new SwingWorker<String, Object>() {
