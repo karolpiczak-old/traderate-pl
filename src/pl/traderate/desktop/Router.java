@@ -18,49 +18,34 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.desktop;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import pl.traderate.core.TradeRate;
+import pl.traderate.desktop.presenter.HomePresenter;
 
-/**
- *
- */
-class Portfolio implements Serializable {
+public final class Router {
 
-	private String name;
-
-	private ArrayList<JournalEntry> entries;
+	private final static Router instance = new Router();
+	
+	private TradeRate model;
 
 	/**
-	 * Reference to the parent portfolio.
+	 * Restricted constructor.
 	 *
-	 * <tt>null</tt> if portfolio has no ancestors. Should be the case only for the
-	 * single unique global portfolio.
+	 * Prevents direct instantiation.
 	 */
-	private Portfolio parent;
-
-	private Portfolio[] children;
-
-	private Holding[] holdings;
-
-	Portfolio(String name) {
-		this(name, null);
-	}
-	
-	Portfolio(String name, Portfolio parent) {
-		setName(name);
-
-		this.parent = parent;
+	private Router() {
+		model = TradeRate.getInstance();
 	}
 
-	String getName() {
-		return name;
+	public static Router getInstance() {
+		return instance;
 	}
 
-	void setName(String name) {
-		this.name = name;
+	public void goHome() {
+		HomePresenter presenter = new HomePresenter(model);
+		presenter.show();
+		model.createJournal("Dziennik", "Jan Kowalski");
+		model.addAccount("Test");
 	}
-
-
 }

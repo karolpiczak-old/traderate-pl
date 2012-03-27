@@ -18,49 +18,15 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.desktop.view;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+public abstract class GenericForm {
 
-/**
- *
- */
-class Portfolio implements Serializable {
-
-	private String name;
-
-	private ArrayList<JournalEntry> entries;
-
-	/**
-	 * Reference to the parent portfolio.
-	 *
-	 * <tt>null</tt> if portfolio has no ancestors. Should be the case only for the
-	 * single unique global portfolio.
-	 */
-	private Portfolio parent;
-
-	private Portfolio[] children;
-
-	private Holding[] holdings;
-
-	Portfolio(String name) {
-		this(name, null);
-	}
+	protected GenericView view;
 	
-	Portfolio(String name, Portfolio parent) {
-		setName(name);
-
-		this.parent = parent;
+	GenericForm(GenericView view) {
+		this.view = view;
 	}
 
-	String getName() {
-		return name;
-	}
-
-	void setName(String name) {
-		this.name = name;
-	}
-
-
+	abstract void show();
 }

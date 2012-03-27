@@ -18,28 +18,15 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.desktop.textmode.presenter;
+package pl.traderate.core.event;
 
-import pl.traderate.core.TradeRate;
-import pl.traderate.desktop.textmode.view.HomeView;
-import pl.traderate.desktop.textmode.view.HomeViewModel;
+public interface GenericModelEventListener {
 
-public class HomePresenter extends GenericPresenter {
+	public void visitModelEvent(GenericModelEvent e);
 
-	HomeViewModel viewModel;
-	
-	HomeView view;
-	
-	public HomePresenter(TradeRate model) {
-		super(model);
+	public void handleModelEvent(GenericModelEvent e);
 
-		viewModel = new HomeViewModel();
-		view = new HomeView(viewModel);
-		
-		viewModel.setVersion("1.0.0");
-	}
+	public void handleModelEvent(UpdateModelEvent e);
 
-	public void show() {
-		view.show();
-	}
+	public void handleModelEvent(QuoteUpdatedModelEvent e);
 }

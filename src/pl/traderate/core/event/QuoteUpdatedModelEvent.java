@@ -18,11 +18,16 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.desktop.textmode.view;
+package pl.traderate.core.event;
 
-public abstract class GenericViewModel {
+public class QuoteUpdatedModelEvent extends GenericModelEvent {
 
-	protected GenericViewModel() {
+	public QuoteUpdatedModelEvent(Object source) {
+		super(source);
+	}
 
+	@Override
+	public void accept(GenericModelEventListener listener) {
+		listener.handleModelEvent(this);
 	}
 }

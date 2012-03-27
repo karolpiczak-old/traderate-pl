@@ -18,11 +18,27 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.desktop.textmode;
+package pl.traderate.core.event;
 
-public class Main {
+public abstract class GenericModelEventListenerAdapter implements GenericModelEventListener {
 
-	public static void main(String[] args) {
-		Router.getInstance().showHome();
+	@Override
+	public void visitModelEvent(GenericModelEvent e) {
+		e.accept(this);
+	}
+
+	@Override
+	public void handleModelEvent(GenericModelEvent e) {
+
+	}
+
+	@Override
+	public void handleModelEvent(UpdateModelEvent e) {
+
+	}
+
+	@Override
+	public void handleModelEvent(QuoteUpdatedModelEvent e) {
+
 	}
 }

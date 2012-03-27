@@ -18,21 +18,26 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.desktop.textmode.presenter;
+package pl.traderate.desktop.view;
 
-import pl.traderate.core.TradeRate;
-import pl.traderate.desktop.textmode.view.GenericView;
-import pl.traderate.desktop.textmode.view.GenericViewModel;
+import pl.traderate.desktop.presenter.GenericPresenter;
 
-public abstract class GenericPresenter {
+import java.util.Observable;
 
-	TradeRate model;
+public abstract class GenericViewModel extends Observable {
+
+	protected GenericView view;
 	
-	GenericViewModel viewModel;
+	protected GenericViewModel(GenericPresenter presenter) {
 
-	GenericView view;
+	}
 
-	protected GenericPresenter(TradeRate model) {
-		this.model = model;
+	protected void notifyChange() {
+		setChanged();
+		notifyObservers();
+	}
+
+	public void show() {
+		view.show();
 	}
 }

@@ -18,49 +18,37 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.desktop.view;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import pl.traderate.desktop.event.GenericViewEventSource;
+import pl.traderate.desktop.presenter.GenericPresenter;
 
-/**
- *
- */
-class Portfolio implements Serializable {
+import javax.swing.*;
+import java.util.Observable;
+import java.util.Observer;
 
-	private String name;
+public abstract class GenericView extends GenericViewEventSource implements Observer {
 
-	private ArrayList<JournalEntry> entries;
-
-	/**
-	 * Reference to the parent portfolio.
-	 *
-	 * <tt>null</tt> if portfolio has no ancestors. Should be the case only for the
-	 * single unique global portfolio.
-	 */
-	private Portfolio parent;
-
-	private Portfolio[] children;
-
-	private Holding[] holdings;
-
-	Portfolio(String name) {
-		this(name, null);
-	}
+	GenericForm form;
 	
-	Portfolio(String name, Portfolio parent) {
-		setName(name);
+	GenericViewModel viewModel;
 
-		this.parent = parent;
+	protected GenericView(GenericViewModel viewModel, GenericPresenter presenter) {
+		this.viewModel = viewModel;
+		addEventListener(presenter);
 	}
 
-	String getName() {
-		return name;
+	void show() {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				form.show();
+			}
+		});
 	}
 
-	void setName(String name) {
-		this.name = name;
+	protected abstract void syncViewModel();
+
+	public void update(Observable o, Object arg) {
+		syncViewModel();
 	}
-
-
 }

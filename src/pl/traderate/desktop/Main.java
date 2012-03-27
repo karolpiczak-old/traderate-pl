@@ -18,49 +18,20 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.desktop;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import javax.swing.*;
 
-/**
- *
- */
-class Portfolio implements Serializable {
+public class Main {
 
-	private String name;
+	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(
+			UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 
-	private ArrayList<JournalEntry> entries;
-
-	/**
-	 * Reference to the parent portfolio.
-	 *
-	 * <tt>null</tt> if portfolio has no ancestors. Should be the case only for the
-	 * single unique global portfolio.
-	 */
-	private Portfolio parent;
-
-	private Portfolio[] children;
-
-	private Holding[] holdings;
-
-	Portfolio(String name) {
-		this(name, null);
+		Router.getInstance().goHome();
 	}
-	
-	Portfolio(String name, Portfolio parent) {
-		setName(name);
-
-		this.parent = parent;
-	}
-
-	String getName() {
-		return name;
-	}
-
-	void setName(String name) {
-		this.name = name;
-	}
-
-
 }

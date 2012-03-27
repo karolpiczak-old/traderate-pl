@@ -18,32 +18,16 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.desktop.textmode;
+package pl.traderate.core.event;
 
-import pl.traderate.core.TradeRate;
-import pl.traderate.desktop.textmode.presenter.HomePresenter;
+public class UpdateModelEvent extends GenericModelEvent {
 
-public final class Router {
-
-	private final static Router instance = new Router();
-	
-	private TradeRate model;
-
-	/**
-	 * Restricted constructor.
-	 *
-	 * Prevents direct instantiation.
-	 */
-	private Router() {
-		model = TradeRate.getInstance();
+	public UpdateModelEvent(Object source) {
+		super(source);
 	}
 
-	public static Router getInstance() {
-		return instance;
-	}
-
-	public void showHome() {
-		HomePresenter presenter = new HomePresenter(model);
-		presenter.show();
+	@Override
+	public void accept(GenericModelEventListener listener) {
+		listener.handleModelEvent(this);
 	}
 }

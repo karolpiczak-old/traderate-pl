@@ -18,15 +18,19 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.desktop.textmode.view;
+package pl.traderate.desktop.event;
 
-public abstract class GenericView {
+import pl.traderate.desktop.presenter.*;
 
-	GenericViewModel viewModel;
+import java.util.EventObject;
 
-	protected GenericView(GenericViewModel viewModel) {
-		this.viewModel = viewModel;
+public class GenericViewEvent extends EventObject {
+
+	public GenericViewEvent(Object source) {
+		super(source);
 	}
+	
+	public void handle(GenericPresenter presenter) {}
 
-	public abstract void show();
+	public void handle(HomePresenter presenter) {}
 }

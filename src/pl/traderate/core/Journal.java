@@ -29,75 +29,75 @@ import java.util.Date;
  */
 class Journal implements Serializable {
 
-    private ArrayList<JournalEntry> entries;
+	private ArrayList<JournalEntry> entries;
 
-    private ArrayList<Account> accounts;
+	private ArrayList<Account> accounts;
 
 	private ArrayList<Portfolio> portfolios;
 
 	private String name;
 
-    private String owner;
+	private String owner;
 
-    private Date creationDate;
+	private Date creationDate;
 
-    private Date lastUpdateDate;
+	private Date lastUpdateDate;
 
-    Journal(String name, String owner) {
-        entries = new ArrayList<JournalEntry>(1000);
-        accounts = new ArrayList<Account>(10);
-        portfolios = new ArrayList<Portfolio>(25);
+	Journal(String name, String owner) {
+		entries = new ArrayList<JournalEntry>(1000);
+		accounts = new ArrayList<Account>(10);
+		portfolios = new ArrayList<Portfolio>(25);
 
-        setName(name);
-        setOwner(owner);
-        setCreationDate(new Date());
-        setLastUpdateDate(new Date());
+		setName(name);
+		setOwner(owner);
+		setCreationDate(new Date());
+		setLastUpdateDate(new Date());
 
-	    addPortfolio(new Portfolio("Portfel globalny"));
-    }
+		addPortfolio(new Portfolio("Portfel globalny"));
+	}
 
-    void addAccount(Account account) {
-        accounts.add(account);
-    }
+	void addAccount(Account account) {
+		accounts.add(account);
+	}
 
-    void addPortfolio(Portfolio portfolio) {
-        portfolios.add(portfolio);
-    }
+	void addPortfolio(Portfolio portfolio) {
+		portfolios.add(portfolio);
+	}
 
-    void addEntry(JournalEntry entry) {
-        entries.add(entry);
-    }
+	void addEntry(JournalEntry entry) {
+		entries.add(entry);
+	}
 
 	public String getName() {
 		return name;
 	}
 
-    void setName(String name) {
-        this.name = name;
-    }
+	void setName(String name) {
+		this.name = name;
+	}
 
 	public String getOwner() {
 		return owner;
 	}
 
-    void setOwner(String owner) {
-        this.owner = owner;
-    }
+	void setOwner(String owner) {
+		this.owner = owner;
+	}
 
-    Date getCreationDate() {
-        return creationDate;
-    }
+	Date getCreationDate() {
+		return creationDate;
+	}
 
-    void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
+	void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
 
-    Date getLastUpdateDate() {
-        return lastUpdateDate;
-    }
+	Date getLastUpdateDate() {
+		return lastUpdateDate;
+	}
 
-    void setLastUpdateDate(Date lastUpdateDate) {
-        this.lastUpdateDate = lastUpdateDate;
-    }
+	void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
+	}
 
 }

@@ -20,13 +20,14 @@
 
 package pl.traderate.core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
  *
  */
-abstract class JournalEntry {
+abstract class JournalEntry implements Serializable {
 
 	int id;
 

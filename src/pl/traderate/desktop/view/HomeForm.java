@@ -18,49 +18,38 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.desktop.view;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import javax.swing.*;
+import java.awt.*;
 
-/**
- *
- */
-class Portfolio implements Serializable {
+public class HomeForm extends GenericForm {
 
-	private String name;
-
-	private ArrayList<JournalEntry> entries;
-
-	/**
-	 * Reference to the parent portfolio.
-	 *
-	 * <tt>null</tt> if portfolio has no ancestors. Should be the case only for the
-	 * single unique global portfolio.
-	 */
-	private Portfolio parent;
-
-	private Portfolio[] children;
-
-	private Holding[] holdings;
-
-	Portfolio(String name) {
-		this(name, null);
-	}
+	HomeView view;
 	
-	Portfolio(String name, Portfolio parent) {
-		setName(name);
+	JFrame frame;
 
-		this.parent = parent;
+	JPanel panel;
+
+	JLabel applicationName;
+
+	JButton buttonOK;
+
+	HomeForm(GenericView view) {
+		super(view);
+		this.view = (HomeView) super.view;
+
+		frame = new JFrame("Home");
+		frame.setMinimumSize(new Dimension(300, 300));
+		frame.setContentPane(panel);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+
+		buttonOK.addActionListener(this.view.new OnButtonOKClicked());
 	}
 
-	String getName() {
-		return name;
+	void show() {
+		frame.setVisible(true);
 	}
-
-	void setName(String name) {
-		this.name = name;
-	}
-
 
 }

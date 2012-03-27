@@ -18,49 +18,36 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.desktop.view;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import pl.traderate.desktop.presenter.HomePresenter;
 
-/**
- *
- */
-class Portfolio implements Serializable {
+public class HomeViewModel extends GenericViewModel {
 
-	private String name;
-
-	private ArrayList<JournalEntry> entries;
-
-	/**
-	 * Reference to the parent portfolio.
-	 *
-	 * <tt>null</tt> if portfolio has no ancestors. Should be the case only for the
-	 * single unique global portfolio.
-	 */
-	private Portfolio parent;
-
-	private Portfolio[] children;
-
-	private Holding[] holdings;
-
-	Portfolio(String name) {
-		this(name, null);
-	}
+	protected HomeView view;
 	
-	Portfolio(String name, Portfolio parent) {
-		setName(name);
+	private String version;
 
-		this.parent = parent;
+	public HomeViewModel(HomePresenter presenter) {
+		super(presenter);
+
+		view = new HomeView(this, presenter);
+		addObserver(view);
+
+		// Make sure that both views reference the same object
+		super.view = view;
 	}
 
-	String getName() {
-		return name;
+	public String getVersion() {
+		return version;
 	}
 
-	void setName(String name) {
-		this.name = name;
+	public void setVersion(String version) {
+		this.version = version;
+		notifyChange();
 	}
 
-
+	public String getApplicationTitle() {
+		return "TradeRate " + getVersion();
+	}
 }

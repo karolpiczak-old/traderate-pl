@@ -20,12 +20,13 @@
 
 package pl.traderate.core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  */
-class Account {
+class Account implements Serializable {
 
 	private String name;
 

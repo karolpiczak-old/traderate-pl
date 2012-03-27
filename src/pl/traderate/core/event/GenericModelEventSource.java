@@ -18,49 +18,26 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.core.event;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- *
- */
-class Portfolio implements Serializable {
+public abstract class GenericModelEventSource {
 
-	private String name;
+	private List<GenericModelEventListener> eventListeners = new ArrayList<GenericModelEventListener>();
 
-	private ArrayList<JournalEntry> entries;
-
-	/**
-	 * Reference to the parent portfolio.
-	 *
-	 * <tt>null</tt> if portfolio has no ancestors. Should be the case only for the
-	 * single unique global portfolio.
-	 */
-	private Portfolio parent;
-
-	private Portfolio[] children;
-
-	private Holding[] holdings;
-
-	Portfolio(String name) {
-		this(name, null);
-	}
-	
-	Portfolio(String name, Portfolio parent) {
-		setName(name);
-
-		this.parent = parent;
+	public synchronized void addEventListener(GenericModelEventListener listener) {
+		eventListeners.add(listener);
 	}
 
-	String getName() {
-		return name;
+	public synchronized void removeEventListener(GenericModelEventListener listener) {
+		eventListeners.remove(listener);
 	}
 
-	void setName(String name) {
-		this.name = name;
+	protected synchronized void fireEvent(GenericModelEvent event) {
+		for (GenericModelEventListener eventListener : eventListeners) {
+			eventListener.visitModelEvent(event);
+		}
 	}
-
-
 }

@@ -18,21 +18,26 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.desktop.textmode.view;
+package pl.traderate.desktop.event;
 
-public class HomeView extends GenericView {
+import java.util.ArrayList;
+import java.util.List;
 
-	HomeViewModel viewModel;
+public abstract class GenericViewEventSource {
 	
-	public HomeView(HomeViewModel viewModel) {
-		super(viewModel);
-		
-		this.viewModel = (HomeViewModel) super.viewModel;
+	private List<GenericViewEventListener> eventListeners = new ArrayList<GenericViewEventListener>();
+	
+	public synchronized void addEventListener(GenericViewEventListener listener) {
+		eventListeners.add(listener);
 	}
 
-	@Override
-	public void show() {
-		System.out.println("Welcome!");
-		System.out.println("This is TradeRate version " + viewModel.getVersion());
+	public synchronized void removeEventListener(GenericViewEventListener listener) {
+		eventListeners.remove(listener);
+	}
+
+	protected synchronized void fireEvent(GenericViewEvent event) {
+		for (GenericViewEventListener eventListener : eventListeners) {
+			eventListener.handleViewEvent(event);
+		}
 	}
 }
