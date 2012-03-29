@@ -26,9 +26,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
-class CashAllocationEntry extends CashReallocationEntry {
+class CashDeallocationEntry extends CashReallocationEntry {
 
-	protected CashAllocationEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date, String comment, BigDecimal amount) {
+	protected CashDeallocationEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date, String comment, BigDecimal amount) {
 		super(account, portfolio, tags, date, comment, amount);
 	}
 
@@ -57,7 +57,7 @@ class CashAllocationEntry extends CashReallocationEntry {
 	}
 
 	@Override
-	public void apply(Portfolio portfolio) {
+	public void apply(Portfolio portfolio) throws EntryInsertionException {
 		portfolio.applyEntry(this);
 	}
 

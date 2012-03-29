@@ -60,9 +60,14 @@ public final class Router {
 			model.addPortfolio("Test", 0);
 			model.addCashDepositEntry(0, "tag1", new GregorianCalendar(2011, 1, 1).getTime(), "Komentarz", new BigDecimal("100.00"));
 			model.addAccount("Test2");
-			model.addCashWithdrawalEntry(0, "tag1", new GregorianCalendar(2012, 1, 3).getTime(), "Komentarz", new BigDecimal("50.15"));
-			model.addCashDepositEntry(0, "tag1", new GregorianCalendar(2012, 1, 2).getTime(), "Komentarz", new BigDecimal("100.00"));
-			model.addCashWithdrawalEntry(0, "tag1", new GregorianCalendar(2011, 1, 3).getTime(), "Komentarz", new BigDecimal("10.15"));
+			//model.addCashWithdrawalEntry(0, "tag1", new GregorianCalendar(2012, 1, 3).getTime(), "Komentarz", new BigDecimal("50.00"));
+			model.addCashDepositEntry(0, "tag1", new GregorianCalendar(2012, 1, 2).getTime(), "Komentarz", new BigDecimal("200.00"));
+			//model.addCashWithdrawalEntry(0, "tag1", new GregorianCalendar(2011, 1, 3).getTime(), "Komentarz", new BigDecimal("30.00"));
+			//model.removeEntry(1);
+			model.addCashAllocationEntry(0, 0, "tag2", new GregorianCalendar(2012, 1, 3).getTime(), "Komentarz", new BigDecimal("100.00"));
+			model.addCashAllocationEntry(0, 0, "tag2", new GregorianCalendar(2011, 1, 3).getTime(), "Komentarz", new BigDecimal("100.00"));
+			//model.addCashAllocationEntry(0, 0, "tag2", new GregorianCalendar(2010, 1, 3).getTime(), "Komentarz", new BigDecimal("50.00"));
+			model.addCashDeallocationEntry(0, 0, "tag2", new GregorianCalendar(2012, 1, 4).getTime(), "Komentarz", new BigDecimal("100.00"));
 			model.addAccount("Test3");
 		} catch (JournalNotLoadedException | ObjectNotFoundException | EntryInsertionException e) {
 			e.printStackTrace();

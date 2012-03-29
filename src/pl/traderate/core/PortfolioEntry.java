@@ -35,5 +35,33 @@ abstract class PortfolioEntry extends JournalEntry {
 		this.portfolio = portfolio;
 	}
 
-	public abstract void apply(Portfolio portfolio) throws EntryInsertionException;;
+	@Override
+	public void attach() throws EntryInsertionException {
+		account.addEntry(this);
+
+		try {
+			portfolio.addEntry(this);
+		} catch (EntryInsertionException e) {
+			account.removeEntry(this);
+			throw e;
+		}
+	}
+
+	@Override
+	public void detach() throws EntryInsertionException {
+		account.removeEntry(this);
+
+		try {
+			portfolio.removeEntry(this);
+		} catch (EntryInsertionException e) {
+			account.addEntry(this);
+			throw e;
+		}
+	}
+
+	public abstract void apply(Portfolio portfolio) throws EntryInsertionException;
+
+	public int getPortfolioID() {
+		return portfolio.getID();
+	}
 }

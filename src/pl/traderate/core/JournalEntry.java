@@ -30,7 +30,7 @@ import java.util.Date;
 /**
  *
  */
-abstract class JournalEntry implements Serializable {
+abstract class JournalEntry implements Serializable, Identifiable {
 
 	protected int id;
 
@@ -58,6 +58,19 @@ abstract class JournalEntry implements Serializable {
 
 	public Date getDate() {
 		return new Date(date.getTime());
+	}
+
+	@Override
+	public int getID() {
+		return id;
+	}
+
+	public void attach() throws EntryInsertionException {
+		account.addEntry(this);
+	}
+
+	public void detach() throws EntryInsertionException {
+		account.removeEntry(this);
 	}
 
 	public static class DateComparator implements Comparator<JournalEntry> {

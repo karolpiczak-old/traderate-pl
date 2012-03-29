@@ -33,22 +33,35 @@ import java.util.Date;
  */
 class Journal {
 
+	/** */
 	private final ArrayList<JournalEntry> entries;
 
+	/** */
 	private final ArrayList<Account> accounts;
 
+	/** */
 	private final ArrayList<Portfolio> portfolios;
-	
+
+	/** */
 	private final ArrayList<Tag> tags;
 
+	/** */
 	private String name;
 
+	/** */
 	private String owner;
 
+	/** */
 	private final Date creationDate;
 
+	/** */
 	private Date lastUpdateDate;
 
+	/**
+	 *
+	 * @param name
+	 * @param owner
+	 */
 	Journal(String name, String owner) {
 		entries = new ArrayList<JournalEntry>(1000);
 		accounts = new ArrayList<Account>(10);
@@ -63,138 +76,217 @@ class Journal {
 		portfolios.add(new Portfolio("Portfel globalny"));
 	}
 
+	/**
+	 *
+	 * @param name
+	 */
 	void addAccount(String name) {
 		accounts.add(new Account(name));
 	}
 
+	/**
+	 *
+	 * @param name
+	 * @param parentID
+	 * @throws ObjectNotFoundException
+	 */
 	void addPortfolio(String name, int parentID) throws ObjectNotFoundException {
-		portfolios.add(new Portfolio(name, findPortfolioByID(parentID)));
-	}
-
-	void addEntry(JournalEntry entry) {
-		entries.add(entry);
+		portfolios.add(new Portfolio(name, findObjectByID(parentID, portfolios)));
 	}
 	
 	void addBuyEquityTransactionEntry() {
-//		try {
-//			account.addEntry(entry);
-//		} catch (EntryInsertionException e) {
-//			throw e;
-//		}
-//
-//		try {
-//			portfolio.addEntry(entry);
-//		} catch (EntryInsertionException e) {
-//			accounts.removeEntry(entry);
-//			throw e;
-//		}
-//
-//		entries.add(entry);
+
 	}
 
+	/**
+	 *
+	 * @param accountID
+	 * @param portfolioID
+	 * @param tags
+	 * @param date
+	 * @param comment
+	 * @param amount
+	 * @throws ObjectNotFoundException
+	 * @throws EntryInsertionException
+	 */
+	void addCashAllocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException {
+		Account account = findObjectByID(accountID, accounts);
+		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
+
+		// TODO: Proper tag handling
+		CashAllocationEntry entry = new CashAllocationEntry(account, portfolio, null, date, comment, amount);
+		
+		addEntry(entry);
+	}
+
+	/**
+	 *
+	 * @param accountID
+	 * @param portfolioID
+	 * @param tags
+	 * @param date
+	 * @param comment
+	 * @param amount
+	 * @throws ObjectNotFoundException
+	 * @throws EntryInsertionException
+	 */
+	void addCashDeallocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException {
+		Account account = findObjectByID(accountID, accounts);
+		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
+
+		// TODO: Proper tag handling
+		CashDeallocationEntry entry = new CashDeallocationEntry(account, portfolio, null, date, comment, amount);
+
+		addEntry(entry);
+	}
+
+	/**
+	 *
+	 * @param accountID
+	 * @param tags
+	 * @param date
+	 * @param comment
+	 * @param amount
+	 * @throws ObjectNotFoundException
+	 * @throws EntryInsertionException
+	 */
 	void addCashDepositEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException {
-		Account account = findAccountByID(accountID);
+		Account account = findObjectByID(accountID, accounts);
 
 		// TODO: Proper tag handling
 		CashDepositEntry entry = new CashDepositEntry(account, null, date, comment, amount);
 
-		try {
-			account.addEntry(entry);
-		} catch (EntryInsertionException e) {
-			throw e;
-		}
-
-		entries.add(entry);
+		addEntry(entry);
 	}
 
+	/**
+	 *
+	 * @param accountID
+	 * @param tags
+	 * @param date
+	 * @param comment
+	 * @param amount
+	 * @throws ObjectNotFoundException
+	 * @throws EntryInsertionException
+	 */
 	void addCashWithdrawalEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException {
-		Account account = findAccountByID(accountID);
+		Account account = findObjectByID(accountID, accounts);
 
 		// TODO: Proper tag handling
 		CashWithdrawalEntry entry = new CashWithdrawalEntry(account, null, date, comment, amount);
 
-		try {
-			account.addEntry(entry);
-		} catch (EntryInsertionException e) {
-			throw e;
-		}
+		addEntry(entry);
+	}
 
+	/**
+	 *
+	 * @param entryID
+	 * @throws ObjectNotFoundException
+	 * @throws EntryInsertionException
+	 */
+	void removeEntry(int entryID) throws ObjectNotFoundException, EntryInsertionException {
+		JournalEntry entry = findObjectByID(entryID, entries);
+		removeEntry(entry);
+	}
+
+	/**
+	 *
+	 * @param entry
+	 * @throws EntryInsertionException
+	 */
+	private void addEntry(JournalEntry entry) throws EntryInsertionException {
+		entry.attach();
 		entries.add(entry);
 	}
 
-	void removeEntry(int entryID) {
-		// TODO: Implement 2nd
+	/**
+	 *
+	 * @param entry
+	 * @throws EntryInsertionException
+	 */
+	private void removeEntry(JournalEntry entry) throws EntryInsertionException {
+		entry.detach();
+		entries.remove(entry);
 	}
 
-// TODO: Deep copy needed here?
-//	ArrayList<Account> getAccounts() {
-//		return new ArrayList<Account>(accounts);
-//	}
-
-// TODO: Deep copy needed here?
-//	ArrayList<Portfolio> getPortfolios() {
-//		return new ArrayList<Portfolio>(portfolios);
-//	}
-
+	/**
+	 *
+	 * @return
+	 */
 	String getName() {
 		return name;
 	}
 
+	/**
+	 *
+	 * @param name
+	 */
 	void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	String getOwner() {
 		return owner;
 	}
 
+	/**
+	 *
+	 * @param owner
+	 */
 	void setOwner(String owner) {
 		this.owner = owner;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	Date getCreationDate() {
 		return new Date(creationDate.getTime());
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	Date getLastUpdateDate() {
 		return new Date(lastUpdateDate.getTime());
 	}
 
+	/**
+	 *
+	 * @param lastUpdateDate
+	 */
 	void setLastUpdateDate(Date lastUpdateDate) {
 		this.lastUpdateDate = new Date(lastUpdateDate.getTime());
 	}
 
-	private Account findAccountByID(int accountID) throws ObjectNotFoundException {
-		Account account = null;
-
-		for (Account checkedAccount : accounts) {
-			if (checkedAccount.getID() == accountID) {
-				account = checkedAccount;
+	/**
+	 *
+	 * @param objectID
+	 * @param arrayList
+	 * @param <T>
+	 * @return
+	 * @throws ObjectNotFoundException
+	 */
+	private <T extends Identifiable> T findObjectByID(int objectID, ArrayList<T> arrayList) throws ObjectNotFoundException {
+		T object = null;
+		
+		for (T checkedObject : arrayList) {
+			if (checkedObject.getID() == objectID) {
+				object = checkedObject;
 				break;
 			}
 		}
-
-		if (account == null) {
+		
+		if (object == null) {
 			throw new ObjectNotFoundException();
 		}
-
-		return account;
-	}
-
-	private Portfolio findPortfolioByID(int portfolioID) throws ObjectNotFoundException {
-		Portfolio portfolio = null;
-
-		for (Portfolio checkedPortfolio : portfolios) {
-			if (checkedPortfolio.getID() == portfolioID) {
-				portfolio = checkedPortfolio;
-				break;
-			}
-		}
-
-		if (portfolio == null) {
-			throw new ObjectNotFoundException();
-		}
-
-		return portfolio;
+		
+		return object;
 	}
 }

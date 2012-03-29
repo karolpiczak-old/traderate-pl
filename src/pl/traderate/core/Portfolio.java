@@ -23,6 +23,7 @@ package pl.traderate.core;
 import pl.traderate.core.exception.EntryInsertionException;
 import pl.traderate.core.exception.PortfolioRecalcException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -30,14 +31,18 @@ import java.util.Date;
 /**
  *
  */
-class Portfolio {
+class Portfolio implements Identifiable {
 
+	/** */
 	private final int id;
-	
+
+	/** */
 	private static int numberOfPortfoliosCreated;
 
+	/** */
 	private String name;
 
+	/** */
 	private final ArrayList<PortfolioEntry> entries;
 
 	/**
@@ -48,12 +53,22 @@ class Portfolio {
 	 */
 	private Portfolio parent;
 
+	/** */
 	private final ArrayList<Portfolio> children;
 
+	/** */
 	private final ArrayList<Holding> holdings;
 
+	/** */
+	private BigDecimal cashBalance;
+
+	/** */
 	private Date latestEntryDate;
 
+	/**
+	 *
+	 * @param name
+	 */
 	Portfolio(String name) {
 		id = numberOfPortfoliosCreated++;
 		setName(name);
@@ -61,9 +76,15 @@ class Portfolio {
 		children = new ArrayList<Portfolio>();
 		holdings = new ArrayList<Holding>();
 
+		cashBalance = new BigDecimal("0");
 		latestEntryDate = new Date(0L);
 	}
 
+	/**
+	 *
+	 * @param name
+	 * @param parent
+	 */
 	Portfolio(String name, Portfolio parent) {
 		this(name);
 
@@ -71,26 +92,45 @@ class Portfolio {
 		parent.children.add(this);
 	}
 
-	public void applyEntry(PortfolioEntry entry) throws EntryInsertionException {
-//		// TODO: Implement
-//		throw new EntryInsertionException();
-
+	/**
+	 *
+	 */
+	private void wipeCalculations() {
+		holdings.clear();
+		cashBalance = new BigDecimal("0");
+		latestEntryDate = new Date(0L);
 	}
 
-	public int getID() {
-		return id;
+	/**
+	 *
+	 * @throws PortfolioRecalcException
+	 */
+	private void recalc() throws PortfolioRecalcException {
+		wipeCalculations();
+
+		ArrayList<PortfolioEntry> sortedEntries = new ArrayList<PortfolioEntry>(entries);
+		Collections.sort(sortedEntries, new JournalEntry.DateComparator());
+
+		for (PortfolioEntry entry : sortedEntries) {
+			try {
+				entry.apply(this);
+			} catch (EntryInsertionException e) {
+				throw new PortfolioRecalcException();
+			}
+		}
+
+		if (!sortedEntries.isEmpty()) {
+			JournalEntry latestEntry = sortedEntries.get(sortedEntries.size() - 1);
+			latestEntryDate = latestEntry.getDate();
+		}
 	}
 
-	String getName() {
-		return name;
-	}
-
-	void setName(String name) {
-		this.name = name;
-	}
-
+	/**
+	 *
+	 * @param entry
+	 * @throws EntryInsertionException
+	 */
 	public void addEntry(PortfolioEntry entry) throws EntryInsertionException {
-
 		// Checks if entry date is newer or equal to latestEntryDate
 		if (entry.getDate().compareTo(latestEntryDate) >= 0) {
 			entry.apply(this);
@@ -112,22 +152,79 @@ class Portfolio {
 		}
 	}
 
-	private void wipeCalculations() {
-		holdings.clear();
+	/**
+	 *
+	 * @param entry
+	 * @throws EntryInsertionException
+	 */
+	public void removeEntry(PortfolioEntry entry) throws EntryInsertionException {
+		try {
+			entries.remove(entry);
+			recalc();
+		} catch (PortfolioRecalcException e) {
+			entries.add(entry);
+			try {
+				recalc();
+			} catch (PortfolioRecalcException e2) {
+				throw new InternalError();
+			}
+			throw new EntryInsertionException();
+		}
 	}
 
-	private void recalc() throws PortfolioRecalcException {
-		wipeCalculations();
+	public void applyEntry(BuyEquityTransactionEntry entry) {
+		// TODO: Buy equity transaction handling
+	}
 
-		ArrayList<PortfolioEntry> sortedEntries = new ArrayList<PortfolioEntry>(entries);
-		Collections.sort(sortedEntries, new JournalEntry.DateComparator());
+	public void applyEntry(SellEquityTransactionEntry entry) {
+		// TODO: Sell equity transaction handling
+	}
 
-		for (PortfolioEntry entry : sortedEntries) {
-			try {
-				entry.apply(this);
-			} catch (EntryInsertionException e) {
-				throw new PortfolioRecalcException();
-			}
+	/**
+	 *
+	 * @param entry
+	 * @throws EntryInsertionException
+	 */
+	public void applyEntry(CashAllocationEntry entry) {
+		cashBalance = cashBalance.add(entry.getAmount());
+	}
+
+	/**
+	 *
+	 * @param entry
+	 * @throws EntryInsertionException
+	 */
+	public void applyEntry(CashDeallocationEntry entry) throws EntryInsertionException {
+		BigDecimal newBalance = cashBalance.subtract(entry.getAmount());
+
+		if ((newBalance.compareTo(new BigDecimal("0")) < 0)) {
+			throw new EntryInsertionException();
 		}
+
+		cashBalance = newBalance;
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public int getID() {
+		return id;
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	String getName() {
+		return name;
+	}
+
+	/**
+	 *
+	 * @param name
+	 */
+	void setName(String name) {
+		this.name = name;
 	}
 }

@@ -20,19 +20,21 @@
 
 package pl.traderate.core;
 
-import pl.traderate.core.exception.EntryInsertionException;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- *
- */
-abstract class BuyTransactionEntry extends TransactionEntry {
+public abstract class CashReallocationEntry extends PortfolioEntry {
 
-	protected BuyTransactionEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date,
-	                              String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
-		super(account, portfolio, tags, date, comment, ticker, quantity, price, commission);
+	protected BigDecimal amount;
+
+	protected CashReallocationEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date, String comment, BigDecimal amount) {
+		super(account, portfolio, tags, date, comment);
+
+		this.amount = amount;
+	}
+
+	public BigDecimal getAmount() {
+		return amount;
 	}
 }
