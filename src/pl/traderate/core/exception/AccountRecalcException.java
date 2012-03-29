@@ -18,16 +18,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core.event;
+package pl.traderate.core.exception;
 
-public class UpdateModelEvent extends GenericModelEvent {
+public class AccountRecalcException extends Exception {
 
-	public UpdateModelEvent(Object source) {
-		super(source);
-	}
-
-	@Override
-	public void accept(GenericModelEventListener listener) {
-		listener.handleModelEvent(this);
-	}
 }

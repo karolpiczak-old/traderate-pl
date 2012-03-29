@@ -20,8 +20,11 @@
 
 package pl.traderate.core;
 
+import pl.traderate.core.exception.EntryInsertionException;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -29,15 +32,39 @@ import java.util.Date;
  */
 abstract class JournalEntry implements Serializable {
 
-	int id;
+	protected int id;
 
-	Date date;
+	protected Date date;
 
-	String comment;
+	protected String comment;
 
-	private Account account;
+	protected static int numberOfJournalEntriesCreated;
 
-	private Portfolio portfolio;
+	protected Account account;
 
-	private ArrayList<Tag> tags;
+	protected ArrayList<Tag> tags;
+
+	// TODO: Check for tags defensive copying when implementing tags
+	protected JournalEntry(Account account, ArrayList<Tag> tags, Date date, String comment) {
+		id = numberOfJournalEntriesCreated++;
+
+		this.account = account;
+		this.tags = tags;
+		this.date = new Date(date.getTime());
+		this.comment = comment;
+	}
+
+	public abstract void apply(Account account) throws EntryInsertionException;
+
+	public Date getDate() {
+		return new Date(date.getTime());
+	}
+
+	public static class DateComparator implements Comparator<JournalEntry> {
+
+		@Override
+		public int compare(JournalEntry o1, JournalEntry o2) {
+			return o1.getDate().compareTo(o2.getDate());
+		}
+	}
 }

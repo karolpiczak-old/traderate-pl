@@ -20,17 +20,25 @@
 
 package pl.traderate.core;
 
-import java.io.Serializable;
+import pl.traderate.core.exception.EntryInsertionException;
+import pl.traderate.core.exception.PortfolioRecalcException;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
 /**
  *
  */
-class Portfolio implements Serializable {
+class Portfolio {
+
+	private final int id;
+	
+	private static int numberOfPortfoliosCreated;
 
 	private String name;
 
-	private ArrayList<JournalEntry> entries;
+	private final ArrayList<PortfolioEntry> entries;
 
 	/**
 	 * Reference to the parent portfolio.
@@ -40,18 +48,37 @@ class Portfolio implements Serializable {
 	 */
 	private Portfolio parent;
 
-	private Portfolio[] children;
+	private final ArrayList<Portfolio> children;
 
-	private Holding[] holdings;
+	private final ArrayList<Holding> holdings;
+
+	private Date latestEntryDate;
 
 	Portfolio(String name) {
-		this(name, null);
-	}
-	
-	Portfolio(String name, Portfolio parent) {
+		id = numberOfPortfoliosCreated++;
 		setName(name);
+		entries = new ArrayList<PortfolioEntry>();
+		children = new ArrayList<Portfolio>();
+		holdings = new ArrayList<Holding>();
+
+		latestEntryDate = new Date(0L);
+	}
+
+	Portfolio(String name, Portfolio parent) {
+		this(name);
 
 		this.parent = parent;
+		parent.children.add(this);
+	}
+
+	public void applyEntry(PortfolioEntry entry) throws EntryInsertionException {
+//		// TODO: Implement
+//		throw new EntryInsertionException();
+
+	}
+
+	public int getID() {
+		return id;
 	}
 
 	String getName() {
@@ -62,5 +89,45 @@ class Portfolio implements Serializable {
 		this.name = name;
 	}
 
+	public void addEntry(PortfolioEntry entry) throws EntryInsertionException {
 
+		// Checks if entry date is newer or equal to latestEntryDate
+		if (entry.getDate().compareTo(latestEntryDate) >= 0) {
+			entry.apply(this);
+			entries.add(entry);
+			latestEntryDate = entry.getDate();
+		} else {
+			try {
+				entries.add(entry);
+				recalc();
+			} catch (PortfolioRecalcException e) {
+				entries.remove(entry);
+				try {
+					recalc();
+				} catch (PortfolioRecalcException e2) {
+					throw new InternalError();
+				}
+				throw new EntryInsertionException();
+			}
+		}
+	}
+
+	private void wipeCalculations() {
+		holdings.clear();
+	}
+
+	private void recalc() throws PortfolioRecalcException {
+		wipeCalculations();
+
+		ArrayList<PortfolioEntry> sortedEntries = new ArrayList<PortfolioEntry>(entries);
+		Collections.sort(sortedEntries, new JournalEntry.DateComparator());
+
+		for (PortfolioEntry entry : sortedEntries) {
+			try {
+				entry.apply(this);
+			} catch (EntryInsertionException e) {
+				throw new PortfolioRecalcException();
+			}
+		}
+	}
 }

@@ -20,9 +20,15 @@
 
 package pl.traderate.core;
 
-import pl.traderate.core.event.GenericModelEvent;
 import pl.traderate.core.event.GenericModelEventSource;
-import pl.traderate.core.event.UpdateModelEvent;
+import pl.traderate.core.event.DataUpdateModelEvent;
+import pl.traderate.core.exception.EntryInsertionException;
+import pl.traderate.core.exception.JournalNotLoadedException;
+import pl.traderate.core.exception.ObjectNotFoundException;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Main application class.
@@ -56,7 +62,7 @@ public final class TradeRate extends GenericModelEventSource {
 	public void createJournal(String name, String owner) {
 		journal = new Journal(name, owner);
 
-		fireEvent(new GenericModelEvent(this));
+		fireEvent(new DataUpdateModelEvent(this));
 	}
 
 	public void openJournal() {
@@ -70,13 +76,62 @@ public final class TradeRate extends GenericModelEventSource {
 	public void closeJournal() {
 		saveJournal();
 		journal = null;
+
+		fireEvent(new DataUpdateModelEvent(this));
 	}
 
-	public void addAccount(String name) {
-		if (journal != null) {
-			journal.addAccount(new Account(name));
-		}
-		
-		fireEvent(new UpdateModelEvent(this));
+	public void addAccount(String name) throws JournalNotLoadedException {
+		assertJournalIsLoaded();
+		journal.addAccount(name);
+
+		fireEvent(new DataUpdateModelEvent(this));
+	}
+	
+	public void addPortfolio(String name, int parentID) throws JournalNotLoadedException, ObjectNotFoundException {
+		assertJournalIsLoaded();
+		journal.addPortfolio(name, parentID);
+
+		fireEvent(new DataUpdateModelEvent(this));
+	}
+
+	public void addBuyTransactionEntry() {
+
+	}
+
+	public void addSellTransactionEntry() {
+
+	}
+
+	public void addCashAllocationEntry() {
+
+	}
+
+	public void addCashDepositEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException {
+		assertJournalIsLoaded();
+		journal.addCashDepositEntry(accountID, tags, date, comment, amount);
+
+		fireEvent(new DataUpdateModelEvent(this));
+	}
+
+	public void addCashWithdrawalEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException {
+		assertJournalIsLoaded();
+		journal.addCashWithdrawalEntry(accountID, tags, date, comment, amount);
+
+		fireEvent(new DataUpdateModelEvent(this));
+	}
+
+	public void removeEntry(int entryID) throws JournalNotLoadedException {
+		assertJournalIsLoaded();
+		journal.removeEntry(entryID);
+
+		fireEvent(new DataUpdateModelEvent(this));
+	}
+
+	public void updateQuotes() {
+
+	}
+
+	private void assertJournalIsLoaded() throws JournalNotLoadedException {
+		if (journal == null) throw new JournalNotLoadedException();
 	}
 }

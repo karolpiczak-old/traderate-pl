@@ -20,9 +20,17 @@
 
 package pl.traderate.core;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  *
  */
 abstract class SellTransactionEntry extends TransactionEntry {
 
+	protected SellTransactionEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags,
+	                               Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
+		super(account, portfolio, tags, date, comment, ticker, quantity, price, commission);
+	}
 }

@@ -47,8 +47,6 @@ public class MainForm extends GenericForm {
 
 	private JTabbedPane tabs;
 
-	private JPanel sidebar;
-
 	private JLabel topNavigationLabel;
 
 	MainForm(GenericView view) {

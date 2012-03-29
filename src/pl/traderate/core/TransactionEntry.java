@@ -21,11 +21,13 @@
 package pl.traderate.core;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
  */
-abstract class TransactionEntry extends JournalEntry {
+abstract class TransactionEntry extends PortfolioEntry {
 
 	String ticker;
 
@@ -34,4 +36,15 @@ abstract class TransactionEntry extends JournalEntry {
 	BigDecimal price;
 
 	BigDecimal commission;
+
+	protected TransactionEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date,
+	                           String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
+
+		super(account, portfolio, tags, date, comment);
+
+		this.ticker = ticker;
+		this.quantity = quantity;
+		this.price = price;
+		this.commission = commission;
+	}
 }

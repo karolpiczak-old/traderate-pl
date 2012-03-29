@@ -20,5 +20,20 @@
 
 package pl.traderate.core;
 
+import pl.traderate.core.exception.EntryInsertionException;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+
 class CashWithdrawalEntry extends CashOperationEntry {
+
+	protected CashWithdrawalEntry(Account account, ArrayList<Tag> tags, Date date, String comment, BigDecimal amount) {
+		super(account, tags, date, comment, amount);
+	}
+
+	@Override
+	public void apply(Account account) throws EntryInsertionException {
+		account.applyEntry(this);
+	}
 }

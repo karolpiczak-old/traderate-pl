@@ -20,5 +20,18 @@
 
 package pl.traderate.core;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+
 class CashDepositEntry extends CashOperationEntry {
+
+	protected CashDepositEntry(Account account, ArrayList<Tag> tags, Date date, String comment, BigDecimal amount) {
+		super(account, tags, date, comment, amount);
+	}
+
+	@Override
+	public void apply(Account account) {
+		account.applyEntry(this);
+	}
 }

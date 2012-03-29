@@ -20,9 +20,29 @@
 
 package pl.traderate.core;
 
+import pl.traderate.core.exception.EntryInsertionException;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  *
  */
 abstract class BuyTransactionEntry extends TransactionEntry {
-	
+
+	protected BuyTransactionEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date,
+	                              String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
+		super(account, portfolio, tags, date, comment, ticker, quantity, price, commission);
+	}
+
+	@Override
+	public void apply(Account account) {
+		account.applyEntry(this);
+	}
+
+	@Override
+	public void apply(Portfolio portfolio) throws EntryInsertionException {
+		portfolio.applyEntry(this);
+	}
 }

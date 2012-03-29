@@ -20,22 +20,63 @@
 
 package pl.traderate.core;
 
-import java.io.Serializable;
+import pl.traderate.core.exception.AccountRecalcException;
+import pl.traderate.core.exception.EntryInsertionException;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
 /**
  *
  */
-class Account implements Serializable {
+class Account {
+
+	private final int id;
+
+	private static int numberOfAccountsCreated;
 
 	private String name;
 
-	private ArrayList<JournalEntry> entries;
+	private final ArrayList<JournalEntry> entries;
 
-	private ArrayList<Holding> holdings;
+	private final ArrayList<Holding> holdings;
+
+	private Date latestEntryDate;
+
+	private BigDecimal cashBalance;
 
 	Account(String name) {
+		id = numberOfAccountsCreated++;
 		setName(name);
+		entries = new ArrayList<JournalEntry>();
+		holdings = new ArrayList<Holding>();
+
+		cashBalance = new BigDecimal("0");
+		latestEntryDate = new Date(0L);
+	}
+
+	public void applyEntry(JournalEntry entry) {
+
+	}
+
+	public void applyEntry(CashDepositEntry entry) {
+		cashBalance = cashBalance.add(entry.getAmount());
+	}
+
+	public void applyEntry(CashWithdrawalEntry entry) throws EntryInsertionException {
+		BigDecimal newBalance = cashBalance.subtract(entry.getAmount());
+
+		if (newBalance.compareTo(new BigDecimal("0")) < 0) {
+			throw new EntryInsertionException();
+		}
+
+		cashBalance = newBalance;
+	}
+
+	public int getID() {
+		return id;
 	}
 
 	String getName() {
@@ -44,5 +85,48 @@ class Account implements Serializable {
 
 	void setName(String name) {
 		this.name = name;
+	}
+
+	public void addEntry(JournalEntry entry) throws EntryInsertionException {
+
+		// Checks if entry date is newer or equal to latestEntryDate
+		if (entry.getDate().compareTo(latestEntryDate) >= 0) {
+			entry.apply(this);
+			entries.add(entry);
+			latestEntryDate = entry.getDate();
+		} else {
+			try {
+				entries.add(entry);
+				recalc();
+			} catch (AccountRecalcException e) {
+				entries.remove(entry);
+				try {
+					recalc();
+				} catch (AccountRecalcException e2) {
+					throw new InternalError();
+				}
+				throw new EntryInsertionException();
+			}
+		}
+	}
+
+	private void wipeCalculations() {
+		holdings.clear();
+		cashBalance = new BigDecimal("0");
+	}
+
+	private void recalc() throws AccountRecalcException {
+		wipeCalculations();
+
+		ArrayList<JournalEntry> sortedEntries = new ArrayList<JournalEntry>(entries);
+		Collections.sort(sortedEntries, new JournalEntry.DateComparator());
+
+		for (JournalEntry entry : sortedEntries) {
+			try {
+				entry.apply(this);
+			} catch (EntryInsertionException e) {
+				throw new AccountRecalcException();
+			}
+		}
 	}
 }

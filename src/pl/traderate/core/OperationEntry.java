@@ -20,5 +20,12 @@
 
 package pl.traderate.core;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 abstract class OperationEntry extends JournalEntry {
+
+	protected OperationEntry(Account account, ArrayList<Tag> tags, Date date, String comment) {
+		super(account, tags, date, comment);
+	}
 }

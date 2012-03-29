@@ -33,7 +33,7 @@ public abstract class GenericModelEventListenerAdapter implements GenericModelEv
 	}
 
 	@Override
-	public void handleModelEvent(UpdateModelEvent e) {
+	public void handleModelEvent(DataUpdateModelEvent e) {
 
 	}
 

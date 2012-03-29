@@ -26,9 +26,9 @@ public class SummaryForm {
 
 	JPanel root;
 
-	JTable table1;
+	private JTable table1;
 
-	JTable table2;
+	private JTable table2;
 
 	public SummaryForm() {
 

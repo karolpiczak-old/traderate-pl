@@ -62,12 +62,12 @@ public abstract class GenericPresenter implements GenericViewEventListener {
 
 		@Override
 		public void handleModelEvent(GenericModelEvent e) {
-			System.out.println("GenericModelEvent at GenericPresenter");
+			// TODO: Implement
 		}
 
 		@Override
-		public void handleModelEvent(UpdateModelEvent e) {
-			System.out.println("UpdateModelEvent at GenericPresenter");
+		public void handleModelEvent(DataUpdateModelEvent e) {
+			// TODO: Implement
 		}
 
 	}

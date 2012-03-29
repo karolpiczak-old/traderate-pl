@@ -21,7 +21,14 @@
 package pl.traderate.desktop;
 
 import pl.traderate.core.TradeRate;
+import pl.traderate.core.exception.EntryInsertionException;
+import pl.traderate.core.exception.JournalNotLoadedException;
+import pl.traderate.core.exception.ObjectNotFoundException;
 import pl.traderate.desktop.presenter.MainPresenter;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public final class Router {
 
@@ -45,7 +52,20 @@ public final class Router {
 	public void goHome() {
 		MainPresenter presenter = new MainPresenter(model);
 		presenter.show();
+
 		model.createJournal("Dziennik", "Jan Kowalski");
-		model.addAccount("Test");
+
+		try {
+			model.addAccount("Test");
+			model.addPortfolio("Test", 0);
+			model.addCashDepositEntry(0, "tag1", new GregorianCalendar(2011, 1, 1).getTime(), "Komentarz", new BigDecimal("100.00"));
+			model.addAccount("Test2");
+			model.addCashWithdrawalEntry(0, "tag1", new GregorianCalendar(2012, 1, 3).getTime(), "Komentarz", new BigDecimal("50.15"));
+			model.addCashDepositEntry(0, "tag1", new GregorianCalendar(2012, 1, 2).getTime(), "Komentarz", new BigDecimal("100.00"));
+			model.addCashWithdrawalEntry(0, "tag1", new GregorianCalendar(2011, 1, 3).getTime(), "Komentarz", new BigDecimal("10.15"));
+			model.addAccount("Test3");
+		} catch (JournalNotLoadedException | ObjectNotFoundException | EntryInsertionException e) {
+			e.printStackTrace();
+		}
 	}
 }

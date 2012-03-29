@@ -18,15 +18,22 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core.event;
+package pl.traderate.core;
 
-public interface GenericModelEventListener {
+import pl.traderate.core.exception.EntryInsertionException;
 
-	public void visitModelEvent(GenericModelEvent e);
+import java.util.ArrayList;
+import java.util.Date;
 
-	public void handleModelEvent(GenericModelEvent e);
+abstract class PortfolioEntry extends JournalEntry {
 
-	public void handleModelEvent(DataUpdateModelEvent e);
+	protected Portfolio portfolio;
 
-	public void handleModelEvent(QuoteUpdatedModelEvent e);
+	protected PortfolioEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date, String comment) {
+		super(account, tags, date, comment);
+
+		this.portfolio = portfolio;
+	}
+
+	public abstract void apply(Portfolio portfolio) throws EntryInsertionException;;
 }

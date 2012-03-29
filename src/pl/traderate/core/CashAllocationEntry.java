@@ -18,15 +18,20 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core.event;
+package pl.traderate.core;
 
-public interface GenericModelEventListener {
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 
-	public void visitModelEvent(GenericModelEvent e);
+class CashAllocationEntry extends CashOperationEntry {
 
-	public void handleModelEvent(GenericModelEvent e);
+	protected CashAllocationEntry(Account account, ArrayList<Tag> tags, Date date, String comment, BigDecimal amount) {
+		super(account, tags, date, comment, amount);
+	}
 
-	public void handleModelEvent(DataUpdateModelEvent e);
-
-	public void handleModelEvent(QuoteUpdatedModelEvent e);
+	@Override
+	public void apply(Account account) {
+		account.applyEntry(this);
+	}
 }

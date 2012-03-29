@@ -70,12 +70,12 @@ public class MainPresenter extends GenericPresenter {
 
 		@Override
 		public void handleModelEvent(GenericModelEvent e) {
-			System.out.println("GenericModelEvent at HomePresenter");
+			// TODO: Implement
 		}
 
 		@Override
-		public void handleModelEvent(UpdateModelEvent e) {
-			System.out.println("UpdateModelEvent at HomePresenter");
+		public void handleModelEvent(DataUpdateModelEvent e) {
+			// TODO: Implement
 		}
 
 	}
