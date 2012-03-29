@@ -20,6 +20,8 @@
 
 package pl.traderate.core;
 
+import pl.traderate.core.exception.ObjectConstraintsException;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,7 +32,7 @@ import java.util.Date;
 abstract class SellTransactionEntry extends TransactionEntry {
 
 	protected SellTransactionEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags,
-	                               Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
+	                               Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectConstraintsException {
 		super(account, portfolio, tags, date, comment, ticker, quantity, price, commission);
 	}
 }

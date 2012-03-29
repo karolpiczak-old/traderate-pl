@@ -57,7 +57,7 @@ class Portfolio implements Identifiable {
 	private final ArrayList<Portfolio> children;
 
 	/** */
-	private final ArrayList<Holding> holdings;
+	private final HoldingList holdings;
 
 	/** */
 	private BigDecimal cashBalance;
@@ -74,7 +74,7 @@ class Portfolio implements Identifiable {
 		setName(name);
 		entries = new ArrayList<PortfolioEntry>();
 		children = new ArrayList<Portfolio>();
-		holdings = new ArrayList<Holding>();
+		holdings = new HoldingList();
 
 		cashBalance = new BigDecimal("0");
 		latestEntryDate = new Date(0L);
@@ -172,12 +172,33 @@ class Portfolio implements Identifiable {
 		}
 	}
 
-	public void applyEntry(BuyEquityTransactionEntry entry) {
-		// TODO: Buy equity transaction handling
+	public void applyEntry(BuyEquityTransactionEntry entry) throws EntryInsertionException {
+		BigDecimal purchaseValue = entry.getCashValue();
+
+		BigDecimal newBalance = cashBalance.subtract(purchaseValue);
+
+		if ((newBalance.compareTo(new BigDecimal("0")) < 0)) {
+			throw new EntryInsertionException();
+		}
+
+		holdings.open(entry);
+
+		cashBalance = newBalance;
 	}
 
-	public void applyEntry(SellEquityTransactionEntry entry) {
-		// TODO: Sell equity transaction handling
+	public void applyEntry(SellEquityTransactionEntry entry) throws EntryInsertionException {
+		BigDecimal sellValue = entry.getCashValue();
+
+		BigDecimal newBalance = cashBalance.add(sellValue);
+
+		// New cash balance can be negative when commission paid is greater than proceeds from sale
+		if ((newBalance.compareTo(new BigDecimal("0")) < 0)) {
+			throw new EntryInsertionException();
+		}
+
+		holdings.close(entry);
+
+		cashBalance = newBalance;
 	}
 
 	/**

@@ -21,6 +21,7 @@
 package pl.traderate.core;
 
 import pl.traderate.core.exception.EntryInsertionException;
+import pl.traderate.core.exception.ObjectConstraintsException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,17 +30,21 @@ import java.util.Date;
 class BuyEquityTransactionEntry extends BuyTransactionEntry {
 
 	protected BuyEquityTransactionEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date,
-	                                    String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
+	                                    String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectConstraintsException {
 		super(account, portfolio, tags, date, comment, ticker, quantity, price, commission);
 	}
 
 	@Override
-	public void apply(Account account) {
+	public void apply(Account account) throws EntryInsertionException {
 		account.applyEntry(this);
 	}
 
 	@Override
 	public void apply(Portfolio portfolio) throws EntryInsertionException {
 		portfolio.applyEntry(this);
+	}
+
+	public BigDecimal getCashValue() {
+		return price.multiply(quantity).add(commission);
 	}
 }

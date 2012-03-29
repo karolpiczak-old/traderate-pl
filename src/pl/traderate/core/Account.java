@@ -47,7 +47,7 @@ class Account implements Identifiable {
 	private final ArrayList<JournalEntry> entries;
 
 	/** */
-	private final ArrayList<Holding> holdings;
+	private final HoldingList holdings;
 
 	/** */
 	private Date latestEntryDate;
@@ -69,7 +69,7 @@ class Account implements Identifiable {
 		id = numberOfAccountsCreated++;
 		setName(name);
 		entries = new ArrayList<>();
-		holdings = new ArrayList<>();
+		holdings = new HoldingList();
 
 		cashBalance = new BigDecimal("0");
 		unallocatedCash = new BigDecimal("0");
@@ -160,12 +160,42 @@ class Account implements Identifiable {
 		}
 	}
 
-	public void applyEntry(BuyEquityTransactionEntry entry) {
+	/**
+	 *
+	 * @param entry
+	 * @throws EntryInsertionException
+	 */
+	public void applyEntry(BuyEquityTransactionEntry entry) throws EntryInsertionException {
+		BigDecimal purchaseValue = entry.getCashValue();
+		
+		BigDecimal newBalance = cashBalance.subtract(purchaseValue);
+		BigDecimal newPortfolioCash = getCashAllocation(entry.getPortfolioID()).subtract(purchaseValue);
 
+		if ((newBalance.compareTo(new BigDecimal("0")) < 0) || (newPortfolioCash.compareTo(new BigDecimal("0")) < 0)) {
+			throw new EntryInsertionException();
+		}
+
+		holdings.open(entry);
+
+		cashBalance = newBalance;
+		setCashAllocation(entry.getPortfolioID(), newPortfolioCash);
 	}
 
-	public void applyEntry(SellEquityTransactionEntry entry) {
+	public void applyEntry(SellEquityTransactionEntry entry) throws EntryInsertionException {
+		BigDecimal sellValue = entry.getCashValue();
 
+		BigDecimal newBalance = cashBalance.add(sellValue);
+		BigDecimal newPortfolioCash = getCashAllocation(entry.getPortfolioID()).add(sellValue);
+
+		// New cash balance can be negative when commission paid is greater than proceeds from sale
+		if ((newBalance.compareTo(new BigDecimal("0")) < 0) || (newPortfolioCash.compareTo(new BigDecimal("0")) < 0)) {
+			throw new EntryInsertionException();
+		}
+
+		holdings.close(entry);
+
+		cashBalance = newBalance;
+		setCashAllocation(entry.getPortfolioID(), newPortfolioCash);
 	}
 
 	/**

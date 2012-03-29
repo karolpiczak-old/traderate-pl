@@ -20,6 +20,8 @@
 
 package pl.traderate.core;
 
+import pl.traderate.core.exception.ObjectConstraintsException;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,19 +31,27 @@ import java.util.Date;
  */
 abstract class TransactionEntry extends PortfolioEntry {
 
-	String ticker;
+	protected String ticker;
 
-	BigDecimal quantity;
+	protected BigDecimal quantity;
 
-	BigDecimal price;
+	protected BigDecimal price;
 
-	BigDecimal commission;
+	protected BigDecimal commission;
 
 	protected TransactionEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date,
-	                           String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
+	                           String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectConstraintsException {
 
 		super(account, portfolio, tags, date, comment);
 
+		if (price.compareTo(new BigDecimal("0")) < 0) {
+			throw new ObjectConstraintsException();
+		}
+		
+		if (quantity.compareTo(new BigDecimal("0")) < 0) {
+			throw new ObjectConstraintsException();
+		}
+		
 		this.ticker = ticker;
 		this.quantity = quantity;
 		this.price = price;

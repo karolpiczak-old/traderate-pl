@@ -18,22 +18,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.core.exception;
 
-import pl.traderate.core.exception.EntryInsertionException;
-import pl.traderate.core.exception.ObjectConstraintsException;
+public class ObjectConstraintsException extends Exception {
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-
-/**
- *
- */
-abstract class BuyTransactionEntry extends TransactionEntry {
-
-	protected BuyTransactionEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date,
-	                              String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectConstraintsException {
-		super(account, portfolio, tags, date, comment, ticker, quantity, price, commission);
-	}
 }

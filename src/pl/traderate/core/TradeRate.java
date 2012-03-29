@@ -24,6 +24,7 @@ import pl.traderate.core.event.GenericModelEventSource;
 import pl.traderate.core.event.DataUpdateModelEvent;
 import pl.traderate.core.exception.EntryInsertionException;
 import pl.traderate.core.exception.JournalNotLoadedException;
+import pl.traderate.core.exception.ObjectConstraintsException;
 import pl.traderate.core.exception.ObjectNotFoundException;
 
 import java.math.BigDecimal;
@@ -112,12 +113,42 @@ public final class TradeRate extends GenericModelEventSource {
 		fireEvent(new DataUpdateModelEvent(this));
 	}
 
-	public void addBuyTransactionEntry() {
+	/**
+	 *
+	 * @param accountID
+	 * @param portfolioID
+	 * @param tags
+	 * @param date
+	 * @param comment
+	 * @param ticker
+	 * @param quantity
+	 * @param price
+	 * @param commission
+	 */
+	public void addBuyEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws JournalNotLoadedException, EntryInsertionException, ObjectNotFoundException, ObjectConstraintsException {
+		assertJournalIsLoaded();
+		journal.addBuyEquityTransactionEntry(accountID, portfolioID, tags, date, comment, ticker, quantity, price, commission);
 
+		fireEvent(new DataUpdateModelEvent(this));
 	}
 
-	public void addSellTransactionEntry() {
+	/**
+	 *
+	 * @param accountID
+	 * @param portfolioID
+	 * @param tags
+	 * @param date
+	 * @param comment
+	 * @param ticker
+	 * @param quantity
+	 * @param price
+	 * @param commission
+	 */
+	public void addSellEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws JournalNotLoadedException, EntryInsertionException, ObjectNotFoundException, ObjectConstraintsException {
+		assertJournalIsLoaded();
+		journal.addSellEquityTransactionEntry(accountID, portfolioID, tags, date, comment, ticker, quantity, price, commission);
 
+		fireEvent(new DataUpdateModelEvent(this));
 	}
 
 	/**

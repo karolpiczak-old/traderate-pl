@@ -21,6 +21,7 @@
 package pl.traderate.core;
 
 import pl.traderate.core.exception.EntryInsertionException;
+import pl.traderate.core.exception.ObjectConstraintsException;
 import pl.traderate.core.exception.ObjectNotFoundException;
 
 import java.math.BigDecimal;
@@ -94,8 +95,24 @@ class Journal {
 		portfolios.add(new Portfolio(name, findObjectByID(parentID, portfolios)));
 	}
 	
-	void addBuyEquityTransactionEntry() {
+	void addBuyEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectNotFoundException, EntryInsertionException, ObjectConstraintsException {
+		Account account = findObjectByID(accountID, accounts);
+		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
 
+		// TODO: Proper BuyEquityTransaction tag handling
+		BuyEquityTransactionEntry entry = new BuyEquityTransactionEntry(account, portfolio, null, date, comment, ticker, quantity, price, commission);
+
+		addEntry(entry);
+	}
+
+	void addSellEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectNotFoundException, EntryInsertionException, ObjectConstraintsException {
+		Account account = findObjectByID(accountID, accounts);
+		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
+
+		// TODO: Proper SellEquityTransaction tag handling
+		SellEquityTransactionEntry entry = new SellEquityTransactionEntry(account, portfolio, null, date, comment, ticker, quantity, price, commission);
+
+		addEntry(entry);
 	}
 
 	/**
