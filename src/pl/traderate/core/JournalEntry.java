@@ -65,6 +65,14 @@ abstract class JournalEntry implements Serializable, Identifiable {
 		return id;
 	}
 
+	static void resetIDIncrement() {
+		numberOfJournalEntriesCreated = 0;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
 	public void attach() throws EntryInsertionException {
 		account.addEntry(this);
 	}

@@ -21,6 +21,7 @@
 package pl.traderate.core;
 
 import pl.traderate.core.exception.EntryInsertionException;
+import pl.traderate.core.exception.InternalLogicError;
 import pl.traderate.core.exception.PortfolioRecalcException;
 
 import java.math.BigDecimal;
@@ -63,6 +64,9 @@ class Portfolio implements Identifiable {
 	private BigDecimal cashBalance;
 
 	/** */
+	private BigDecimal childrenCashBalance;
+
+	/** */
 	private Date latestEntryDate;
 
 	/**
@@ -77,6 +81,7 @@ class Portfolio implements Identifiable {
 		holdings = new HoldingList();
 
 		cashBalance = new BigDecimal("0");
+		childrenCashBalance = new BigDecimal("0");
 		latestEntryDate = new Date(0L);
 	}
 
@@ -98,6 +103,7 @@ class Portfolio implements Identifiable {
 	private void wipeCalculations() {
 		holdings.clear();
 		cashBalance = new BigDecimal("0");
+		childrenCashBalance = new BigDecimal("0");
 		latestEntryDate = new Date(0L);
 	}
 
@@ -145,7 +151,7 @@ class Portfolio implements Identifiable {
 				try {
 					recalc();
 				} catch (PortfolioRecalcException e2) {
-					throw new InternalError();
+					throw new InternalLogicError();
 				}
 				throw new EntryInsertionException();
 			}
@@ -166,7 +172,7 @@ class Portfolio implements Identifiable {
 			try {
 				recalc();
 			} catch (PortfolioRecalcException e2) {
-				throw new InternalError();
+				throw new InternalLogicError();
 			}
 			throw new EntryInsertionException();
 		}
@@ -207,7 +213,25 @@ class Portfolio implements Identifiable {
 	 * @throws EntryInsertionException
 	 */
 	public void applyEntry(CashAllocationEntry entry) {
+		applyEntryToParents(entry);
+
+		entry.getAccount().increasePortfolioCash(this.id, entry.getAmount());
+
 		cashBalance = cashBalance.add(entry.getAmount());
+	}
+
+	/**
+	 *
+	 * @param entry
+	 */
+	private void applyEntryToParents(CashAllocationEntry entry) {
+		if (parent != null) {
+			parent.applyEntryToParents(entry);
+
+			entry.getAccount().increasePortfolioChildrenCash(parent.id, entry.getAmount());
+
+			parent.childrenCashBalance = parent.childrenCashBalance.add(entry.getAmount());
+		}
 	}
 
 	/**
@@ -216,13 +240,35 @@ class Portfolio implements Identifiable {
 	 * @throws EntryInsertionException
 	 */
 	public void applyEntry(CashDeallocationEntry entry) throws EntryInsertionException {
+		applyEntryToParents(entry);
+
 		BigDecimal newBalance = cashBalance.subtract(entry.getAmount());
 
 		if ((newBalance.compareTo(new BigDecimal("0")) < 0)) {
 			throw new EntryInsertionException();
 		}
 
+		entry.getAccount().decreasePortfolioCash(this.id, entry.getAmount());
+
 		cashBalance = newBalance;
+	}
+
+	/**
+	 *
+	 * @param entry
+	 */
+	private void applyEntryToParents(CashDeallocationEntry entry) {
+		if (parent != null) {
+			parent.applyEntryToParents(entry);
+
+			entry.getAccount().decreasePortfolioChildrenCash(parent.id, entry.getAmount());
+
+			parent.childrenCashBalance = parent.childrenCashBalance.subtract(entry.getAmount());
+
+			if ((parent.childrenCashBalance.compareTo(new BigDecimal("0")) < 0)) {
+				throw new InternalLogicError();
+			}
+		}
 	}
 
 	/**
@@ -231,6 +277,10 @@ class Portfolio implements Identifiable {
 	 */
 	public int getID() {
 		return id;
+	}
+
+	static void resetIDIncrement() {
+		numberOfPortfoliosCreated = 0;
 	}
 
 	/**
@@ -247,5 +297,13 @@ class Portfolio implements Identifiable {
 	 */
 	void setName(String name) {
 		this.name = name;
+	}
+
+	public BigDecimal getCashBalance() {
+		return cashBalance;
+	}
+
+	public BigDecimal getChildrenCashBalance() {
+		return childrenCashBalance;
 	}
 }

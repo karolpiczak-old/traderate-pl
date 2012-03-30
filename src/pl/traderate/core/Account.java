@@ -22,6 +22,7 @@ package pl.traderate.core;
 
 import pl.traderate.core.exception.AccountRecalcException;
 import pl.traderate.core.exception.EntryInsertionException;
+import pl.traderate.core.exception.InternalLogicError;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -61,6 +62,9 @@ class Account implements Identifiable {
 	/** */
 	private HashMap<Integer, BigDecimal> cashAllocations;
 
+	/** */
+	private HashMap<Integer, BigDecimal> childrenCashAllocations;
+
 	/**
 	 *
 	 * @param name
@@ -75,6 +79,7 @@ class Account implements Identifiable {
 		unallocatedCash = new BigDecimal("0");
 		latestEntryDate = new Date(0L);
 		cashAllocations = new HashMap<>();
+		childrenCashAllocations = new HashMap<>();
 	}
 
 	/**
@@ -87,6 +92,7 @@ class Account implements Identifiable {
 		unallocatedCash = new BigDecimal("0");
 		latestEntryDate = new Date(0L);
 		cashAllocations.clear();
+		childrenCashAllocations.clear();
 	}
 
 	/**
@@ -133,7 +139,7 @@ class Account implements Identifiable {
 				try {
 					recalc();
 				} catch (AccountRecalcException e2) {
-					throw new InternalError();
+					throw new InternalLogicError();
 				}
 				throw new EntryInsertionException();
 			}
@@ -154,7 +160,7 @@ class Account implements Identifiable {
 			try {
 				recalc();
 			} catch (AccountRecalcException e2) {
-				throw new InternalError();
+				throw new InternalLogicError();
 			}
 			throw new EntryInsertionException();
 		}
@@ -211,9 +217,6 @@ class Account implements Identifiable {
 		}
 
 		unallocatedCash = newUnallocatedCash;
-
-		BigDecimal portfolioCash = getCashAllocation(entry.getPortfolioID());
-		setCashAllocation(entry.getPortfolioID(), portfolioCash.add(entry.getAmount()));
 	}
 
 	/**
@@ -222,16 +225,35 @@ class Account implements Identifiable {
 	 * @throws EntryInsertionException
 	 */
 	public void applyEntry(CashDeallocationEntry entry) throws EntryInsertionException {
-		BigDecimal portfolioCash = getCashAllocation(entry.getPortfolioID());
-		BigDecimal newPortfolioCash = portfolioCash.subtract(entry.getAmount());
+		unallocatedCash = unallocatedCash.add(entry.getAmount());
+	}
 
-		if (newPortfolioCash.compareTo(new BigDecimal("0")) < 0) {
-			throw new EntryInsertionException();
+	void increasePortfolioCash(int portfolioID, BigDecimal amount) {
+		BigDecimal portfolioCash = getCashAllocation(portfolioID);
+
+		if ((portfolioCash.add(amount).compareTo(new BigDecimal("0")) < 0)) {
+			throw new InternalLogicError();
 		}
 
-		setCashAllocation(entry.getPortfolioID(), newPortfolioCash);
+		setCashAllocation(portfolioID, portfolioCash.add(amount));
+	}
+	
+	void decreasePortfolioCash(int portfolioID, BigDecimal amount) {
+		increasePortfolioCash(portfolioID, amount.negate());
+	}
+	
+	void increasePortfolioChildrenCash(int portfolioID, BigDecimal amount) {
+		BigDecimal portfolioChildrenCash = getChildrenCashAllocation(portfolioID);
 
-		unallocatedCash = unallocatedCash.add(entry.getAmount());
+		if ((portfolioChildrenCash.add(amount).compareTo(new BigDecimal("0")) < 0)) {
+			throw new InternalLogicError();
+		}
+
+		setChildrenCashAllocation(portfolioID, portfolioChildrenCash.add(amount));
+	}
+
+	void decreasePortfolioChildrenCash(int portfolioID, BigDecimal amount) {
+		increasePortfolioChildrenCash(portfolioID, amount.negate());
 	}
 
 	/**
@@ -268,6 +290,10 @@ class Account implements Identifiable {
 		return id;
 	}
 
+	static void resetIDIncrement() {
+		numberOfAccountsCreated = 0;
+	}
+
 	/**
 	 *
 	 * @return
@@ -282,6 +308,14 @@ class Account implements Identifiable {
 	 */
 	void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	BigDecimal getCashBalance() {
+		return cashBalance;
 	}
 
 	/**
@@ -302,9 +336,37 @@ class Account implements Identifiable {
 	/**
 	 *
 	 * @param portfolioID
+	 * @return
+	 */
+	private BigDecimal getChildrenCashAllocation(int portfolioID) {
+		BigDecimal amount = childrenCashAllocations.get(portfolioID);
+
+		if (amount == null) {
+			amount = new BigDecimal("0");
+		}
+
+		return amount;
+	}
+
+	/**
+	 *
+	 * @param portfolioID
 	 * @param amount
 	 */
 	private void setCashAllocation(int portfolioID, BigDecimal amount) {
 		cashAllocations.put(portfolioID, amount);
+	}
+
+	/**
+	 *
+	 * @param portfolioID
+	 * @param amount
+	 */
+	private void setChildrenCashAllocation(int portfolioID, BigDecimal amount) {
+		childrenCashAllocations.put(portfolioID, amount);
+	}
+
+	public BigDecimal getUnallocatedCash() {
+		return unallocatedCash;
 	}
 }

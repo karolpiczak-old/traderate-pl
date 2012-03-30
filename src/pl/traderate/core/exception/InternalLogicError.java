@@ -20,6 +20,6 @@
 
 package pl.traderate.core.exception;
 
-public class InternalError extends Error {
+public class InternalLogicError extends Error {
 
 }

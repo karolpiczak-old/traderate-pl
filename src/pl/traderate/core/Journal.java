@@ -69,6 +69,10 @@ class Journal {
 		portfolios = new ArrayList<Portfolio>(25);
 		tags = new ArrayList<Tag>(25);
 
+		JournalEntry.resetIDIncrement();
+		Account.resetIDIncrement();
+		Portfolio.resetIDIncrement();
+		
 		setName(name);
 		setOwner(owner);
 		creationDate = new Date();
