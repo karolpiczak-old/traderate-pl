@@ -21,6 +21,7 @@
 package pl.traderate.core;
 
 import pl.traderate.core.exception.EntryInsertionException;
+import pl.traderate.core.exception.InvalidInputException;
 import pl.traderate.core.exception.ObjectConstraintsException;
 import pl.traderate.core.exception.ObjectNotFoundException;
 
@@ -130,7 +131,9 @@ class Journal {
 	 * @throws ObjectNotFoundException
 	 * @throws EntryInsertionException
 	 */
-	void addCashAllocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException {
+	void addCashAllocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
+		assertAmountIsPositive(amount);
+		
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
 
@@ -151,7 +154,9 @@ class Journal {
 	 * @throws ObjectNotFoundException
 	 * @throws EntryInsertionException
 	 */
-	void addCashDeallocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException {
+	void addCashDeallocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
+		assertAmountIsPositive(amount);
+
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
 
@@ -170,8 +175,11 @@ class Journal {
 	 * @param amount
 	 * @throws ObjectNotFoundException
 	 * @throws EntryInsertionException
+	 * @throws InvalidInputException
 	 */
-	void addCashDepositEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException {
+	void addCashDepositEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
+		assertAmountIsPositive(amount);
+		
 		Account account = findObjectByID(accountID, accounts);
 
 		// TODO: Proper tag handling
@@ -190,7 +198,9 @@ class Journal {
 	 * @throws ObjectNotFoundException
 	 * @throws EntryInsertionException
 	 */
-	void addCashWithdrawalEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException {
+	void addCashWithdrawalEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
+		assertAmountIsPositive(amount);
+		
 		Account account = findObjectByID(accountID, accounts);
 
 		// TODO: Proper tag handling
@@ -309,5 +319,11 @@ class Journal {
 		}
 		
 		return object;
+	}
+	
+	private void assertAmountIsPositive(BigDecimal amount) throws InvalidInputException {
+		if ((amount.compareTo(new BigDecimal("0")) < 0)) {
+			throw new InvalidInputException();
+		}
 	}
 }

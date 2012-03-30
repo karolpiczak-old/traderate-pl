@@ -240,13 +240,13 @@ class Portfolio implements Identifiable {
 	 * @throws EntryInsertionException
 	 */
 	public void applyEntry(CashDeallocationEntry entry) throws EntryInsertionException {
-		applyEntryToParents(entry);
-
 		BigDecimal newBalance = cashBalance.subtract(entry.getAmount());
 
 		if ((newBalance.compareTo(new BigDecimal("0")) < 0)) {
 			throw new EntryInsertionException();
 		}
+
+		applyEntryToParents(entry);
 
 		entry.getAccount().decreasePortfolioCash(this.id, entry.getAmount());
 

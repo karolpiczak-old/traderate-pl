@@ -22,10 +22,7 @@ package pl.traderate.core;
 
 import pl.traderate.core.event.GenericModelEventSource;
 import pl.traderate.core.event.DataUpdateModelEvent;
-import pl.traderate.core.exception.EntryInsertionException;
-import pl.traderate.core.exception.JournalNotLoadedException;
-import pl.traderate.core.exception.ObjectConstraintsException;
-import pl.traderate.core.exception.ObjectNotFoundException;
+import pl.traderate.core.exception.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -161,7 +158,7 @@ public final class TradeRate extends GenericModelEventSource {
 	 * @param amount
 	 * @throws pl.traderate.core.exception.JournalNotLoadedException
 	 */
-	public void addCashAllocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException {
+	public void addCashAllocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addCashAllocationEntry(accountID, portfolioID, tags, date, comment, amount);
 
@@ -178,7 +175,7 @@ public final class TradeRate extends GenericModelEventSource {
 	 * @param amount
 	 * @throws pl.traderate.core.exception.JournalNotLoadedException
 	 */
-	public void addCashDeallocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException {
+	public void addCashDeallocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addCashDeallocationEntry(accountID, portfolioID, tags, date, comment, amount);
 
@@ -196,7 +193,7 @@ public final class TradeRate extends GenericModelEventSource {
 	 * @throws ObjectNotFoundException
 	 * @throws EntryInsertionException
 	 */
-	public void addCashDepositEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException {
+	public void addCashDepositEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addCashDepositEntry(accountID, tags, date, comment, amount);
 
@@ -214,7 +211,7 @@ public final class TradeRate extends GenericModelEventSource {
 	 * @throws ObjectNotFoundException
 	 * @throws EntryInsertionException
 	 */
-	public void addCashWithdrawalEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException {
+	public void addCashWithdrawalEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addCashWithdrawalEntry(accountID, tags, date, comment, amount);
 

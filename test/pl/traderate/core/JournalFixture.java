@@ -25,6 +25,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import pl.traderate.core.exception.EntryInsertionException;
+import pl.traderate.core.exception.InvalidInputException;
 import pl.traderate.core.exception.ObjectNotFoundException;
 import pl.traderate.test.TestNotImplementedError;
 
@@ -112,7 +113,7 @@ public class JournalFixture {
 	}
 
 	@Test
-	public void shouldHandleCashOperations() throws EntryInsertionException, ObjectNotFoundException {
+	public void shouldHandleCashOperations() throws EntryInsertionException, ObjectNotFoundException, InvalidInputException {
 		journal.addAccount("Test account #1");
 		assertEquals(new BigDecimal("0"), accounts.get(0).getCashBalance());
 
@@ -135,7 +136,7 @@ public class JournalFixture {
 	}
 
 	@Test(expected=EntryInsertionException.class)
-	public void shouldRejectCashOperationsGivenInsufficientFunds() throws EntryInsertionException, ObjectNotFoundException {
+	public void shouldRejectCashOperationGivenInsufficientFunds() throws EntryInsertionException, ObjectNotFoundException, InvalidInputException {
 		journal.addAccount("Test account #1");
 		assertEquals(new BigDecimal("0"), accounts.get(0).getCashBalance());
 
@@ -146,7 +147,7 @@ public class JournalFixture {
 	}
 
 	@Test(expected=EntryInsertionException.class)
-	public void shouldRejectCashOperationsGivenPastInsufficientFunds() throws EntryInsertionException, ObjectNotFoundException {
+	public void shouldRejectCashOperationGivenPastInsufficientFunds() throws EntryInsertionException, ObjectNotFoundException, InvalidInputException {
 		journal.addAccount("Test account #1");
 		assertEquals(new BigDecimal("0"), accounts.get(0).getCashBalance());
 
@@ -160,7 +161,7 @@ public class JournalFixture {
 	}
 
 	@Test
-	public void shouldHandleCashReallocations() throws EntryInsertionException, ObjectNotFoundException {
+	public void shouldHandleCashReallocations() throws EntryInsertionException, ObjectNotFoundException, InvalidInputException {
 		journal.addAccount("Test account #1");
 		journal.addAccount("Test account #2");
 
@@ -239,16 +240,74 @@ public class JournalFixture {
 		assertEquals(new BigDecimal("3000.00"), portfolios.get(0).getChildrenCashBalance());
 	}
 	
-	@Test
-	public void shouldRejectCashReallocationsGivenInsufficientFunds() {
-		throw new TestNotImplementedError();
+	@Test(expected=EntryInsertionException.class)
+	public void shouldRejectCashReallocationGivenInsufficientAccountFunds() throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
+		journal.addAccount("Test account #1");
+		journal.addPortfolio("Test portfolio #1", 0);
+		journal.addCashDepositEntry(0, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", new BigDecimal("10000.00"));
+		journal.addCashAllocationEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("15000.00"));
 	}
 
-	@Test
-	public void shouldRejectCashReallocationsGivenPastInsufficientFunds() {
-		throw new TestNotImplementedError();
+	@Test(expected=EntryInsertionException.class)
+	public void shouldRejectCashReallocationGivenPastInsufficientAccountFunds() throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
+		journal.addAccount("Test account #1");
+		journal.addPortfolio("Test portfolio #1", 0);
+		journal.addCashDepositEntry(0, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", new BigDecimal("10000.00"));
+		journal.addCashDepositEntry(0, "Example tag", new GregorianCalendar(2001, 0, 1).getTime(), "Some comment", new BigDecimal("10000.00"));
+		journal.addCashAllocationEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("15000.00"));
 	}
-	
+
+	@Test(expected=EntryInsertionException.class)
+	public void shouldRejectCashReallocationGivenInsufficientPortfolioFunds() throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
+		journal.addAccount("Test account #1");
+		journal.addPortfolio("Test portfolio #1", 0);
+		journal.addCashDepositEntry(0, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", new BigDecimal("10000.00"));
+		journal.addCashAllocationEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("5000.00"));
+		journal.addCashDeallocationEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 3).getTime(), "Some comment", new BigDecimal("7000.00"));
+	}
+
+	@Test(expected=EntryInsertionException.class)
+	public void shouldRejectCashReallocationGivenPastInsufficientPortfolioFunds() throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
+		journal.addAccount("Test account #1");
+		journal.addPortfolio("Test portfolio #1", 0);
+		journal.addCashDepositEntry(0, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", new BigDecimal("10000.00"));
+		journal.addCashAllocationEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("5000.00"));
+		journal.addCashAllocationEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 5).getTime(), "Some comment", new BigDecimal("3000.00"));
+		journal.addCashDeallocationEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 3).getTime(), "Some comment", new BigDecimal("7000.00"));
+	}
+
+	@Test(expected=InvalidInputException.class)
+	public void shouldRejectCashDepositGivenNegativeAmount() throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
+		journal.addAccount("Test account #1");
+		journal.addPortfolio("Test portfolio #1", 0);
+		journal.addCashDepositEntry(0, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", new BigDecimal("-1000.00"));
+	}
+
+	@Test(expected=InvalidInputException.class)
+	public void shouldRejectCashWithdrawalGivenNegativeAmount() throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
+		journal.addAccount("Test account #1");
+		journal.addPortfolio("Test portfolio #1", 0);
+		journal.addCashDepositEntry(0, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", new BigDecimal("1000.00"));
+		journal.addCashWithdrawalEntry(0, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", new BigDecimal("-500.00"));
+	}
+
+	@Test(expected=InvalidInputException.class)
+	public void shouldRejectCashAllocationGivenNegativeAmount() throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
+		journal.addAccount("Test account #1");
+		journal.addPortfolio("Test portfolio #1", 0);
+		journal.addCashDepositEntry(0, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", new BigDecimal("1000.00"));
+		journal.addCashAllocationEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("-500.00"));
+	}
+
+	@Test(expected=InvalidInputException.class)
+	public void shouldRejectCashDeallocationGivenNegativeAmount() throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
+		journal.addAccount("Test account #1");
+		journal.addPortfolio("Test portfolio #1", 0);
+		journal.addCashDepositEntry(0, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", new BigDecimal("1000.00"));
+		journal.addCashAllocationEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("500.00"));
+		journal.addCashDeallocationEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("-300.00"));
+	}
+
 	@Test
 	public void shouldHandleEquityOperations() {
 		throw new TestNotImplementedError();
