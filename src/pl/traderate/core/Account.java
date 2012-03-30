@@ -48,7 +48,7 @@ class Account implements Identifiable {
 	private final ArrayList<JournalEntry> entries;
 
 	/** */
-	private final HoldingList holdings;
+	private HoldingList holdings;
 
 	/** */
 	private Date latestEntryDate;
@@ -70,8 +70,14 @@ class Account implements Identifiable {
 		id = numberOfAccountsCreated++;
 		setName(name);
 		entries = new ArrayList<>();
-		holdings = new HoldingList();
+		initVolatile();
+	}
 
+	/**
+	 *
+	 */
+	private void initVolatile() {
+		holdings = new HoldingList();
 		cashBalance = new BigDecimal("0");
 		unallocatedCash = new BigDecimal("0");
 		latestEntryDate = new Date(0L);
@@ -82,12 +88,7 @@ class Account implements Identifiable {
 	 *
 	 */
 	private void wipeCalculations() {
-		holdings.clear();
-
-		cashBalance = new BigDecimal("0");
-		unallocatedCash = new BigDecimal("0");
-		latestEntryDate = new Date(0L);
-		cashAllocations.clear();
+		initVolatile();
 	}
 
 	/**
@@ -168,7 +169,6 @@ class Account implements Identifiable {
 	 */
 	public void applyEntry(BuyEquityTransactionEntry entry) throws EntryInsertionException {
 		BigDecimal purchaseValue = entry.getCashValue();
-		
 		BigDecimal newBalance = cashBalance.subtract(purchaseValue);
 		BigDecimal newPortfolioCash = getCashAllocation(entry.getPortfolioID()).subtract(purchaseValue);
 
@@ -184,7 +184,6 @@ class Account implements Identifiable {
 
 	public void applyEntry(SellEquityTransactionEntry entry) throws EntryInsertionException {
 		BigDecimal sellValue = entry.getCashValue();
-
 		BigDecimal newBalance = cashBalance.add(sellValue);
 		BigDecimal newPortfolioCash = getCashAllocation(entry.getPortfolioID()).add(sellValue);
 
@@ -206,12 +205,14 @@ class Account implements Identifiable {
 	 */
 	public void applyEntry(CashAllocationEntry entry) throws EntryInsertionException {
 		BigDecimal newUnallocatedCash = unallocatedCash.subtract(entry.getAmount());
+		BigDecimal newPortfolioCash = getCashAllocation(entry.getPortfolioID()).add(entry.getAmount());
 
 		if (newUnallocatedCash.compareTo(new BigDecimal("0")) < 0) {
 			throw new EntryInsertionException();
 		}
 
 		unallocatedCash = newUnallocatedCash;
+		setCashAllocation(entry.getPortfolioID(), newPortfolioCash);
 	}
 
 	/**
@@ -220,21 +221,14 @@ class Account implements Identifiable {
 	 * @throws EntryInsertionException
 	 */
 	public void applyEntry(CashDeallocationEntry entry) throws EntryInsertionException {
-		unallocatedCash = unallocatedCash.add(entry.getAmount());
-	}
-
-	void increasePortfolioCash(int portfolioID, BigDecimal amount) {
-		BigDecimal portfolioCash = getCashAllocation(portfolioID);
-
-		if ((portfolioCash.add(amount).compareTo(new BigDecimal("0")) < 0)) {
-			throw new InternalLogicError();
+		BigDecimal newPortfolioCash = getCashAllocation(entry.getPortfolioID()).subtract(entry.getAmount());
+		
+		if (newPortfolioCash.compareTo(new BigDecimal("0")) < 0) {
+			throw new EntryInsertionException();
 		}
 
-		setCashAllocation(portfolioID, portfolioCash.add(amount));
-	}
-	
-	void decreasePortfolioCash(int portfolioID, BigDecimal amount) {
-		increasePortfolioCash(portfolioID, amount.negate());
+		unallocatedCash = unallocatedCash.add(entry.getAmount());
+		setCashAllocation(entry.getPortfolioID(), newPortfolioCash);
 	}
 
 	/**
@@ -301,12 +295,20 @@ class Account implements Identifiable {
 
 	/**
 	 *
+	 * @return
+	 */
+	public BigDecimal getUnallocatedCash() {
+		return unallocatedCash;
+	}
+
+	/**
+	 *
 	 * @param portfolioID
 	 * @return
 	 */
-	private BigDecimal getCashAllocation(int portfolioID) {
+	BigDecimal getCashAllocation(int portfolioID) {
 		BigDecimal amount = cashAllocations.get(portfolioID);
-		
+
 		if (amount == null) {
 			amount = new BigDecimal("0");
 		}
@@ -321,9 +323,5 @@ class Account implements Identifiable {
 	 */
 	private void setCashAllocation(int portfolioID, BigDecimal amount) {
 		cashAllocations.put(portfolioID, amount);
-	}
-
-	public BigDecimal getUnallocatedCash() {
-		return unallocatedCash;
 	}
 }

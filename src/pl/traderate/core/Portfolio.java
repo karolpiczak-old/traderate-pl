@@ -35,10 +35,13 @@ import java.util.Date;
 class Portfolio implements Identifiable {
 
 	/** */
-	private final int id;
+	private static int numberOfPortfoliosCreated;
 
 	/** */
-	private static int numberOfPortfoliosCreated;
+	private final Journal journal;
+
+	/** */
+	private final int id;
 
 	/** */
 	private String name;
@@ -58,7 +61,7 @@ class Portfolio implements Identifiable {
 	private final ArrayList<Portfolio> children;
 
 	/** */
-	private final HoldingList holdings;
+	private HoldingList holdings;
 
 	/** */
 	private BigDecimal cashBalance;
@@ -73,16 +76,14 @@ class Portfolio implements Identifiable {
 	 *
 	 * @param name
 	 */
-	Portfolio(String name) {
+	Portfolio(Journal journal, String name) {
+		this.journal = journal;
 		id = numberOfPortfoliosCreated++;
 		setName(name);
 		entries = new ArrayList<PortfolioEntry>();
 		children = new ArrayList<Portfolio>();
-		holdings = new HoldingList();
 
-		cashBalance = new BigDecimal("0");
-		aggregatedCashBalance = new BigDecimal("0");
-		latestEntryDate = new Date(0L);
+		initVolatile();
 	}
 
 	/**
@@ -90,21 +91,25 @@ class Portfolio implements Identifiable {
 	 * @param name
 	 * @param parent
 	 */
-	Portfolio(String name, Portfolio parent) {
-		this(name);
+	Portfolio(Journal journal, String name, Portfolio parent) {
+		this(journal, name);
 
 		this.parent = parent;
 		parent.children.add(this);
+	}
+
+	private void initVolatile() {
+		holdings = new HoldingList();
+		cashBalance = new BigDecimal("0");
+		aggregatedCashBalance = new BigDecimal("0");
+		latestEntryDate = new Date(0L);
 	}
 
 	/**
 	 *
 	 */
 	private void wipeCalculations() {
-		holdings.clear();
-		cashBalance = new BigDecimal("0");
-		aggregatedCashBalance = new BigDecimal("0");
-		latestEntryDate = new Date(0L);
+		initVolatile();
 	}
 
 	/**
@@ -179,64 +184,50 @@ class Portfolio implements Identifiable {
 	}
 
 	public void applyEntry(BuyEquityTransactionEntry entry) throws EntryInsertionException {
-		BigDecimal purchaseValue = entry.getCashValue();
-
-		BigDecimal newBalance = cashBalance.subtract(purchaseValue);
-
-		if ((newBalance.compareTo(new BigDecimal("0")) < 0)) {
-			throw new EntryInsertionException();
-		}
-
 		holdings.open(entry);
-
-		cashBalance = newBalance;
+		updateCashBalance();
+		updateHoldingAggregates();
 	}
 
 	public void applyEntry(SellEquityTransactionEntry entry) throws EntryInsertionException {
-		BigDecimal sellValue = entry.getCashValue();
-
-		BigDecimal newBalance = cashBalance.add(sellValue);
-
-		// New cash balance can be negative when commission paid is greater than proceeds from sale
-		if ((newBalance.compareTo(new BigDecimal("0")) < 0)) {
-			throw new EntryInsertionException();
-		}
-
 		holdings.close(entry);
+		updateCashBalance();
+		updateHoldingAggregates();
+	}
 
-		cashBalance = newBalance;
+	private void updateHoldingAggregates() {
+		throw new InternalLogicError();
 	}
 
 	/**
 	 *
 	 * @param entry
-	 * @throws EntryInsertionException
 	 */
 	public void applyEntry(CashAllocationEntry entry) {
-		entry.getAccount().increasePortfolioCash(this.id, entry.getAmount());
-		cashBalance = cashBalance.add(entry.getAmount());
-
+		updateCashBalance();
 		updateCashAggregates();
 	}
 
 	/**
 	 *
 	 * @param entry
-	 * @throws EntryInsertionException
 	 */
-	public void applyEntry(CashDeallocationEntry entry) throws EntryInsertionException {
-		BigDecimal newBalance = cashBalance.subtract(entry.getAmount());
-
-		if ((newBalance.compareTo(new BigDecimal("0")) < 0)) {
-			throw new EntryInsertionException();
-		}
-
-		entry.getAccount().decreasePortfolioCash(this.id, entry.getAmount());
-		cashBalance = newBalance;
-
+	public void applyEntry(CashDeallocationEntry entry) {
+		updateCashBalance();
 		updateCashAggregates();
 	}
 
+	/**
+	 *
+	 */
+	private void updateCashBalance() {
+		cashBalance = new BigDecimal("0");
+		
+		for (Account account : journal.getAccounts()) {
+			cashBalance = cashBalance.add(account.getCashAllocation(this.id));
+		}
+	}
+	
 	/**
 	 *
 	 *

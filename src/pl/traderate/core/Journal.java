@@ -84,7 +84,7 @@ class Journal {
 		creationDate = new Date();
 		setLastUpdateDate(new Date());
 
-		portfolios.add(new Portfolio("Portfel globalny"));
+		portfolios.add(new Portfolio(this, "Portfel globalny"));
 	}
 
 	/**
@@ -102,7 +102,7 @@ class Journal {
 	 * @throws ObjectNotFoundException
 	 */
 	void addPortfolio(String name, int parentID) throws ObjectNotFoundException {
-		portfolios.add(new Portfolio(name, findObjectByID(parentID, portfolios)));
+		portfolios.add(new Portfolio(this, name, findObjectByID(parentID, portfolios)));
 	}
 
 	void addBuyEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectNotFoundException, EntryInsertionException, ObjectConstraintsException, InvalidInputException {
@@ -307,6 +307,10 @@ class Journal {
 	 */
 	void setLastUpdateDate(Date lastUpdateDate) {
 		this.lastUpdateDate = new Date(lastUpdateDate.getTime());
+	}
+
+	ArrayList<Account> getAccounts() {
+		return accounts;
 	}
 
 	/**
