@@ -21,6 +21,7 @@
 package pl.traderate.core;
 
 import pl.traderate.core.exception.EntryInsertionException;
+import pl.traderate.core.exception.InternalLogicError;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,7 +43,11 @@ abstract class PortfolioEntry extends JournalEntry {
 		try {
 			portfolio.addEntry(this);
 		} catch (EntryInsertionException e) {
-			account.removeEntry(this);
+			try {
+				account.removeEntry(this);
+			} catch (EntryInsertionException e2) {
+				throw new InternalLogicError();
+			}
 			throw e;
 		}
 	}
@@ -54,7 +59,11 @@ abstract class PortfolioEntry extends JournalEntry {
 		try {
 			portfolio.removeEntry(this);
 		} catch (EntryInsertionException e) {
-			account.addEntry(this);
+			try {
+				account.addEntry(this);
+			} catch (EntryInsertionException e2) {
+				throw new InternalLogicError();
+			}
 			throw e;
 		}
 	}
