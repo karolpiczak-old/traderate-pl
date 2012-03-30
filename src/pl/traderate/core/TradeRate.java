@@ -122,7 +122,7 @@ public final class TradeRate extends GenericModelEventSource {
 	 * @param price
 	 * @param commission
 	 */
-	public void addBuyEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws JournalNotLoadedException, EntryInsertionException, ObjectNotFoundException, ObjectConstraintsException {
+	public void addBuyEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws JournalNotLoadedException, EntryInsertionException, ObjectNotFoundException, ObjectConstraintsException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addBuyEquityTransactionEntry(accountID, portfolioID, tags, date, comment, ticker, quantity, price, commission);
 
@@ -141,7 +141,7 @@ public final class TradeRate extends GenericModelEventSource {
 	 * @param price
 	 * @param commission
 	 */
-	public void addSellEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws JournalNotLoadedException, EntryInsertionException, ObjectNotFoundException, ObjectConstraintsException {
+	public void addSellEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws JournalNotLoadedException, EntryInsertionException, ObjectNotFoundException, ObjectConstraintsException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addSellEquityTransactionEntry(accountID, portfolioID, tags, date, comment, ticker, quantity, price, commission);
 

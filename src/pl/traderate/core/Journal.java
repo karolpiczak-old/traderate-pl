@@ -32,6 +32,11 @@ import java.util.Date;
 /**
  *
  *
+ * <b>Implementation details:</b>
+ * Barricade function. All input should be sanitized inside implementations of
+ * public methods of this class. Further internal calls to other classes in this
+ * package assume that no additional checking is needed and passed values adhere to
+ * expected standards (e.g. cash amount are not negative etc.).
  */
 class Journal {
 
@@ -73,7 +78,7 @@ class Journal {
 		JournalEntry.resetIDIncrement();
 		Account.resetIDIncrement();
 		Portfolio.resetIDIncrement();
-		
+
 		setName(name);
 		setOwner(owner);
 		creationDate = new Date();
@@ -99,8 +104,12 @@ class Journal {
 	void addPortfolio(String name, int parentID) throws ObjectNotFoundException {
 		portfolios.add(new Portfolio(name, findObjectByID(parentID, portfolios)));
 	}
-	
-	void addBuyEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectNotFoundException, EntryInsertionException, ObjectConstraintsException {
+
+	void addBuyEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectNotFoundException, EntryInsertionException, ObjectConstraintsException, InvalidInputException {
+		assertNumberIsPositive(quantity);
+		assertNumberIsPositive(price);
+		assertNumberIsPositive(commission);
+
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
 
@@ -110,7 +119,11 @@ class Journal {
 		addEntry(entry);
 	}
 
-	void addSellEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectNotFoundException, EntryInsertionException, ObjectConstraintsException {
+	void addSellEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectNotFoundException, EntryInsertionException, ObjectConstraintsException, InvalidInputException {
+		assertNumberIsPositive(quantity);
+		assertNumberIsPositive(price);
+		assertNumberIsPositive(commission);
+
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
 
@@ -132,14 +145,14 @@ class Journal {
 	 * @throws EntryInsertionException
 	 */
 	void addCashAllocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
-		assertAmountIsPositive(amount);
-		
+		assertNumberIsPositive(amount);
+
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
 
 		// TODO: Proper tag handling
 		CashAllocationEntry entry = new CashAllocationEntry(account, portfolio, null, date, comment, amount);
-		
+
 		addEntry(entry);
 	}
 
@@ -155,7 +168,7 @@ class Journal {
 	 * @throws EntryInsertionException
 	 */
 	void addCashDeallocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
-		assertAmountIsPositive(amount);
+		assertNumberIsPositive(amount);
 
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
@@ -178,8 +191,8 @@ class Journal {
 	 * @throws InvalidInputException
 	 */
 	void addCashDepositEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
-		assertAmountIsPositive(amount);
-		
+		assertNumberIsPositive(amount);
+
 		Account account = findObjectByID(accountID, accounts);
 
 		// TODO: Proper tag handling
@@ -199,8 +212,8 @@ class Journal {
 	 * @throws EntryInsertionException
 	 */
 	void addCashWithdrawalEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
-		assertAmountIsPositive(amount);
-		
+		assertNumberIsPositive(amount);
+
 		Account account = findObjectByID(accountID, accounts);
 
 		// TODO: Proper tag handling
@@ -306,23 +319,23 @@ class Journal {
 	 */
 	private <T extends Identifiable> T findObjectByID(int objectID, ArrayList<T> arrayList) throws ObjectNotFoundException {
 		T object = null;
-		
+
 		for (T checkedObject : arrayList) {
 			if (checkedObject.getID() == objectID) {
 				object = checkedObject;
 				break;
 			}
 		}
-		
+
 		if (object == null) {
 			throw new ObjectNotFoundException();
 		}
-		
+
 		return object;
 	}
-	
-	private void assertAmountIsPositive(BigDecimal amount) throws InvalidInputException {
-		if ((amount.compareTo(new BigDecimal("0")) < 0)) {
+
+	private void assertNumberIsPositive(BigDecimal number) throws InvalidInputException {
+		if ((number.compareTo(new BigDecimal("0")) < 0)) {
 			throw new InvalidInputException();
 		}
 	}
