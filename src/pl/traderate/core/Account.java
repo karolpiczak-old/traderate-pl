@@ -62,9 +62,6 @@ class Account implements Identifiable {
 	/** */
 	private HashMap<Integer, BigDecimal> cashAllocations;
 
-	/** */
-	private HashMap<Integer, BigDecimal> childrenCashAllocations;
-
 	/**
 	 *
 	 * @param name
@@ -79,7 +76,6 @@ class Account implements Identifiable {
 		unallocatedCash = new BigDecimal("0");
 		latestEntryDate = new Date(0L);
 		cashAllocations = new HashMap<>();
-		childrenCashAllocations = new HashMap<>();
 	}
 
 	/**
@@ -92,7 +88,6 @@ class Account implements Identifiable {
 		unallocatedCash = new BigDecimal("0");
 		latestEntryDate = new Date(0L);
 		cashAllocations.clear();
-		childrenCashAllocations.clear();
 	}
 
 	/**
@@ -241,20 +236,6 @@ class Account implements Identifiable {
 	void decreasePortfolioCash(int portfolioID, BigDecimal amount) {
 		increasePortfolioCash(portfolioID, amount.negate());
 	}
-	
-	void increasePortfolioChildrenCash(int portfolioID, BigDecimal amount) {
-		BigDecimal portfolioChildrenCash = getChildrenCashAllocation(portfolioID);
-
-		if ((portfolioChildrenCash.add(amount).compareTo(new BigDecimal("0")) < 0)) {
-			throw new InternalLogicError();
-		}
-
-		setChildrenCashAllocation(portfolioID, portfolioChildrenCash.add(amount));
-	}
-
-	void decreasePortfolioChildrenCash(int portfolioID, BigDecimal amount) {
-		increasePortfolioChildrenCash(portfolioID, amount.negate());
-	}
 
 	/**
 	 *
@@ -336,34 +317,10 @@ class Account implements Identifiable {
 	/**
 	 *
 	 * @param portfolioID
-	 * @return
-	 */
-	private BigDecimal getChildrenCashAllocation(int portfolioID) {
-		BigDecimal amount = childrenCashAllocations.get(portfolioID);
-
-		if (amount == null) {
-			amount = new BigDecimal("0");
-		}
-
-		return amount;
-	}
-
-	/**
-	 *
-	 * @param portfolioID
 	 * @param amount
 	 */
 	private void setCashAllocation(int portfolioID, BigDecimal amount) {
 		cashAllocations.put(portfolioID, amount);
-	}
-
-	/**
-	 *
-	 * @param portfolioID
-	 * @param amount
-	 */
-	private void setChildrenCashAllocation(int portfolioID, BigDecimal amount) {
-		childrenCashAllocations.put(portfolioID, amount);
 	}
 
 	public BigDecimal getUnallocatedCash() {

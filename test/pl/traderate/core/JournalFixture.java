@@ -198,7 +198,7 @@ public class JournalFixture {
 		assertEquals(new BigDecimal("9000.00"), accounts.get(0).getUnallocatedCash());
 		assertEquals(new BigDecimal("1000.00"), portfolios.get(1).getCashBalance());
 		assertEquals(new BigDecimal("0"), portfolios.get(0).getCashBalance());
-		assertEquals(new BigDecimal("1000.00"), portfolios.get(0).getChildrenCashBalance());
+		assertEquals(new BigDecimal("1000.00"), portfolios.get(0).getAggregatedCashBalance());
 
 		// Check earlier date
 		// Allocate 5000.00 from Account #2 to Portfolio #1.2.1
@@ -208,9 +208,9 @@ public class JournalFixture {
 		assertEquals(new BigDecimal("5000.00"), portfolios.get(8).getCashBalance());
 		assertEquals(new BigDecimal("0"), portfolios.get(7).getCashBalance()); // Portfolio #1.2
 		assertEquals(new BigDecimal("1000.00"), portfolios.get(1).getCashBalance()); // Portfolio #1, 1000.00 still from previous case
-		assertEquals(new BigDecimal("5000.00"), portfolios.get(7).getChildrenCashBalance()); // Portfolio #1.2
-		assertEquals(new BigDecimal("5000.00"), portfolios.get(1).getChildrenCashBalance()); // Portfolio #1
-		assertEquals(new BigDecimal("6000.00"), portfolios.get(0).getChildrenCashBalance()); // Portfolio #0
+		assertEquals(new BigDecimal("5000.00"), portfolios.get(7).getAggregatedCashBalance()); // Portfolio #1.2
+		assertEquals(new BigDecimal("6000.00"), portfolios.get(1).getAggregatedCashBalance()); // Portfolio #1
+		assertEquals(new BigDecimal("6000.00"), portfolios.get(0).getAggregatedCashBalance()); // Portfolio #0
 
 		// Deallocate 2000.00 from Portfolio #1.2.1 to Account #2
 		journal.addCashDeallocationEntry(1, 8, "Example tag", new GregorianCalendar(2003, 0, 1).getTime(), "Some comment", new BigDecimal("2000.00"));
@@ -219,9 +219,9 @@ public class JournalFixture {
 		assertEquals(new BigDecimal("3000.00"), portfolios.get(8).getCashBalance());
 		assertEquals(new BigDecimal("0"), portfolios.get(7).getCashBalance()); // Portfolio #1.2
 		assertEquals(new BigDecimal("1000.00"), portfolios.get(1).getCashBalance()); // Portfolio #1, 1000.00 still from previous case
-		assertEquals(new BigDecimal("3000.00"), portfolios.get(7).getChildrenCashBalance()); // Portfolio #1.2
-		assertEquals(new BigDecimal("3000.00"), portfolios.get(1).getChildrenCashBalance()); // Portfolio #1
-		assertEquals(new BigDecimal("4000.00"), portfolios.get(0).getChildrenCashBalance()); // Portfolio #0
+		assertEquals(new BigDecimal("3000.00"), portfolios.get(7).getAggregatedCashBalance()); // Portfolio #1.2
+		assertEquals(new BigDecimal("4000.00"), portfolios.get(1).getAggregatedCashBalance()); // Portfolio #1
+		assertEquals(new BigDecimal("4000.00"), portfolios.get(0).getAggregatedCashBalance()); // Portfolio #0
 
 		// Deallocate 500.00 from Portfolio #1 to Account #1
 		journal.addCashDeallocationEntry(0, 1, "Example tag", new GregorianCalendar(2002, 5, 1).getTime(), "Some comment", new BigDecimal("500.00"));
@@ -229,7 +229,7 @@ public class JournalFixture {
 		assertEquals(new BigDecimal("9500.00"), accounts.get(0).getUnallocatedCash());
 		assertEquals(new BigDecimal("500.00"), portfolios.get(1).getCashBalance());
 		assertEquals(new BigDecimal("0"), portfolios.get(0).getCashBalance());
-		assertEquals(new BigDecimal("3500.00"), portfolios.get(0).getChildrenCashBalance());
+		assertEquals(new BigDecimal("3500.00"), portfolios.get(0).getAggregatedCashBalance());
 
 		// Deallocate another 500.00 from Portfolio #1 to Account #1
 		journal.addCashDeallocationEntry(0, 1, "Example tag", new GregorianCalendar(2002, 6, 1).getTime(), "Some comment", new BigDecimal("500.00"));
@@ -237,7 +237,7 @@ public class JournalFixture {
 		assertEquals(new BigDecimal("10000.00"), accounts.get(0).getUnallocatedCash());
 		assertEquals(new BigDecimal("0.00"), portfolios.get(1).getCashBalance());
 		assertEquals(new BigDecimal("0"), portfolios.get(0).getCashBalance());
-		assertEquals(new BigDecimal("3000.00"), portfolios.get(0).getChildrenCashBalance());
+		assertEquals(new BigDecimal("3000.00"), portfolios.get(0).getAggregatedCashBalance());
 	}
 	
 	@Test(expected=EntryInsertionException.class)

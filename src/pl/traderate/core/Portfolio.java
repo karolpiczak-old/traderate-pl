@@ -64,7 +64,7 @@ class Portfolio implements Identifiable {
 	private BigDecimal cashBalance;
 
 	/** */
-	private BigDecimal childrenCashBalance;
+	private BigDecimal aggregatedCashBalance;
 
 	/** */
 	private Date latestEntryDate;
@@ -81,7 +81,7 @@ class Portfolio implements Identifiable {
 		holdings = new HoldingList();
 
 		cashBalance = new BigDecimal("0");
-		childrenCashBalance = new BigDecimal("0");
+		aggregatedCashBalance = new BigDecimal("0");
 		latestEntryDate = new Date(0L);
 	}
 
@@ -103,7 +103,7 @@ class Portfolio implements Identifiable {
 	private void wipeCalculations() {
 		holdings.clear();
 		cashBalance = new BigDecimal("0");
-		childrenCashBalance = new BigDecimal("0");
+		aggregatedCashBalance = new BigDecimal("0");
 		latestEntryDate = new Date(0L);
 	}
 
@@ -213,25 +213,10 @@ class Portfolio implements Identifiable {
 	 * @throws EntryInsertionException
 	 */
 	public void applyEntry(CashAllocationEntry entry) {
-		applyEntryToParents(entry);
-
 		entry.getAccount().increasePortfolioCash(this.id, entry.getAmount());
-
 		cashBalance = cashBalance.add(entry.getAmount());
-	}
 
-	/**
-	 *
-	 * @param entry
-	 */
-	private void applyEntryToParents(CashAllocationEntry entry) {
-		if (parent != null) {
-			parent.applyEntryToParents(entry);
-
-			entry.getAccount().increasePortfolioChildrenCash(parent.id, entry.getAmount());
-
-			parent.childrenCashBalance = parent.childrenCashBalance.add(entry.getAmount());
-		}
+		updateCashAggregates();
 	}
 
 	/**
@@ -246,28 +231,25 @@ class Portfolio implements Identifiable {
 			throw new EntryInsertionException();
 		}
 
-		applyEntryToParents(entry);
-
 		entry.getAccount().decreasePortfolioCash(this.id, entry.getAmount());
-
 		cashBalance = newBalance;
+
+		updateCashAggregates();
 	}
 
 	/**
 	 *
-	 * @param entry
+	 *
 	 */
-	private void applyEntryToParents(CashDeallocationEntry entry) {
+	private void updateCashAggregates() {
+		aggregatedCashBalance = cashBalance;
+
+		for (Portfolio child : children) {
+			aggregatedCashBalance = aggregatedCashBalance.add(child.getAggregatedCashBalance());
+		}
+
 		if (parent != null) {
-			parent.applyEntryToParents(entry);
-
-			entry.getAccount().decreasePortfolioChildrenCash(parent.id, entry.getAmount());
-
-			parent.childrenCashBalance = parent.childrenCashBalance.subtract(entry.getAmount());
-
-			if ((parent.childrenCashBalance.compareTo(new BigDecimal("0")) < 0)) {
-				throw new InternalLogicError();
-			}
+			parent.updateCashAggregates();
 		}
 	}
 
@@ -303,7 +285,7 @@ class Portfolio implements Identifiable {
 		return cashBalance;
 	}
 
-	public BigDecimal getChildrenCashBalance() {
-		return childrenCashBalance;
+	public BigDecimal getAggregatedCashBalance() {
+		return aggregatedCashBalance;
 	}
 }
