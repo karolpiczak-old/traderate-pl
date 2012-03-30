@@ -20,5 +20,27 @@
 
 package pl.traderate.core;
 
+import java.util.ArrayList;
+
 class EquityHolding extends Holding {
+
+	protected ArrayList<EquityPosition> positions;
+
+	public EquityHolding(String ticker) {
+		super(ticker);
+		positions = new ArrayList<>();
+	}
+
+	ArrayList<EquityPosition> getPositions() {
+		return positions;
+	}
+
+	@Override
+	void update() {
+
+	}
+
+	void attach(EquityPosition position) {
+		positions.add(position);
+	}
 }

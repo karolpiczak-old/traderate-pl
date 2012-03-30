@@ -33,7 +33,7 @@ import java.util.Date;
 abstract class BuyTransactionEntry extends TransactionEntry {
 
 	protected BuyTransactionEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date,
-	                              String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectConstraintsException {
-		super(account, portfolio, tags, date, comment, ticker, quantity, price, commission);
+	                              String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission, String position) throws ObjectConstraintsException {
+		super(account, portfolio, tags, date, comment, ticker, quantity, price, commission, position);
 	}
 }

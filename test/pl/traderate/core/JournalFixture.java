@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 import pl.traderate.core.exception.EntryInsertionException;
 import pl.traderate.core.exception.InvalidInputException;
+import pl.traderate.core.exception.ObjectConstraintsException;
 import pl.traderate.core.exception.ObjectNotFoundException;
 import pl.traderate.test.TestNotImplementedError;
 
@@ -309,8 +310,29 @@ public class JournalFixture {
 	}
 
 	@Test
-	public void shouldHandleEquityOperations() {
-		throw new TestNotImplementedError();
+	public void shouldHandleEquityOperations() throws ObjectNotFoundException, InvalidInputException, EntryInsertionException, ObjectConstraintsException {
+		journal.addAccount("Test account #1");              // ID: 0
+		journal.addAccount("Test account #2");              // ID: 1
+
+		journal.addPortfolio("Test portfolio #1", 0);       // ID: 1
+		journal.addPortfolio("Test portfolio #2", 0);       // ID: 2
+		journal.addPortfolio("Test portfolio #1.1", 1);     // ID: 3
+		journal.addPortfolio("Test portfolio #1.2", 2);     // ID: 4
+
+		journal.addCashDepositEntry(0, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", new BigDecimal("10000.00"));
+		journal.addCashDepositEntry(1, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", new BigDecimal("10000.00"));
+
+		journal.addCashAllocationEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("1000.00"));
+		journal.addCashAllocationEntry(0, 2, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("1000.00"));
+		journal.addCashAllocationEntry(1, 3, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("1000.00"));
+		journal.addCashAllocationEntry(1, 4, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("1000.00"));
+
+		journal.addBuyEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("5.00"), new BigDecimal("1.00"));
+		journal.addBuyEquityTransactionEntry(0, 2, "Example tag", new GregorianCalendar(2000, 0, 3).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("10.00"), new BigDecimal("2.00"));
+		journal.addBuyEquityTransactionEntry(1, 3, "Example tag", new GregorianCalendar(2000, 0, 4).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("10.00"), new BigDecimal("3.00"));
+		journal.addBuyEquityTransactionEntry(1, 4, "Example tag", new GregorianCalendar(2000, 0, 5).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("4.00"), new BigDecimal("2.50"));
+
+
 	}
 
 	@Test
@@ -318,13 +340,31 @@ public class JournalFixture {
 		throw new TestNotImplementedError();
 	}
 
-	@Test
-	public void shouldRejectEquityOperationsGivenInvalidPrice() {
-		throw new TestNotImplementedError();
+	@Test(expected=InvalidInputException.class)
+	public void shouldRejectEquityOperationsGivenNegativePrice() throws ObjectNotFoundException, InvalidInputException, EntryInsertionException, ObjectConstraintsException {
+		journal.addAccount("Test account #1");
+		journal.addPortfolio("Test portfolio #1", 0);
+		journal.addBuyEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", "TICKER", new BigDecimal("30"), new BigDecimal("-1.50"), new BigDecimal("5.00"));
 	}
 
-	@Test
-	public void shouldRejectEquityOperationsGivenInvalidQuantity() {
-		throw new TestNotImplementedError();
+	@Test(expected=InvalidInputException.class)
+	public void shouldRejectEquityOperationsGivenNegativeQuantity() throws ObjectNotFoundException, InvalidInputException, EntryInsertionException, ObjectConstraintsException {
+		journal.addAccount("Test account #1");
+		journal.addPortfolio("Test portfolio #1", 0);
+		journal.addBuyEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", "TICKER", new BigDecimal("-30"), new BigDecimal("1.50"), new BigDecimal("5.00"));
+	}
+
+	@Test(expected=InvalidInputException.class)
+	public void shouldRejectEquityOperationsGivenFractionalQuantity() throws ObjectNotFoundException, InvalidInputException, EntryInsertionException, ObjectConstraintsException {
+		journal.addAccount("Test account #1");
+		journal.addPortfolio("Test portfolio #1", 0);
+		journal.addBuyEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", "TICKER", new BigDecimal("30.5"), new BigDecimal("1.50"), new BigDecimal("5.00"));
+	}
+
+	@Test(expected=InvalidInputException.class)
+	public void shouldRejectEquityOperationsGivenNegativeCommission() throws ObjectNotFoundException, InvalidInputException, EntryInsertionException, ObjectConstraintsException {
+		journal.addAccount("Test account #1");
+		journal.addPortfolio("Test portfolio #1", 0);
+		journal.addBuyEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", "TICKER", new BigDecimal("30"), new BigDecimal("1.50"), new BigDecimal("-2.00"));
 	}
 }

@@ -196,7 +196,7 @@ class Portfolio implements Identifiable {
 	}
 
 	private void updateHoldingAggregates() {
-		throw new InternalLogicError();
+		//throw new InternalLogicError();
 	}
 
 	/**

@@ -21,4 +21,13 @@
 package pl.traderate.core;
 
 class CashHolding extends Holding {
+
+	public CashHolding(String ticker) {
+		super(ticker);
+	}
+
+	@Override
+	void update() {
+
+	}
 }

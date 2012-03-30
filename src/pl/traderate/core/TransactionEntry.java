@@ -38,9 +38,11 @@ abstract class TransactionEntry extends PortfolioEntry {
 	protected BigDecimal price;
 
 	protected BigDecimal commission;
+	
+	protected String position;
 
 	protected TransactionEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date,
-	                           String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectConstraintsException {
+	                           String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission, String position) throws ObjectConstraintsException {
 
 		super(account, portfolio, tags, date, comment);
 
@@ -56,5 +58,6 @@ abstract class TransactionEntry extends PortfolioEntry {
 		this.quantity = quantity;
 		this.price = price;
 		this.commission = commission;
+		this.position = position;
 	}
 }

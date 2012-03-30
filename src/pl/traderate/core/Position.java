@@ -22,8 +22,17 @@ package pl.traderate.core;
 
 import java.util.ArrayList;
 
-abstract class Position {
+abstract class Position implements IdentifiableByName {
 
-	private ArrayList<Trade> trades;
+	private String name;
 
+	public Position(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	abstract void update();
 }

@@ -25,8 +25,17 @@ import java.util.ArrayList;
 /**
  *
  */
-abstract class Holding {
+abstract class Holding implements IdentifiableByName {
 
-	private ArrayList<Position> positions;
+	protected String ticker;
 
+	public Holding(String ticker) {
+		this.ticker = ticker;
+	}
+
+	public String getName() {
+		return ticker;
+	}
+
+	abstract void update();
 }

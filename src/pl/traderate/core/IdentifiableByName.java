@@ -20,35 +20,7 @@
 
 package pl.traderate.core;
 
-import java.math.BigDecimal;
-import java.util.Date;
+public interface IdentifiableByName {
 
-abstract class Trade {
-
-	private Account account;
-
-	private Portfolio portfolio;
-
-	private Date date;
-
-	private String comment;
-
-	private String ticker;
-
-	private BigDecimal quantity;
-
-	private BigDecimal price;
-
-	private BigDecimal commission;
-
-	public Trade(Account account, Portfolio portfolio, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
-		this.account = account;
-		this.portfolio = portfolio;
-		this.date = new Date(date.getTime());
-		this.comment = comment;
-		this.ticker = ticker;
-		this.quantity = quantity;
-		this.price = price;
-		this.commission = commission;
-	}
+	String getName();
 }

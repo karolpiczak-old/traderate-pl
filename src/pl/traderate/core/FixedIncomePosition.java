@@ -22,4 +22,12 @@ package pl.traderate.core;
 
 class FixedIncomePosition extends Position {
 
+	public FixedIncomePosition(String name) {
+		super(name);
+	}
+
+	@Override
+	void update() {
+
+	}
 }

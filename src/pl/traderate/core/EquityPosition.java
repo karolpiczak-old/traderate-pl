@@ -20,6 +20,27 @@
 
 package pl.traderate.core;
 
+import java.util.ArrayList;
+
 class EquityPosition extends Position {
 
+	protected ArrayList<EquityTrade> trades;
+	
+	public EquityPosition(String name) {
+		super(name);
+		trades = new ArrayList<>();
+	}
+	
+	ArrayList<EquityTrade> getTrades() {
+		return trades;
+	}
+
+	@Override
+	void update() {
+
+	}
+	
+	void attach(EquityTrade trade) {
+		trades.add(trade);
+	}
 }

@@ -21,28 +21,66 @@
 package pl.traderate.core;
 
 import pl.traderate.core.exception.EntryInsertionException;
+import pl.traderate.core.exception.ObjectNotFoundException;
 
 import java.util.ArrayList;
 
 /**
  *
  */
-class HoldingList {
+final class HoldingList {
 
-	private ArrayList<EquityHolding> holdings;
+	private ArrayList<EquityHolding> equityHoldings;
 
-	void clear() {
-
+	HoldingList() {
+		equityHoldings = new ArrayList<>();
 	}
 
 	void open(BuyEquityTransactionEntry entry) throws EntryInsertionException {
-		throw new EntryInsertionException();
-		// TODO: Implement equity transaction handling
+		EquityTrade trade = new EquityTrade(entry.account, entry.portfolio, entry.date, entry.comment, entry.ticker, entry.quantity, entry.price, entry.commission);
+
+		EquityHolding holding;
+
+		try {
+			holding = findObjectByName(entry.ticker, equityHoldings);
+		} catch (ObjectNotFoundException e) {
+			holding = new EquityHolding(entry.ticker);
+			equityHoldings.add(holding);
+		}
+		
+		EquityPosition position;
+
+		try {
+			position = findObjectByName(entry.position, holding.getPositions());
+		} catch (ObjectNotFoundException e) {
+			position = new EquityPosition(entry.position);
+			holding.attach(position);
+		}
+		
+		position.attach(trade);
+
+		position.update();
+		holding.update();
 	}
 
 	void close(SellEquityTransactionEntry entry) throws EntryInsertionException {
-		throw new EntryInsertionException();
-		// TODO: Implement equity transaction handling
+		
 	}
 
+	private <T extends IdentifiableByName> T findObjectByName(String objectName, ArrayList<T> arrayList) throws ObjectNotFoundException {
+		T object = null;
+
+		for (T checkedObject : arrayList) {
+			if (checkedObject.getName().equals(objectName)) {
+				object = checkedObject;
+				break;
+			}
+		}
+
+		if (object == null) {
+			throw new ObjectNotFoundException();
+		}
+
+		return object;
+	}
 }

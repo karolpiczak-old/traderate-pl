@@ -26,6 +26,7 @@ import pl.traderate.core.exception.ObjectConstraintsException;
 import pl.traderate.core.exception.ObjectNotFoundException;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -107,6 +108,7 @@ class Journal {
 
 	void addBuyEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectNotFoundException, EntryInsertionException, ObjectConstraintsException, InvalidInputException {
 		assertNumberIsPositive(quantity);
+		assertNumberIsInteger(quantity);
 		assertNumberIsPositive(price);
 		assertNumberIsPositive(commission);
 
@@ -114,13 +116,15 @@ class Journal {
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
 
 		// TODO: Proper BuyEquityTransaction tag handling
-		BuyEquityTransactionEntry entry = new BuyEquityTransactionEntry(account, portfolio, null, date, comment, ticker, quantity, price, commission);
+		// TODO: Proper BuyEquityTransaction position handling
+		BuyEquityTransactionEntry entry = new BuyEquityTransactionEntry(account, portfolio, null, date, comment, ticker, quantity, price, commission, new StringBuilder(new SimpleDateFormat("yyyy-MM").format(date)).toString());
 
 		addEntry(entry);
 	}
 
 	void addSellEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectNotFoundException, EntryInsertionException, ObjectConstraintsException, InvalidInputException {
 		assertNumberIsPositive(quantity);
+		assertNumberIsInteger(quantity);
 		assertNumberIsPositive(price);
 		assertNumberIsPositive(commission);
 
@@ -128,7 +132,8 @@ class Journal {
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
 
 		// TODO: Proper SellEquityTransaction tag handling
-		SellEquityTransactionEntry entry = new SellEquityTransactionEntry(account, portfolio, null, date, comment, ticker, quantity, price, commission);
+		// TODO: Proper SellEquityTransaction position handling
+		SellEquityTransactionEntry entry = new SellEquityTransactionEntry(account, portfolio, null, date, comment, ticker, quantity, price, commission, new StringBuilder(new SimpleDateFormat("yyyy-MM").format(date)).toString());
 
 		addEntry(entry);
 	}
@@ -340,6 +345,14 @@ class Journal {
 
 	private void assertNumberIsPositive(BigDecimal number) throws InvalidInputException {
 		if ((number.compareTo(new BigDecimal("0")) < 0)) {
+			throw new InvalidInputException();
+		}
+	}
+
+	private void assertNumberIsInteger(BigDecimal number) throws InvalidInputException {
+		try {
+			number.intValueExact();
+		} catch (ArithmeticException e) {
 			throw new InvalidInputException();
 		}
 	}
