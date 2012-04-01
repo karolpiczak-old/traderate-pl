@@ -2,3 +2,5 @@
 /out/
 /docs/
 /*.iml
+/.classpath
+/.project
