@@ -59,7 +59,10 @@ public class MainView extends GenericView {
 	protected void syncViewModel() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				//form.applicationName.setText(viewModel.getApplicationTitle());
+				form.navigationTree.setModel(viewModel.getNavigationTree());
+				for (int i = 0; i < form.navigationTree.getRowCount(); ++i) {
+					form.navigationTree.expandRow(i);
+				}
 			}
 		});
 	}

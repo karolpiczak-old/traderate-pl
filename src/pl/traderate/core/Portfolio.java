@@ -288,4 +288,8 @@ class Portfolio implements Identifiable {
 	HoldingList getHoldings() {
 		return holdings;
 	}
+
+	ArrayList<Portfolio> getChildren() {
+		return children;
+	}
 }

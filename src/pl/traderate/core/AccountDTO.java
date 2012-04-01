@@ -34,8 +34,8 @@ public class AccountDTO {
 
 	public final HoldingsDTO holdings;
 
-	//	public final EntryDTO entries;
-
+	// TODO: Add missing fields
+	// public final ArrayList<EntryDTO> entries;
 	// cashAllocations
 
 	AccountDTO(Account account) {

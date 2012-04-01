@@ -21,7 +21,9 @@
 package pl.traderate.desktop.view;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class MainForm extends GenericForm {
 
@@ -31,23 +33,23 @@ public class MainForm extends GenericForm {
 
 	JPanel root;
 
-	private JPanel statusbar;
+	JPanel statusbar;
 
-	private JPanel toolbar;
+	JPanel toolbar;
 
-	private JPanel mainPanel;
+	JPanel mainPanel;
 
-	private JPanel navigationPanel;
+	JPanel navigationPanel;
 
-	private JProgressBar progressBar;
+	JProgressBar progressBar;
 
-	private JList tagList;
+	JTree navigationTree;
 
-	private JTree navigationTree;
+	JTabbedPane tabs;
 
-	private JTabbedPane tabs;
+	JLabel topNavigationLabel;
 
-	private JLabel topNavigationLabel;
+	private JButton buttonOK;
 
 	MainForm(GenericView view) {
 		super(view);
@@ -59,7 +61,7 @@ public class MainForm extends GenericForm {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 
-	//	buttonOK.addActionListener(this.view.new OnButtonOKClicked());
+		buttonOK.addActionListener(this.view.new OnButtonOKClicked());
 	}
 
 	void show() {
@@ -73,5 +75,7 @@ public class MainForm extends GenericForm {
 		
 		tabs = new JTabbedPane();
 		tabs.addTab("Podsumowanie", new SummaryForm().root);
+
+		navigationTree = new JTree();
 	}
 }

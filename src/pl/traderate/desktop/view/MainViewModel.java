@@ -20,13 +20,19 @@
 
 package pl.traderate.desktop.view;
 
+import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.desktop.presenter.MainPresenter;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 public class MainViewModel extends GenericViewModel {
 
 	protected MainView view;
-	
-	private String version;
+
+	private PortfolioNodeDTO rootPortfolioNode;
+
+	private DefaultTreeModel navigationTree;
 
 	public MainViewModel(MainPresenter presenter) {
 		super(presenter);
@@ -38,16 +44,40 @@ public class MainViewModel extends GenericViewModel {
 		super.view = view;
 	}
 
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
+	public void setRootPortfolioNode(PortfolioNodeDTO rootPortfolioNode) {
+		this.rootPortfolioNode = rootPortfolioNode;
+		updateNavigationTree();
 		notifyChange();
 	}
 
-	public String getApplicationTitle() {
-		return "TradeRate " + getVersion();
+	private void updateNavigationTree() {
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("TradeRate");
+		DefaultMutableTreeNode portfolios = new DefaultMutableTreeNode("Portfele");
+		DefaultMutableTreeNode accounts = new DefaultMutableTreeNode("Konta");
+
+		DefaultMutableTreeNode portfolio = new DefaultMutableTreeNode(rootPortfolioNode);
+		populatePortfolioChildren(portfolio);
+		
+		portfolios.add(portfolio);
+		
+		root.add(portfolios);
+		root.add(accounts);
+
+		navigationTree = new DefaultTreeModel(root);
+		notifyChange();
+	}
+	
+	private void populatePortfolioChildren(DefaultMutableTreeNode portfolioNode) {
+		PortfolioNodeDTO portfolioTree = (PortfolioNodeDTO) portfolioNode.getUserObject();
+		
+		for (PortfolioNodeDTO child : portfolioTree.children) {
+			DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
+			populatePortfolioChildren(childNode);
+			portfolioNode.add(childNode);
+		}
+	}
+
+	public DefaultTreeModel getNavigationTree() {
+		return navigationTree;
 	}
 }

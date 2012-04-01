@@ -41,7 +41,7 @@ public abstract class GenericPresenter implements GenericViewEventListener {
 		model.addEventListener(modelEventHandler);
 	}
 
-	protected abstract void updateViewModel();
+	protected abstract void initializeViewModel();
 
 	public void show() {
 		viewModel.show();

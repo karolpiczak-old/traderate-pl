@@ -26,7 +26,6 @@ import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.MainViewModel;
 
 import javax.swing.*;
-import java.util.Date;
 
 public class MainPresenter extends GenericPresenter {
 
@@ -38,7 +37,7 @@ public class MainPresenter extends GenericPresenter {
 		super(model);
 
 		viewModel = new MainViewModel(this);
-		updateViewModel();
+		initializeViewModel();
 
 		modelEventHandler = new HomeModelEventHandler();
 		model.removeEventListener(super.modelEventHandler);
@@ -50,8 +49,8 @@ public class MainPresenter extends GenericPresenter {
 	}
 
 	@Override
-	protected void updateViewModel() {
-		viewModel.setVersion("1.0.0");
+	protected void initializeViewModel() {
+		viewModel.setRootPortfolioNode(model.getPortfolioNodes());
 	}
 	
 	@Override
@@ -91,7 +90,7 @@ public class MainPresenter extends GenericPresenter {
 			}
 
 			public void handle(MainPresenter presenter) {
-				presenter.viewModel.setVersion(new Date().toString());
+				presenter.viewModel.setRootPortfolioNode(presenter.model.getPortfolioNodes());
 
 				new SwingWorker<String, Object>() {
 
