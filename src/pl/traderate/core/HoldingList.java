@@ -101,7 +101,7 @@ final class HoldingList {
 		BigDecimal unallocatedCommission = entry.commission;
 
 		for (EquityTrade trade : tradesToClose) {
-			BigDecimal partialCommission = trade.getQuantity().divide(entry.quantity, new MathContext(2, RoundingMode.HALF_EVEN)).multiply(entry.commission, new MathContext(2, RoundingMode.HALF_EVEN));
+			BigDecimal partialCommission = trade.getQuantity().divide(entry.quantity,  10, RoundingMode.HALF_EVEN).multiply(entry.commission).setScale(2, RoundingMode.HALF_EVEN);
 
 			if (unallocatedCommission.compareTo(partialCommission) > 0) {
 				unallocatedCommission = unallocatedCommission.subtract(partialCommission);
@@ -110,7 +110,7 @@ final class HoldingList {
 				unallocatedCommission = BigDecimal.ZERO;
 			}
 
-			if (sharesLeftToClose.compareTo(trade.getQuantity()) > 0) {
+			if (sharesLeftToClose.compareTo(trade.getQuantity()) >= 0) {
 				trade.close(entry, partialCommission);
 				moveToClosed(trade);
 				sharesLeftToClose = sharesLeftToClose.subtract(trade.getQuantity());
@@ -180,5 +180,13 @@ final class HoldingList {
 		}
 
 		return object;
+	}
+
+	TreeSet<EquityHolding> getEquityHoldings() {
+		return equityHoldings;
+	}
+
+	TreeSet<EquityHolding> getClosedEquityHoldings() {
+		return closedEquityHoldings;
 	}
 }

@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
-public abstract class CashReallocationEntry extends PortfolioEntry {
+abstract class CashReallocationEntry extends PortfolioEntry {
 
 	protected BigDecimal amount;
 

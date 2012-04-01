@@ -34,15 +34,12 @@ class EquityPosition extends Position {
 		trades = new TreeSet<>();
 	}
 
-	TreeSet<EquityTrade> getTrades() {
-		return trades;
-	}
-
 	@Override
 	void update() {
 		quantity = BigDecimal.ZERO;
 		openPrice = BigDecimal.ZERO;
 		openValue = BigDecimal.ZERO;
+		commission = BigDecimal.ZERO;
 
 		if (isClosed()) {
 			closePrice = BigDecimal.ZERO;
@@ -54,22 +51,25 @@ class EquityPosition extends Position {
 		for (EquityTrade trade : trades) {
 			quantity = quantity.add(trade.quantity);
 			openValue = openValue.add(trade.openValue);
+			commission = commission.add(trade.commission);
 			if (isClosed()) {
 				closeValue = closeValue.add(trade.closeValue);
 			}
 		}
 
 		if (quantity.signum() == 0) {
+			// TODO: This should probably never happen?
 			openPrice = BigDecimal.ZERO;
 			closePrice = BigDecimal.ZERO;
+			commission = BigDecimal.ZERO;
 			realizedGain = BigDecimal.ZERO;
 			realizedGainPercentage = BigDecimal.ZERO;
 		} else {
-			openPrice = openValue.divide(quantity, new MathContext(2, RoundingMode.HALF_EVEN));
+			openPrice = openValue.divide(quantity, 2, RoundingMode.HALF_EVEN);
 			if (isClosed()) {
-				closePrice = closeValue.divide(quantity, new MathContext(2, RoundingMode.HALF_EVEN));
+				closePrice = closeValue.divide(quantity, 2, RoundingMode.HALF_EVEN);
 				realizedGain = closeValue.subtract(openValue);
-				realizedGainPercentage = realizedGain.divide(openValue, new MathContext(2, RoundingMode.HALF_EVEN));
+				realizedGainPercentage = realizedGain.divide(openValue, 4, RoundingMode.HALF_EVEN).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_EVEN);
 			}
 		}
 	}
@@ -85,5 +85,9 @@ class EquityPosition extends Position {
 		if (trades.isEmpty()) {
 			((EquityHolding) parent).detach(this);
 		}
+	}
+
+	TreeSet<EquityTrade> getTrades() {
+		return trades;
 	}
 }

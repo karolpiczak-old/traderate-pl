@@ -20,7 +20,9 @@
 
 package pl.traderate.core;
 
-interface IdentifiableByName {
+public class HoldingsDTO {
 
-	String getName();
+	public HoldingsDTO(HoldingList holdings) {
+
+	}
 }

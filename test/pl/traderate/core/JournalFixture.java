@@ -330,29 +330,317 @@ public class JournalFixture {
 
 		// Check buy entries with random date order
 		journal.addBuyEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 3).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("5.00"), new BigDecimal("10.00"));
-		journal.addBuyEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 4).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("10.00"), new BigDecimal("5.00"));
+		journal.addBuyEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 1, 4).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("10.00"), new BigDecimal("5.00"));
 		journal.addBuyEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("15.00"), new BigDecimal("0.00"));
 
-		journal.addSellEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 5).getTime(), "Some comment", "TICKER-A", new BigDecimal("5"), new BigDecimal("20.00"), new BigDecimal("0.00"));
+		verifyEquityHoldingsAfterPurchase(accounts.get(0));
+		verifyEquityHoldingsAfterPurchase(portfolios.get(1));
+
+		journal.addSellEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2001, 0, 5).getTime(), "Some comment", "TICKER-A", new BigDecimal("5"), new BigDecimal("20.00"), new BigDecimal("0.00"));
 		journal.addSellEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 6).getTime(), "Some comment", "TICKER-A", new BigDecimal("3"), new BigDecimal("10.00"), new BigDecimal("0.00"));
-		
-		assertTrue(true);
-		//assertEquals(portfolios.get(1).get);
-		
-//		journal.addBuyEquityTransactionEntry(0, 2, "Example tag", new GregorianCalendar(2000, 0, 3).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("10.00"), new BigDecimal("2.00"));
-//		journal.addBuyEquityTransactionEntry(1, 3, "Example tag", new GregorianCalendar(2000, 0, 4).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("10.00"), new BigDecimal("3.00"));
-//		journal.addBuyEquityTransactionEntry(1, 4, "Example tag", new GregorianCalendar(2000, 0, 5).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("4.00"), new BigDecimal("2.50"));
-//
-//		journal.addSellEquityTransactionEntry(0, 8, "Example tag", new GregorianCalendar(2000, m, d).getTime(), "Some comment", "TICKER-A", new BigDecimal("5"), new BigDecimal("2.00"), new BigDecimal("0.00"));
-//		journal.addSellEquityTransactionEntry(1, 6, "Example tag", new GregorianCalendar(2000, m, d).getTime(), "Some comment", "TICKER-A", new BigDecimal("5"), new BigDecimal("2.00"), new BigDecimal("0.00"));
-//		operationsPerformed = operationsPerformed + 8;
-		
-		// TODO: Implement complete test case
+
+		verifyEquityHoldingsAfterSell(accounts.get(0));
+		verifyEquityHoldingsAfterSell(portfolios.get(1));
+
+		// Clear all open positions, gain 1.00 x 22 = 22.00, commission paid 11.00 => Realized gain = 10.00 (previous) + 11.00 (now) = 21.00
+		journal.addSellEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2001, 0, 6).getTime(), "Some comment", "TICKER-A", new BigDecimal("22"), new BigDecimal("9.18"), new BigDecimal("11.00"));
+
+		verifyEquityHoldingsAfterCompleteSell(accounts.get(0));
+		verifyEquityHoldingsAfterCompleteSell(portfolios.get(1));
 	}
 
-	@Test
-	public void shouldRejectEquityOperationsGivenInsufficientShares() {
-		throw new TestNotImplementedError();
+	private class HasAHoldingListAdapter {
+		
+		private HoldingList holdings;
+		
+		HoldingList getHoldings() {
+			return holdings;
+		}
+
+		HasAHoldingListAdapter(Account account) {
+			this.holdings = account.getHoldings();
+		}
+
+		HasAHoldingListAdapter(Portfolio portfolio) {
+			this.holdings = portfolio.getHoldings();
+		}
+	}
+	
+	private void verifyEquityHoldingsAfterPurchase(Account account) {
+		verifyEquityHoldingsAfterPurchase(new HasAHoldingListAdapter(account));
+	}
+
+	private void verifyEquityHoldingsAfterPurchase(Portfolio portfolio) {
+		verifyEquityHoldingsAfterPurchase(new HasAHoldingListAdapter(portfolio));
+	}
+	
+	private void verifyEquityHoldingsAfterPurchase(HasAHoldingListAdapter holder) {
+		ArrayList<EquityHolding> openHoldings;
+		ArrayList<EquityPosition> openPositions;
+		ArrayList<EquityTrade> openTrades;
+
+		assertTrue(holder.getHoldings().getClosedEquityHoldings().isEmpty());
+
+		openHoldings = new ArrayList<>(holder.getHoldings().getEquityHoldings());
+
+		assertEquals(1, openHoldings.size());
+		assertEquals("TICKER-A", openHoldings.get(0).getName());
+		assertTrue(new BigDecimal("30").compareTo(openHoldings.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(openHoldings.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("300").compareTo(openHoldings.get(0).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("15").compareTo(openHoldings.get(0).getCommission()) == 0);
+
+		openPositions = new ArrayList<>(openHoldings.get(0).getPositions());
+
+		assertEquals(2, openPositions.size());
+		assertEquals("2000-01", openPositions.get(0).getName());
+		assertTrue(new BigDecimal("20").compareTo(openPositions.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(openPositions.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("200").compareTo(openPositions.get(0).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(openPositions.get(0).getCommission()) == 0);
+		assertEquals("2000-02", openPositions.get(1).getName());
+		assertTrue(new BigDecimal("10").compareTo(openPositions.get(1).getQuantity()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(openPositions.get(1).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("100").compareTo(openPositions.get(1).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("5").compareTo(openPositions.get(1).getCommission()) == 0);
+
+		// Check for proper ordering too!
+		openTrades = new ArrayList<>(openPositions.get(0).getTrades());
+
+		assertEquals(2, openTrades.size());
+		assertTrue(new BigDecimal("10").compareTo(openTrades.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("15").compareTo(openTrades.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("150").compareTo(openTrades.get(0).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("0").compareTo(openTrades.get(0).getCommission()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(openTrades.get(1).getQuantity()) == 0);
+		assertTrue(new BigDecimal("5").compareTo(openTrades.get(1).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("50").compareTo(openTrades.get(1).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(openTrades.get(1).getCommission()) == 0);
+
+		openTrades = new ArrayList<>(openPositions.get(1).getTrades());
+
+		assertEquals(1, openTrades.size());
+		assertTrue(new BigDecimal("10").compareTo(openTrades.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(openTrades.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("100").compareTo(openTrades.get(0).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("5").compareTo(openTrades.get(0).getCommission()) == 0);
+	}
+
+	private void verifyEquityHoldingsAfterSell(Account account) {
+		verifyEquityHoldingsAfterSell(new HasAHoldingListAdapter(account));
+	}
+
+	private void verifyEquityHoldingsAfterSell(Portfolio portfolio) {
+		verifyEquityHoldingsAfterSell(new HasAHoldingListAdapter(portfolio));
+	}
+
+	private void verifyEquityHoldingsAfterSell(HasAHoldingListAdapter holder) {
+		ArrayList<EquityHolding> openHoldings;
+		ArrayList<EquityPosition> openPositions;
+		ArrayList<EquityTrade> openTrades;
+
+		openHoldings = new ArrayList<>(holder.getHoldings().getEquityHoldings());
+
+		assertEquals(1, openHoldings.size());
+		assertEquals("TICKER-A", openHoldings.get(0).getName());
+		assertTrue(new BigDecimal("22").compareTo(openHoldings.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("8.18").compareTo(openHoldings.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("180").compareTo(openHoldings.get(0).getOpenValue()) == 0);
+
+		openPositions = new ArrayList<>(openHoldings.get(0).getPositions());
+
+		assertEquals(2, openPositions.size());
+		assertEquals("2000-01", openPositions.get(0).getName());
+		assertTrue(new BigDecimal("12").compareTo(openPositions.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("6.67").compareTo(openPositions.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("80").compareTo(openPositions.get(0).getOpenValue()) == 0);
+		assertEquals("2000-02", openPositions.get(1).getName());
+		assertTrue(new BigDecimal("10").compareTo(openPositions.get(1).getQuantity()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(openPositions.get(1).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("100").compareTo(openPositions.get(1).getOpenValue()) == 0);
+
+		// Check for proper ordering too!
+		openTrades = new ArrayList<>(openPositions.get(0).getTrades());
+
+		assertEquals(2, openTrades.size());
+		assertTrue(new BigDecimal("2").compareTo(openTrades.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("15").compareTo(openTrades.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("30").compareTo(openTrades.get(0).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(openTrades.get(1).getQuantity()) == 0);
+		assertTrue(new BigDecimal("5").compareTo(openTrades.get(1).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("50").compareTo(openTrades.get(1).getOpenValue()) == 0);
+
+		openTrades = new ArrayList<>(openPositions.get(1).getTrades());
+
+		assertEquals(1, openTrades.size());
+		assertTrue(new BigDecimal("10").compareTo(openTrades.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(openTrades.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("100").compareTo(openTrades.get(0).getOpenValue()) == 0);
+
+		ArrayList<EquityHolding> closedHoldings;
+		ArrayList<EquityPosition> closedPositions;
+		ArrayList<EquityTrade> closedTrades;
+
+		closedHoldings = new ArrayList<>(holder.getHoldings().getClosedEquityHoldings());
+
+		assertEquals(1, closedHoldings.size());
+		assertEquals("TICKER-A", closedHoldings.get(0).getName());
+		assertTrue(new BigDecimal("8").compareTo(closedHoldings.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("15").compareTo(closedHoldings.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("120").compareTo(closedHoldings.get(0).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("16.25").compareTo(closedHoldings.get(0).getClosePrice()) == 0);
+		assertTrue(new BigDecimal("130").compareTo(closedHoldings.get(0).getCloseValue()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(closedHoldings.get(0).getRealizedGain()) == 0);
+		assertTrue(new BigDecimal("8.33").compareTo(closedHoldings.get(0).getRealizedGainPercentage()) == 0);
+
+		closedPositions = new ArrayList<>(closedHoldings.get(0).getPositions());
+
+		assertEquals(1, closedPositions.size());
+		assertEquals("2000-01", closedPositions.get(0).getName());
+		assertTrue(new BigDecimal("8").compareTo(closedPositions.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("15").compareTo(closedPositions.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("120").compareTo(closedPositions.get(0).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("16.25").compareTo(closedPositions.get(0).getClosePrice()) == 0);
+		assertTrue(new BigDecimal("130").compareTo(closedPositions.get(0).getCloseValue()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(closedPositions.get(0).getRealizedGain()) == 0);
+		assertTrue(new BigDecimal("8.33").compareTo(closedPositions.get(0).getRealizedGainPercentage()) == 0);
+
+		// Check for proper ordering too!
+		closedTrades = new ArrayList<>(closedPositions.get(0).getTrades());
+
+		assertEquals(2, closedTrades.size());
+		assertTrue(new BigDecimal("3").compareTo(closedTrades.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("15").compareTo(closedTrades.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("45").compareTo(closedTrades.get(0).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(closedTrades.get(0).getClosePrice()) == 0);
+		assertTrue(new BigDecimal("30").compareTo(closedTrades.get(0).getCloseValue()) == 0);
+		assertTrue(new BigDecimal("-15").compareTo(closedTrades.get(0).getRealizedGain()) == 0);
+		assertTrue(new BigDecimal("-33.33").compareTo(closedTrades.get(0).getRealizedGainPercentage()) == 0);
+		assertTrue(new BigDecimal("5").compareTo(closedTrades.get(1).getQuantity()) == 0);
+		assertTrue(new BigDecimal("15").compareTo(closedTrades.get(1).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("75").compareTo(closedTrades.get(1).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("20").compareTo(closedTrades.get(1).getClosePrice()) == 0);
+		assertTrue(new BigDecimal("100").compareTo(closedTrades.get(1).getCloseValue()) == 0);
+		assertTrue(new BigDecimal("25").compareTo(closedTrades.get(1).getRealizedGain()) == 0);
+		assertTrue(new BigDecimal("33.33").compareTo(closedTrades.get(1).getRealizedGainPercentage()) == 0);
+	}
+
+	private void verifyEquityHoldingsAfterCompleteSell(Account account) {
+		verifyEquityHoldingsAfterCompleteSell(new HasAHoldingListAdapter(account));
+	}
+
+	private void verifyEquityHoldingsAfterCompleteSell(Portfolio portfolio) {
+		verifyEquityHoldingsAfterCompleteSell(new HasAHoldingListAdapter(portfolio));
+	}
+
+	private void verifyEquityHoldingsAfterCompleteSell(HasAHoldingListAdapter holder) {
+		ArrayList<EquityHolding> openHoldings;
+
+		openHoldings = new ArrayList<>(holder.getHoldings().getEquityHoldings());
+
+		assertTrue(openHoldings.isEmpty());
+
+		ArrayList<EquityHolding> closedHoldings;
+		ArrayList<EquityPosition> closedPositions;
+		ArrayList<EquityTrade> closedTrades;
+
+		closedHoldings = new ArrayList<>(holder.getHoldings().getClosedEquityHoldings());
+
+		assertEquals(1, closedHoldings.size());
+		assertEquals("TICKER-A", closedHoldings.get(0).getName());
+//		assertTrue(new BigDecimal("8").compareTo(closedHoldings.get(0).getQuantity()) == 0);
+//		assertTrue(new BigDecimal("15").compareTo(closedHoldings.get(0).getOpenPrice()) == 0);
+//		assertTrue(new BigDecimal("120").compareTo(closedHoldings.get(0).getOpenValue()) == 0);
+//		assertTrue(new BigDecimal("16.25").compareTo(closedHoldings.get(0).getClosePrice()) == 0);
+//		assertTrue(new BigDecimal("130").compareTo(closedHoldings.get(0).getCloseValue()) == 0);
+//		assertTrue(new BigDecimal("10").compareTo(closedHoldings.get(0).getRealizedGain()) == 0);
+//		assertTrue(new BigDecimal("8.33").compareTo(closedHoldings.get(0).getRealizedGainPercentage()) == 0);
+
+		closedPositions = new ArrayList<>(closedHoldings.get(0).getPositions());
+
+		assertEquals(2, closedPositions.size());
+		assertEquals("2000-01", closedPositions.get(0).getName());
+//		assertTrue(new BigDecimal("8").compareTo(closedPositions.get(0).getQuantity()) == 0);
+//		assertTrue(new BigDecimal("15").compareTo(closedPositions.get(0).getOpenPrice()) == 0);
+//		assertTrue(new BigDecimal("120").compareTo(closedPositions.get(0).getOpenValue()) == 0);
+//		assertTrue(new BigDecimal("16.25").compareTo(closedPositions.get(0).getClosePrice()) == 0);
+//		assertTrue(new BigDecimal("130").compareTo(closedPositions.get(0).getCloseValue()) == 0);
+//		assertTrue(new BigDecimal("10").compareTo(closedPositions.get(0).getRealizedGain()) == 0);
+//		assertTrue(new BigDecimal("8.33").compareTo(closedPositions.get(0).getRealizedGainPercentage()) == 0);
+
+		// Check for proper ordering too!
+		closedTrades = new ArrayList<>(closedPositions.get(0).getTrades());
+
+		assertEquals(4, closedTrades.size());
+		assertTrue(new BigDecimal("3").compareTo(closedTrades.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("15").compareTo(closedTrades.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("45").compareTo(closedTrades.get(0).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(closedTrades.get(0).getClosePrice()) == 0);
+		assertTrue(new BigDecimal("30").compareTo(closedTrades.get(0).getCloseValue()) == 0);
+		assertTrue(new BigDecimal("0").compareTo(closedTrades.get(0).getCommission()) == 0);
+		assertTrue(new BigDecimal("-15").compareTo(closedTrades.get(0).getRealizedGain()) == 0);
+		assertTrue(new BigDecimal("-33.33").compareTo(closedTrades.get(0).getRealizedGainPercentage()) == 0);
+		assertTrue(new BigDecimal("5").compareTo(closedTrades.get(1).getQuantity()) == 0);
+		assertTrue(new BigDecimal("15").compareTo(closedTrades.get(1).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("75").compareTo(closedTrades.get(1).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("20").compareTo(closedTrades.get(1).getClosePrice()) == 0);
+		assertTrue(new BigDecimal("100").compareTo(closedTrades.get(1).getCloseValue()) == 0);
+		assertTrue(new BigDecimal("0").compareTo(closedTrades.get(1).getCommission()) == 0);
+		assertTrue(new BigDecimal("25").compareTo(closedTrades.get(1).getRealizedGain()) == 0);
+		assertTrue(new BigDecimal("33.33").compareTo(closedTrades.get(1).getRealizedGainPercentage()) == 0);
+		assertTrue(new BigDecimal("2").compareTo(closedTrades.get(2).getQuantity()) == 0);
+		assertTrue(new BigDecimal("15").compareTo(closedTrades.get(2).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("30").compareTo(closedTrades.get(2).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("9.18").compareTo(closedTrades.get(2).getClosePrice()) == 0);
+		assertTrue(new BigDecimal("18.36").compareTo(closedTrades.get(2).getCloseValue()) == 0);
+		assertTrue(new BigDecimal("1").compareTo(closedTrades.get(2).getCommission()) == 0); // 0.00 open commission + 1.00 partial close
+		assertTrue(new BigDecimal("-12.64").compareTo(closedTrades.get(2).getRealizedGain()) == 0);
+		assertTrue(new BigDecimal("-42.13").compareTo(closedTrades.get(2).getRealizedGainPercentage()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(closedTrades.get(3).getQuantity()) == 0);
+		assertTrue(new BigDecimal("5").compareTo(closedTrades.get(3).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("50").compareTo(closedTrades.get(3).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("9.18").compareTo(closedTrades.get(3).getClosePrice()) == 0);
+		assertTrue(new BigDecimal("91.80").compareTo(closedTrades.get(3).getCloseValue()) == 0);
+		assertTrue(new BigDecimal("15").compareTo(closedTrades.get(3).getCommission()) == 0); // 10.00 open commission + 5.00 partial close
+		assertTrue(new BigDecimal("26.80").compareTo(closedTrades.get(3).getRealizedGain()) == 0);
+		assertTrue(new BigDecimal("53.60").compareTo(closedTrades.get(3).getRealizedGainPercentage()) == 0);
+
+		closedTrades = new ArrayList<>(closedPositions.get(1).getTrades());
+		assertEquals(1, closedTrades.size());
+		assertTrue(new BigDecimal("10").compareTo(closedTrades.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(closedTrades.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("100").compareTo(closedTrades.get(0).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("9.18").compareTo(closedTrades.get(0).getClosePrice()) == 0);
+		assertTrue(new BigDecimal("91.80").compareTo(closedTrades.get(0).getCloseValue()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(closedTrades.get(0).getCommission()) == 0); // 5.00 open commission + 5.00 partial close
+		assertTrue(new BigDecimal("-18.20").compareTo(closedTrades.get(0).getRealizedGain()) == 0);
+		assertTrue(new BigDecimal("-18.20").compareTo(closedTrades.get(0).getRealizedGainPercentage()) == 0);
+	}
+
+	@Test(expected=EntryInsertionException.class)
+	public void shouldRejectEquityOperationsGivenInsufficientShares() throws ObjectNotFoundException, InvalidInputException, EntryInsertionException, ObjectConstraintsException {
+		journal.addAccount("Test account #1");              // ID: 0
+		journal.addAccount("Test account #2");              // ID: 1
+
+		journal.addPortfolio("Test portfolio #1", 0);       // ID: 1
+		journal.addPortfolio("Test portfolio #2", 0);       // ID: 2
+		journal.addPortfolio("Test portfolio #1.1", 1);     // ID: 3
+		journal.addPortfolio("Test portfolio #1.2", 2);     // ID: 4
+
+		journal.addCashDepositEntry(0, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", new BigDecimal("10000.00"));
+		journal.addCashDepositEntry(1, "Example tag", new GregorianCalendar(2000, 0, 1).getTime(), "Some comment", new BigDecimal("10000.00"));
+
+		journal.addCashAllocationEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("1000.00"));
+		journal.addCashAllocationEntry(0, 2, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("1000.00"));
+		journal.addCashAllocationEntry(1, 3, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("1000.00"));
+		journal.addCashAllocationEntry(1, 4, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", new BigDecimal("1000.00"));
+
+		// Check buy entries with random date order
+		journal.addBuyEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 3).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("5.00"), new BigDecimal("10.00"));
+		journal.addBuyEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 1, 4).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("10.00"), new BigDecimal("5.00"));
+		journal.addBuyEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", "TICKER-A", new BigDecimal("10"), new BigDecimal("15.00"), new BigDecimal("0.00"));
+		journal.addSellEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2001, 0, 5).getTime(), "Some comment", "TICKER-A", new BigDecimal("5"), new BigDecimal("20.00"), new BigDecimal("0.00"));
+		journal.addSellEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 6).getTime(), "Some comment", "TICKER-A", new BigDecimal("30"), new BigDecimal("10.00"), new BigDecimal("0.00"));
 	}
 
 	@Test(expected=InvalidInputException.class)
@@ -384,7 +672,7 @@ public class JournalFixture {
 	}
 
 	/**
-	 * Warning: This test is designed to take a long time to execute (around 10 seconds for a passing test).
+	 * Warning: This test is designed to take a long time to execute (around 20 seconds for a passing test).
 	 *
 	 * @throws ObjectNotFoundException
 	 * @throws InvalidInputException

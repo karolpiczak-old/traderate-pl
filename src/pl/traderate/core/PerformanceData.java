@@ -47,4 +47,52 @@ class PerformanceData {
 	protected BigDecimal realizedGain;
 
 	protected BigDecimal realizedGainPercentage;
+
+	BigDecimal getQuantity() {
+		return quantity;
+	}
+
+	BigDecimal getOpenPrice() {
+		return openPrice;
+	}
+
+	BigDecimal getCommission() {
+		return commission;
+	}
+
+	BigDecimal getOpenValue() {
+		return openValue;
+	}
+
+	BigDecimal getClosePrice() {
+		return closePrice;
+	}
+
+	BigDecimal getCloseValue() {
+		return closeValue;
+	}
+
+	BigDecimal getLastMarketPrice() {
+		return lastMarketPrice;
+	}
+
+	BigDecimal getMarketValue() {
+		return marketValue;
+	}
+
+	BigDecimal getPaperGain() {
+		return paperGain;
+	}
+
+	BigDecimal getPaperGainPercentage() {
+		return paperGainPercentage;
+	}
+
+	BigDecimal getRealizedGain() {
+		return realizedGain;
+	}
+
+	BigDecimal getRealizedGainPercentage() {
+		return realizedGainPercentage;
+	}
 }

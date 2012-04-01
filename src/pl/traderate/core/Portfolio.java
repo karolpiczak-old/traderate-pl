@@ -197,18 +197,11 @@ class Portfolio implements Identifiable {
 	public void applyEntry(BuyEquityTransactionEntry entry) throws EntryInsertionException {
 		holdings.open(entry);
 		updateCashBalance();
-		updateHoldingAggregates();
 	}
 
 	public void applyEntry(SellEquityTransactionEntry entry) throws EntryInsertionException {
 		holdings.close(entry);
 		updateCashBalance();
-		updateHoldingAggregates();
-	}
-
-	private void updateHoldingAggregates() {
-		//throw new InternalLogicError();
-		// TODO: Implement holdings aggregation from subportfolios
 	}
 
 	/**
@@ -290,5 +283,9 @@ class Portfolio implements Identifiable {
 
 	public BigDecimal getAggregatedCashBalance() {
 		return aggregatedCashBalance;
+	}
+
+	HoldingList getHoldings() {
+		return holdings;
 	}
 }

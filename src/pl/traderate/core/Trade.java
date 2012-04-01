@@ -95,10 +95,6 @@ abstract class Trade extends PerformanceData implements Comparable<Trade>, Ident
 		return account;
 	}
 
-	BigDecimal getQuantity() {
-		return quantity;
-	}
-
 	String getTicker() {
 		return ticker;
 	}
@@ -106,8 +102,8 @@ abstract class Trade extends PerformanceData implements Comparable<Trade>, Ident
 	void close(BigDecimal price) {
 		closePrice = price;
 		closeValue = closePrice.multiply(quantity);
-		realizedGain = closeValue.subtract(openValue);
-		realizedGainPercentage = realizedGain.divide(openValue, new MathContext(2, RoundingMode.HALF_EVEN));
+		realizedGain = closeValue.subtract(openValue).subtract(commission);
+		realizedGainPercentage = realizedGain.divide(openValue, 4, RoundingMode.HALF_EVEN).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_EVEN);
 		closed = true;
 	}
 

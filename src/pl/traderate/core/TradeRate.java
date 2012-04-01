@@ -125,6 +125,7 @@ public final class TradeRate extends GenericModelEventSource {
 	public void addBuyEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws JournalNotLoadedException, EntryInsertionException, ObjectNotFoundException, ObjectConstraintsException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addBuyEquityTransactionEntry(accountID, portfolioID, tags, date, comment, ticker, quantity, price, commission);
+		journal.update();
 
 		fireEvent(new DataUpdateModelEvent(this));
 	}
@@ -144,6 +145,7 @@ public final class TradeRate extends GenericModelEventSource {
 	public void addSellEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws JournalNotLoadedException, EntryInsertionException, ObjectNotFoundException, ObjectConstraintsException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addSellEquityTransactionEntry(accountID, portfolioID, tags, date, comment, ticker, quantity, price, commission);
+		journal.update();
 
 		fireEvent(new DataUpdateModelEvent(this));
 	}
@@ -161,6 +163,7 @@ public final class TradeRate extends GenericModelEventSource {
 	public void addCashAllocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addCashAllocationEntry(accountID, portfolioID, tags, date, comment, amount);
+		journal.update();
 
 		fireEvent(new DataUpdateModelEvent(this));
 	}
@@ -178,6 +181,7 @@ public final class TradeRate extends GenericModelEventSource {
 	public void addCashDeallocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addCashDeallocationEntry(accountID, portfolioID, tags, date, comment, amount);
+		journal.update();
 
 		fireEvent(new DataUpdateModelEvent(this));
 	}
@@ -196,6 +200,7 @@ public final class TradeRate extends GenericModelEventSource {
 	public void addCashDepositEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addCashDepositEntry(accountID, tags, date, comment, amount);
+		journal.update();
 
 		fireEvent(new DataUpdateModelEvent(this));
 	}
@@ -214,6 +219,7 @@ public final class TradeRate extends GenericModelEventSource {
 	public void addCashWithdrawalEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addCashWithdrawalEntry(accountID, tags, date, comment, amount);
+		journal.update();
 
 		fireEvent(new DataUpdateModelEvent(this));
 	}
@@ -228,12 +234,26 @@ public final class TradeRate extends GenericModelEventSource {
 	public void removeEntry(int entryID) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException {
 		assertJournalIsLoaded();
 		journal.removeEntry(entryID);
+		journal.update();
 
 		fireEvent(new DataUpdateModelEvent(this));
 	}
 
 	public void updateQuotes() {
 
+	}
+	
+	public ArrayList<AccountDTO> getAccounts() {
+		ArrayList<AccountDTO> accountDTOs = new ArrayList<>();
+		for (Account account : journal.getAccounts()) {
+			accountDTOs.add(new AccountDTO(account));
+		}
+
+		return accountDTOs;
+	}
+
+	public PortfolioTreeDTO getPortfolios() {
+		return new PortfolioTreeDTO(journal.getGlobalPortfolio());
 	}
 
 	/**

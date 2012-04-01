@@ -25,8 +25,6 @@ import java.math.RoundingMode;
 
 public final class TradeRateConfig {
 
-	public final static MathContext TWO_DIGIT = new MathContext(2, RoundingMode.HALF_EVEN);
-
 	private static boolean deferredComputationMode;
 
 	/**

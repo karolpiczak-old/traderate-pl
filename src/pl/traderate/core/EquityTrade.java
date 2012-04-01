@@ -58,7 +58,7 @@ class EquityTrade extends Trade {
 		tradeToBeClosed.setQuantity(sharesToReturn);
 		tradeStillOpen.setQuantity(quantity.subtract(sharesToReturn));
 
-		BigDecimal partialCommission = sharesToReturn.divide(quantity, new MathContext(2, RoundingMode.HALF_EVEN)).multiply(commission, new MathContext(2, RoundingMode.HALF_EVEN));
+		BigDecimal partialCommission = sharesToReturn.divide(quantity, 10, RoundingMode.HALF_EVEN).multiply(commission).setScale(2, RoundingMode.HALF_EVEN);
 		tradeToBeClosed.setCommission(partialCommission);
 		tradeStillOpen.setCommission(commission.subtract(partialCommission));
 		

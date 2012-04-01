@@ -20,7 +20,35 @@
 
 package pl.traderate.core;
 
-interface IdentifiableByName {
+import java.math.BigDecimal;
+import java.util.ArrayList;
 
-	String getName();
+public class PortfolioTreeDTO {
+
+	public final int ID;
+
+	public final String name;
+
+	public final BigDecimal cashBalance;
+
+	public final BigDecimal aggregatedCashBalance;
+	
+	public final HoldingsDTO holdings;
+
+	public final ArrayList<EntryDTO> entries;
+	
+//	public final PortfolioDTO parent;
+//
+//	public final ArrayList<PortfolioDTO> children;
+
+	PortfolioTreeDTO(Portfolio portfolio) {
+		this.ID = portfolio.getID();
+		this.name = portfolio.getName();
+		this.cashBalance = portfolio.getCashBalance();
+		this.aggregatedCashBalance = portfolio.getAggregatedCashBalance();
+		this.holdings = new HoldingsDTO(portfolio.getHoldings());
+		this.entries = new ArrayList<>();
+
+	}
+	
 }

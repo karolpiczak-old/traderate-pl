@@ -20,7 +20,6 @@
 
 package pl.traderate.core;
 
-interface IdentifiableByName {
+public class EntryDTO {
 
-	String getName();
 }

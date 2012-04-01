@@ -26,6 +26,7 @@ import pl.traderate.core.exception.ObjectConstraintsException;
 import pl.traderate.core.exception.ObjectNotFoundException;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -112,6 +113,10 @@ class Journal {
 		assertNumberIsNotNegative(price);
 		assertNumberIsNotNegative(commission);
 
+		quantity = sanitizeQuantity(quantity);
+		price = sanitizePrice(price);
+		commission = sanitizeCommission(commission);
+
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
 
@@ -127,6 +132,10 @@ class Journal {
 		assertNumberIsInteger(quantity);
 		assertNumberIsNotNegative(price);
 		assertNumberIsNotNegative(commission);
+
+		quantity = sanitizeQuantity(quantity);
+		price = sanitizePrice(price);
+		commission = sanitizeCommission(commission);
 
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
@@ -152,6 +161,8 @@ class Journal {
 	void addCashAllocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertNumberIsPositive(amount);
 
+		amount = sanitizeCashAmount(amount);
+
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
 
@@ -174,6 +185,8 @@ class Journal {
 	 */
 	void addCashDeallocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertNumberIsPositive(amount);
+
+		amount = sanitizeCashAmount(amount);
 
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
@@ -198,6 +211,8 @@ class Journal {
 	void addCashDepositEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertNumberIsPositive(amount);
 
+		amount = sanitizeCashAmount(amount);
+
 		Account account = findObjectByID(accountID, accounts);
 
 		// TODO: Proper tag handling
@@ -218,6 +233,8 @@ class Journal {
 	 */
 	void addCashWithdrawalEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertNumberIsPositive(amount);
+
+		amount = sanitizeCashAmount(amount);
 
 		Account account = findObjectByID(accountID, accounts);
 
@@ -317,7 +334,21 @@ class Journal {
 	ArrayList<Account> getAccounts() {
 		return accounts;
 	}
+	
+	Portfolio getGlobalPortfolio() {
+		return portfolios.get(0);
+	}
 
+	void update() {
+		for (Account account : accounts) {
+			account.update();
+		}
+
+		for (Portfolio portfolio : portfolios) {
+			portfolio.update();
+		}
+	}
+	
 	/**
 	 *
 	 * @param objectID
@@ -362,4 +393,25 @@ class Journal {
 			throw new InvalidInputException();
 		}
 	}
+
+	private BigDecimal sanitizeCommission(BigDecimal number) {
+		number = number.setScale(2, RoundingMode.HALF_EVEN);
+		return number;
+	}
+
+	private BigDecimal sanitizePrice(BigDecimal number) {
+		number = number.setScale(2, RoundingMode.HALF_EVEN);
+		return number;
+	}
+
+	private BigDecimal sanitizeQuantity(BigDecimal number) {
+		number = number.setScale(0);
+		return number;
+	}
+
+	private BigDecimal sanitizeCashAmount(BigDecimal number) {
+		number = number.setScale(2, RoundingMode.HALF_EVEN);
+		return number;
+	}
+
 }

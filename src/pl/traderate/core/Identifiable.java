@@ -20,7 +20,7 @@
 
 package pl.traderate.core;
 
-public interface Identifiable {
+interface Identifiable {
 
 	int getID();
 }

@@ -20,7 +20,29 @@
 
 package pl.traderate.core;
 
-interface IdentifiableByName {
+import java.math.BigDecimal;
 
-	String getName();
+public class AccountDTO {
+	
+	public final int ID;
+	
+	public final String name;
+	
+	public final BigDecimal cashBalance;
+	
+	public final BigDecimal unallocatedCash;
+
+	public final HoldingsDTO holdings;
+
+	//	public final EntryDTO entries;
+
+	// cashAllocations
+
+	AccountDTO(Account account) {
+		this.ID = account.getID();
+		this.name = account.getName();
+		this.cashBalance = account.getCashBalance();
+		this.unallocatedCash = account.getUnallocatedCash();
+		this.holdings = new HoldingsDTO(account.getHoldings());
+	}
 }

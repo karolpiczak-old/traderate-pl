@@ -335,4 +335,8 @@ class Account implements Identifiable {
 	private void setCashAllocation(int portfolioID, BigDecimal amount) {
 		cashAllocations.put(portfolioID, amount);
 	}
+
+	HoldingList getHoldings() {
+		return holdings;
+	}
 }
