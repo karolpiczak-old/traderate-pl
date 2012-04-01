@@ -21,11 +21,63 @@
 package pl.traderate.core;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Date;
 
 class EquityTrade extends Trade {
 
-	public EquityTrade(Account account, Portfolio portfolio, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
+	EquityTrade(Account account, Portfolio portfolio, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
 		super(account, portfolio, date, comment, ticker, quantity, price, commission);
+	}
+
+	/**
+	 * Create a clone
+	 *
+	 * @param equityTrade
+	 */
+	private EquityTrade(EquityTrade equityTrade) {
+		super(equityTrade.account, equityTrade.portfolio, equityTrade.date, equityTrade.comment, equityTrade.ticker, equityTrade.quantity, equityTrade.openPrice, equityTrade.commission);
+	}
+
+	void close(SellEquityTransactionEntry entry, BigDecimal allocatedCommission) {
+		commission = commission.add(allocatedCommission);
+		super.close(entry.price);
+	}
+
+	EquityTrade divide(BigDecimal sharesToReturn) {
+		EquityTrade tradeToBeClosed;
+		EquityTrade tradeStillOpen;
+		
+		EquityHolding parentHolding = (EquityHolding) parent.getParent();
+		EquityPosition parentPosition = (EquityPosition) parent;
+		
+		tradeToBeClosed = new EquityTrade(this);
+		tradeStillOpen = new EquityTrade(this);
+		
+		tradeToBeClosed.setQuantity(sharesToReturn);
+		tradeStillOpen.setQuantity(quantity.subtract(sharesToReturn));
+
+		BigDecimal partialCommission = sharesToReturn.divide(quantity, new MathContext(2, RoundingMode.HALF_EVEN)).multiply(commission, new MathContext(2, RoundingMode.HALF_EVEN));
+		tradeToBeClosed.setCommission(partialCommission);
+		tradeStillOpen.setCommission(commission.subtract(partialCommission));
+		
+		parentHolding.attach(tradeToBeClosed);
+		parentPosition.attach(tradeToBeClosed);
+		parentHolding.attach(tradeStillOpen);
+		parentPosition.attach(tradeStillOpen);
+
+		parentHolding.detach(this);
+		parentPosition.detach(this);
+		
+		return tradeToBeClosed;
+	}
+
+	private void setQuantity(BigDecimal quantity) {
+		this.quantity = quantity;
+	}
+
+	private void setCommission(BigDecimal commission) {
+		this.commission = commission;
 	}
 }

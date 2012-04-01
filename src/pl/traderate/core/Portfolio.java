@@ -41,7 +41,7 @@ class Portfolio implements Identifiable {
 	private final Journal journal;
 
 	/** */
-	private final int id;
+	private final int ID;
 
 	/** */
 	private String name;
@@ -78,7 +78,7 @@ class Portfolio implements Identifiable {
 	 */
 	Portfolio(Journal journal, String name) {
 		this.journal = journal;
-		id = numberOfPortfoliosCreated++;
+		ID = numberOfPortfoliosCreated++;
 		setName(name);
 		entries = new ArrayList<PortfolioEntry>();
 		children = new ArrayList<Portfolio>();
@@ -100,8 +100,8 @@ class Portfolio implements Identifiable {
 
 	private void initVolatile() {
 		holdings = new HoldingList();
-		cashBalance = new BigDecimal("0");
-		aggregatedCashBalance = new BigDecimal("0");
+		cashBalance = BigDecimal.ZERO;
+		aggregatedCashBalance = BigDecimal.ZERO;
 		latestEntryDate = new Date(0L);
 	}
 
@@ -197,6 +197,7 @@ class Portfolio implements Identifiable {
 
 	private void updateHoldingAggregates() {
 		//throw new InternalLogicError();
+		// TODO: Implement holdings aggregation from subportfolios
 	}
 
 	/**
@@ -221,10 +222,10 @@ class Portfolio implements Identifiable {
 	 *
 	 */
 	private void updateCashBalance() {
-		cashBalance = new BigDecimal("0");
+		cashBalance = BigDecimal.ZERO;
 		
 		for (Account account : journal.getAccounts()) {
-			cashBalance = cashBalance.add(account.getCashAllocation(this.id));
+			cashBalance = cashBalance.add(account.getCashAllocation(this.ID));
 		}
 	}
 	
@@ -249,7 +250,7 @@ class Portfolio implements Identifiable {
 	 * @return
 	 */
 	public int getID() {
-		return id;
+		return ID;
 	}
 
 	static void resetIDIncrement() {

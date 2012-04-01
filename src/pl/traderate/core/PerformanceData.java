@@ -20,44 +20,31 @@
 
 package pl.traderate.core;
 
-import pl.traderate.core.exception.ObjectConstraintsException;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
 
-/**
- *
- */
-abstract class TransactionEntry extends PortfolioEntry {
-
-	protected String ticker;
+class PerformanceData {
 
 	protected BigDecimal quantity;
 
-	protected BigDecimal price;
+	protected BigDecimal openPrice;
 
 	protected BigDecimal commission;
-	
-	protected String position;
 
-	protected TransactionEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date,
-	                           String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission, String position) throws ObjectConstraintsException {
+	protected BigDecimal openValue;
 
-		super(account, portfolio, tags, date, comment);
+	protected BigDecimal closePrice;
 
-		if (price.compareTo(BigDecimal.ZERO) < 0) {
-			throw new ObjectConstraintsException();
-		}
-		
-		if (quantity.compareTo(BigDecimal.ZERO) < 0) {
-			throw new ObjectConstraintsException();
-		}
-		
-		this.ticker = ticker;
-		this.quantity = quantity;
-		this.price = price;
-		this.commission = commission;
-		this.position = position;
-	}
+	protected BigDecimal closeValue;
+
+	protected BigDecimal lastMarketPrice;
+
+	protected BigDecimal marketValue;
+
+	protected BigDecimal paperGain;
+
+	protected BigDecimal paperGainPercentage;
+
+	protected BigDecimal realizedGain;
+
+	protected BigDecimal realizedGainPercentage;
 }

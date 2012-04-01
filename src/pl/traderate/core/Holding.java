@@ -25,12 +25,17 @@ import java.util.ArrayList;
 /**
  *
  */
-abstract class Holding implements IdentifiableByName {
+abstract class Holding extends PerformanceData implements IdentifiableByName, Comparable<Holding> {
 
+	protected HoldingList parent;
+	
 	protected String ticker;
 
-	public Holding(String ticker) {
+	protected boolean closed;
+
+	Holding(String ticker, boolean closed) {
 		this.ticker = ticker;
+		this.closed = closed;
 	}
 
 	public String getName() {
@@ -38,4 +43,13 @@ abstract class Holding implements IdentifiableByName {
 	}
 
 	abstract void update();
+
+	@Override
+	public int compareTo(Holding o) {
+		return this.ticker.compareTo(o.ticker);
+	}
+
+	boolean isClosed() {
+		return closed;
+	}
 }

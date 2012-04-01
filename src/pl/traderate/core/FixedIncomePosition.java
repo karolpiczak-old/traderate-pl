@@ -22,8 +22,8 @@ package pl.traderate.core;
 
 class FixedIncomePosition extends Position {
 
-	public FixedIncomePosition(String name) {
-		super(name);
+	FixedIncomePosition(String name, boolean closed) {
+		super(name, closed);
 	}
 
 	@Override

@@ -21,34 +21,97 @@
 package pl.traderate.core;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Date;
 
-abstract class Trade {
+abstract class Trade extends PerformanceData implements Comparable<Trade>, Identifiable {
 
-	private Account account;
+	/** */
+	protected static int numberOfTradesCreated;
 
-	private Portfolio portfolio;
+	/** */
+	protected final int ID;
+	
+	protected Position parent;
+	
+	protected Account account;
 
-	private Date date;
+	protected Portfolio portfolio;
 
-	private String comment;
+	protected Date date;
 
-	private String ticker;
+	protected String comment;
 
-	private BigDecimal quantity;
+	protected String ticker;
 
-	private BigDecimal price;
+	protected boolean closed;
 
-	private BigDecimal commission;
-
-	public Trade(Account account, Portfolio portfolio, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
+	Trade(Account account, Portfolio portfolio, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal openPrice, BigDecimal commission) {
+		this.ID = numberOfTradesCreated++;
 		this.account = account;
 		this.portfolio = portfolio;
 		this.date = new Date(date.getTime());
 		this.comment = comment;
 		this.ticker = ticker;
 		this.quantity = quantity;
-		this.price = price;
+		this.openPrice = openPrice;
 		this.commission = commission;
+
+		this.openValue = openPrice.multiply(quantity);
+	}
+
+	@Override
+	public int compareTo(Trade o) {
+		if (this.date.compareTo(o.date) == 0) {
+			if (this.ID > o.ID) {
+				return 1;
+			} else if (this.ID < o.ID) {
+				return -1;
+			}
+			return 0;
+		}
+		return this.date.compareTo(o.date);
+	}
+
+	@Override
+	public int getID() {
+		return ID;
+	}
+
+	static void resetIDIncrement() {
+		numberOfTradesCreated = 0;
+	}
+
+	Position getParent() {
+		return parent;
+	}
+
+	void setParent(Position position) {
+		parent = position;
+	}
+
+	Account getAccount() {
+		return account;
+	}
+
+	BigDecimal getQuantity() {
+		return quantity;
+	}
+
+	String getTicker() {
+		return ticker;
+	}
+
+	void close(BigDecimal price) {
+		closePrice = price;
+		closeValue = closePrice.multiply(quantity);
+		realizedGain = closeValue.subtract(openValue);
+		realizedGainPercentage = realizedGain.divide(openValue, new MathContext(2, RoundingMode.HALF_EVEN));
+		closed = true;
+	}
+
+	boolean isClosed() {
+		return closed;
 	}
 }

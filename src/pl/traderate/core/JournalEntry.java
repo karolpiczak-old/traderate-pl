@@ -32,7 +32,7 @@ import java.util.Date;
  */
 abstract class JournalEntry implements Serializable, Identifiable {
 
-	protected int id;
+	protected int ID;
 
 	protected Date date;
 
@@ -46,7 +46,7 @@ abstract class JournalEntry implements Serializable, Identifiable {
 
 	// TODO: Check for tags defensive copying when implementing tags
 	protected JournalEntry(Account account, ArrayList<Tag> tags, Date date, String comment) {
-		id = numberOfJournalEntriesCreated++;
+		ID = numberOfJournalEntriesCreated++;
 
 		this.account = account;
 		this.tags = tags;
@@ -62,7 +62,7 @@ abstract class JournalEntry implements Serializable, Identifiable {
 
 	@Override
 	public int getID() {
-		return id;
+		return ID;
 	}
 
 	static void resetIDIncrement() {

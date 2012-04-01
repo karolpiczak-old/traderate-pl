@@ -36,7 +36,7 @@ import java.util.HashMap;
 class Account implements Identifiable {
 
 	/** */
-	private final int id;
+	private final int ID;
 
 	/** */
 	private static int numberOfAccountsCreated;
@@ -67,7 +67,7 @@ class Account implements Identifiable {
 	 * @param name
 	 */
 	Account(String name) {
-		id = numberOfAccountsCreated++;
+		ID = numberOfAccountsCreated++;
 		setName(name);
 		entries = new ArrayList<>();
 		initVolatile();
@@ -78,8 +78,8 @@ class Account implements Identifiable {
 	 */
 	private void initVolatile() {
 		holdings = new HoldingList();
-		cashBalance = new BigDecimal("0");
-		unallocatedCash = new BigDecimal("0");
+		cashBalance = BigDecimal.ZERO;
+		unallocatedCash = BigDecimal.ZERO;
 		latestEntryDate = new Date(0L);
 		cashAllocations = new HashMap<>();
 	}
@@ -172,7 +172,7 @@ class Account implements Identifiable {
 		BigDecimal newBalance = cashBalance.subtract(purchaseValue);
 		BigDecimal newPortfolioCash = getCashAllocation(entry.getPortfolioID()).subtract(purchaseValue);
 
-		if ((newBalance.compareTo(new BigDecimal("0")) < 0) || (newPortfolioCash.compareTo(new BigDecimal("0")) < 0)) {
+		if ((newBalance.compareTo(BigDecimal.ZERO) < 0) || (newPortfolioCash.compareTo(BigDecimal.ZERO) < 0)) {
 			throw new EntryInsertionException();
 		}
 
@@ -188,7 +188,7 @@ class Account implements Identifiable {
 		BigDecimal newPortfolioCash = getCashAllocation(entry.getPortfolioID()).add(sellValue);
 
 		// New cash balance can be negative when commission paid is greater than proceeds from sale
-		if ((newBalance.compareTo(new BigDecimal("0")) < 0) || (newPortfolioCash.compareTo(new BigDecimal("0")) < 0)) {
+		if ((newBalance.compareTo(BigDecimal.ZERO) < 0) || (newPortfolioCash.compareTo(BigDecimal.ZERO) < 0)) {
 			throw new EntryInsertionException();
 		}
 
@@ -207,7 +207,7 @@ class Account implements Identifiable {
 		BigDecimal newUnallocatedCash = unallocatedCash.subtract(entry.getAmount());
 		BigDecimal newPortfolioCash = getCashAllocation(entry.getPortfolioID()).add(entry.getAmount());
 
-		if (newUnallocatedCash.compareTo(new BigDecimal("0")) < 0) {
+		if (newUnallocatedCash.compareTo(BigDecimal.ZERO) < 0) {
 			throw new EntryInsertionException();
 		}
 
@@ -223,7 +223,7 @@ class Account implements Identifiable {
 	public void applyEntry(CashDeallocationEntry entry) throws EntryInsertionException {
 		BigDecimal newPortfolioCash = getCashAllocation(entry.getPortfolioID()).subtract(entry.getAmount());
 		
-		if (newPortfolioCash.compareTo(new BigDecimal("0")) < 0) {
+		if (newPortfolioCash.compareTo(BigDecimal.ZERO) < 0) {
 			throw new EntryInsertionException();
 		}
 
@@ -249,7 +249,7 @@ class Account implements Identifiable {
 		BigDecimal newBalance = cashBalance.subtract(entry.getAmount());
 		BigDecimal newUnallocatedCash = unallocatedCash.subtract(entry.getAmount());
 
-		if ((newBalance.compareTo(new BigDecimal("0")) < 0) || (newUnallocatedCash.compareTo(new BigDecimal("0")) < 0)) {
+		if ((newBalance.compareTo(BigDecimal.ZERO) < 0) || (newUnallocatedCash.compareTo(BigDecimal.ZERO) < 0)) {
 			throw new EntryInsertionException();
 		}
 
@@ -262,7 +262,7 @@ class Account implements Identifiable {
 	 * @return
 	 */
 	public int getID() {
-		return id;
+		return ID;
 	}
 
 	static void resetIDIncrement() {
@@ -310,7 +310,7 @@ class Account implements Identifiable {
 		BigDecimal amount = cashAllocations.get(portfolioID);
 
 		if (amount == null) {
-			amount = new BigDecimal("0");
+			amount = BigDecimal.ZERO;
 		}
 
 		return amount;

@@ -20,27 +20,88 @@
 
 package pl.traderate.core;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import java.util.TreeSet;
 
 class EquityHolding extends Holding {
 
-	protected ArrayList<EquityPosition> positions;
+	protected TreeSet<EquityPosition> positions;
 
-	public EquityHolding(String ticker) {
-		super(ticker);
-		positions = new ArrayList<>();
-	}
+	protected TreeSet<EquityTrade> trades;
 
-	ArrayList<EquityPosition> getPositions() {
-		return positions;
+	EquityHolding(String ticker, boolean closed) {
+		super(ticker, closed);
+		positions = new TreeSet<>();
+		trades = new TreeSet<>();
 	}
 
 	@Override
 	void update() {
+		if (!TradeRateConfig.isDeferredComputationMode()) {
+			quantity = BigDecimal.ZERO;
+			openPrice = BigDecimal.ZERO;
+			openValue = BigDecimal.ZERO;
 
+			if (isClosed()) {
+				closePrice = BigDecimal.ZERO;
+				closeValue = BigDecimal.ZERO;
+				realizedGain = BigDecimal.ZERO;
+				realizedGainPercentage = BigDecimal.ZERO;
+			}
+
+			for (EquityPosition position : positions) {
+				quantity = quantity.add(position.quantity);
+				openValue = openValue.add(position.openValue);
+				if (isClosed()) {
+					closeValue = closeValue.add(position.closeValue);
+				}
+			}
+
+			if (quantity.signum() == 0) {
+				openPrice = BigDecimal.ZERO;
+				closePrice = BigDecimal.ZERO;
+				realizedGain = BigDecimal.ZERO;
+				realizedGainPercentage = BigDecimal.ZERO;
+			} else {
+				openPrice = openValue.divide(quantity, new MathContext(2, RoundingMode.HALF_EVEN));
+				if (isClosed()) {
+					closePrice = closeValue.divide(quantity, new MathContext(2, RoundingMode.HALF_EVEN));
+					realizedGain = closeValue.subtract(openValue);
+					realizedGainPercentage = realizedGain.divide(openValue, new MathContext(2, RoundingMode.HALF_EVEN));
+				}
+			}
+		}
 	}
 
 	void attach(EquityPosition position) {
+		position.setParent(this);
 		positions.add(position);
+	}
+
+	void detach(EquityPosition position) {
+		position.setParent(null);
+		positions.remove(position);
+	}
+	
+	void attach(EquityTrade trade) {
+		trades.add(trade);
+	}
+	
+	void detach(EquityTrade trade) {
+		trades.remove(trade);
+	}
+
+	TreeSet<EquityPosition> getPositions() {
+		return positions;
+	}
+
+	TreeSet<EquityTrade> getTrades() {
+		return trades;
+	}
+
+	boolean isEmpty() {
+		return positions.isEmpty();
 	}
 }

@@ -25,7 +25,7 @@ import java.util.Date;
 
 class FixedIncomeTrade extends Trade {
 
-	public FixedIncomeTrade(Account account, Portfolio portfolio, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
+	FixedIncomeTrade(Account account, Portfolio portfolio, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
 		super(account, portfolio, date, comment, ticker, quantity, price, commission);
 	}
 }

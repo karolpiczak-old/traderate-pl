@@ -20,27 +20,72 @@
 
 package pl.traderate.core;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import java.util.TreeSet;
 
 class EquityPosition extends Position {
 
-	protected ArrayList<EquityTrade> trades;
-	
-	public EquityPosition(String name) {
-		super(name);
-		trades = new ArrayList<>();
+	protected TreeSet<EquityTrade> trades;
+
+	EquityPosition(String name, boolean closed) {
+		super(name, closed);
+		trades = new TreeSet<>();
 	}
-	
-	ArrayList<EquityTrade> getTrades() {
+
+	TreeSet<EquityTrade> getTrades() {
 		return trades;
 	}
 
 	@Override
 	void update() {
+		if (!TradeRateConfig.isDeferredComputationMode()) {
+			quantity = BigDecimal.ZERO;
+			openPrice = BigDecimal.ZERO;
+			openValue = BigDecimal.ZERO;
 
+			if (isClosed()) {
+				closePrice = BigDecimal.ZERO;
+				closeValue = BigDecimal.ZERO;
+				realizedGain = BigDecimal.ZERO;
+				realizedGainPercentage = BigDecimal.ZERO;
+			}
+
+			for (EquityTrade trade : trades) {
+				quantity = quantity.add(trade.quantity);
+				openValue = openValue.add(trade.openValue);
+				if (isClosed()) {
+					closeValue = closeValue.add(trade.closeValue);
+				}
+			}
+
+			if (quantity.signum() == 0) {
+				openPrice = BigDecimal.ZERO;
+				closePrice = BigDecimal.ZERO;
+				realizedGain = BigDecimal.ZERO;
+				realizedGainPercentage = BigDecimal.ZERO;
+			} else {
+				openPrice = openValue.divide(quantity, new MathContext(2, RoundingMode.HALF_EVEN));
+				if (isClosed()) {
+					closePrice = closeValue.divide(quantity, new MathContext(2, RoundingMode.HALF_EVEN));
+					realizedGain = closeValue.subtract(openValue);
+					realizedGainPercentage = realizedGain.divide(openValue, new MathContext(2, RoundingMode.HALF_EVEN));
+				}
+			}
+		}
 	}
 	
 	void attach(EquityTrade trade) {
+		trade.setParent(this);
 		trades.add(trade);
+	}
+	
+	void detach(EquityTrade trade) {
+		trade.setParent(null);
+		trades.remove(trade);
+		if (trades.isEmpty()) {
+			((EquityHolding) parent).detach(this);
+		}
 	}
 }

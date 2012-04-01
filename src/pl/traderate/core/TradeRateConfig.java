@@ -20,14 +20,29 @@
 
 package pl.traderate.core;
 
-class CashHolding extends Holding {
+import java.math.MathContext;
+import java.math.RoundingMode;
 
-	public CashHolding(String ticker) {
-		super(ticker);
+public final class TradeRateConfig {
+
+	public final static MathContext TWO_DIGIT = new MathContext(2, RoundingMode.HALF_EVEN);
+
+	private static boolean deferredComputationMode;
+
+	/**
+	 * Restricted constructor.
+	 *
+	 * Prevents direct instantiation.
+	 */
+	private TradeRateConfig() {
+
 	}
 
-	@Override
-	void update() {
+	public static boolean isDeferredComputationMode() {
+		return deferredComputationMode;
+	}
 
+	static void setDeferredComputationMode(boolean deferredComputationMode) {
+		TradeRateConfig.deferredComputationMode = deferredComputationMode;
 	}
 }

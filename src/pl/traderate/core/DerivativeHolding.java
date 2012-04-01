@@ -22,8 +22,8 @@ package pl.traderate.core;
 
 class DerivativeHolding extends Holding {
 
-	public DerivativeHolding(String ticker) {
-		super(ticker);
+	DerivativeHolding(String ticker, boolean closed) {
+		super(ticker, closed);
 	}
 
 	@Override

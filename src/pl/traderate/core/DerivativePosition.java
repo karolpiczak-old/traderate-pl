@@ -22,8 +22,8 @@ package pl.traderate.core;
 
 class DerivativePosition extends Position {
 
-	public DerivativePosition(String name) {
-		super(name);
+	DerivativePosition(String name, boolean closed) {
+		super(name, closed);
 	}
 
 	@Override

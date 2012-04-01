@@ -20,14 +20,20 @@
 
 package pl.traderate.core;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
-abstract class Position implements IdentifiableByName {
+abstract class Position extends PerformanceData implements IdentifiableByName, Comparable<Position> {
 
-	private String name;
+	protected Holding parent;
+	
+	protected String name;
 
-	public Position(String name) {
+	protected boolean closed;
+
+	Position(String name, boolean closed) {
 		this.name = name;
+		this.closed = closed;
 	}
 
 	public String getName() {
@@ -35,4 +41,21 @@ abstract class Position implements IdentifiableByName {
 	}
 
 	abstract void update();
+
+	@Override
+	public int compareTo(Position o) {
+		return this.name.compareTo(o.name);
+	}
+
+	Holding getParent() {
+		return parent;
+	}
+
+	void setParent(Holding holding) {
+		parent = holding;
+	}
+
+	boolean isClosed() {
+		return closed;
+	}
 }

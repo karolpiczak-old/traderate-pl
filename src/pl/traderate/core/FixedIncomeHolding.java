@@ -22,8 +22,8 @@ package pl.traderate.core;
 
 class FixedIncomeHolding extends Holding {
 
-	public FixedIncomeHolding(String ticker) {
-		super(ticker);
+	FixedIncomeHolding(String ticker, boolean closed) {
+		super(ticker, closed);
 	}
 
 	@Override
