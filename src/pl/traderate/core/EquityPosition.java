@@ -68,7 +68,7 @@ class EquityPosition extends Position {
 			openPrice = openValue.divide(quantity, 2, RoundingMode.HALF_EVEN);
 			if (isClosed()) {
 				closePrice = closeValue.divide(quantity, 2, RoundingMode.HALF_EVEN);
-				realizedGain = closeValue.subtract(openValue);
+				realizedGain = closeValue.subtract(openValue).subtract(commission);;
 				realizedGainPercentage = realizedGain.divide(openValue, 4, RoundingMode.HALF_EVEN).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_EVEN);
 			}
 		}

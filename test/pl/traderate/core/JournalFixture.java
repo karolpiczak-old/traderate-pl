@@ -548,25 +548,32 @@ public class JournalFixture {
 
 		assertEquals(1, closedHoldings.size());
 		assertEquals("TICKER-A", closedHoldings.get(0).getName());
-//		assertTrue(new BigDecimal("8").compareTo(closedHoldings.get(0).getQuantity()) == 0);
-//		assertTrue(new BigDecimal("15").compareTo(closedHoldings.get(0).getOpenPrice()) == 0);
-//		assertTrue(new BigDecimal("120").compareTo(closedHoldings.get(0).getOpenValue()) == 0);
-//		assertTrue(new BigDecimal("16.25").compareTo(closedHoldings.get(0).getClosePrice()) == 0);
-//		assertTrue(new BigDecimal("130").compareTo(closedHoldings.get(0).getCloseValue()) == 0);
-//		assertTrue(new BigDecimal("10").compareTo(closedHoldings.get(0).getRealizedGain()) == 0);
-//		assertTrue(new BigDecimal("8.33").compareTo(closedHoldings.get(0).getRealizedGainPercentage()) == 0);
+		assertTrue(new BigDecimal("30").compareTo(closedHoldings.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(closedHoldings.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("300").compareTo(closedHoldings.get(0).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("11.07").compareTo(closedHoldings.get(0).getClosePrice()) == 0);
+		assertTrue(new BigDecimal("331.96").compareTo(closedHoldings.get(0).getCloseValue()) == 0);
+		assertTrue(new BigDecimal("5.96").compareTo(closedHoldings.get(0).getRealizedGain()) == 0);
+		assertTrue(new BigDecimal("1.99").compareTo(closedHoldings.get(0).getRealizedGainPercentage()) == 0);
 
 		closedPositions = new ArrayList<>(closedHoldings.get(0).getPositions());
 
 		assertEquals(2, closedPositions.size());
 		assertEquals("2000-01", closedPositions.get(0).getName());
-//		assertTrue(new BigDecimal("8").compareTo(closedPositions.get(0).getQuantity()) == 0);
-//		assertTrue(new BigDecimal("15").compareTo(closedPositions.get(0).getOpenPrice()) == 0);
-//		assertTrue(new BigDecimal("120").compareTo(closedPositions.get(0).getOpenValue()) == 0);
-//		assertTrue(new BigDecimal("16.25").compareTo(closedPositions.get(0).getClosePrice()) == 0);
-//		assertTrue(new BigDecimal("130").compareTo(closedPositions.get(0).getCloseValue()) == 0);
-//		assertTrue(new BigDecimal("10").compareTo(closedPositions.get(0).getRealizedGain()) == 0);
-//		assertTrue(new BigDecimal("8.33").compareTo(closedPositions.get(0).getRealizedGainPercentage()) == 0);
+		assertTrue(new BigDecimal("20").compareTo(closedPositions.get(0).getQuantity()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(closedPositions.get(0).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("200").compareTo(closedPositions.get(0).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("12.01").compareTo(closedPositions.get(0).getClosePrice()) == 0);
+		assertTrue(new BigDecimal("240.16").compareTo(closedPositions.get(0).getCloseValue()) == 0);
+		assertTrue(new BigDecimal("24.16").compareTo(closedPositions.get(0).getRealizedGain()) == 0);
+		assertTrue(new BigDecimal("12.08").compareTo(closedPositions.get(0).getRealizedGainPercentage()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(closedPositions.get(1).getQuantity()) == 0);
+		assertTrue(new BigDecimal("10").compareTo(closedPositions.get(1).getOpenPrice()) == 0);
+		assertTrue(new BigDecimal("100").compareTo(closedPositions.get(1).getOpenValue()) == 0);
+		assertTrue(new BigDecimal("9.18").compareTo(closedPositions.get(1).getClosePrice()) == 0);
+		assertTrue(new BigDecimal("91.80").compareTo(closedPositions.get(1).getCloseValue()) == 0);
+		assertTrue(new BigDecimal("-18.20").compareTo(closedPositions.get(1).getRealizedGain()) == 0);
+		assertTrue(new BigDecimal("-18.20").compareTo(closedPositions.get(1).getRealizedGainPercentage()) == 0);
 
 		// Check for proper ordering too!
 		closedTrades = new ArrayList<>(closedPositions.get(0).getTrades());
