@@ -113,6 +113,10 @@ class Account implements Identifiable {
 			JournalEntry latestEntry = sortedEntries.get(sortedEntries.size() - 1);
 			latestEntryDate = latestEntry.getDate();
 		}
+
+		if (!TradeRateConfig.isDeferredComputationMode()) {
+			update();
+		}
 	}
 
 	/**
@@ -126,6 +130,9 @@ class Account implements Identifiable {
 			entry.apply(this);
 			entries.add(entry);
 			latestEntryDate = entry.getDate();
+			if (!TradeRateConfig.isDeferredComputationMode()) {
+				update();
+			}
 		} else {
 			try {
 				entries.add(entry);
@@ -160,6 +167,10 @@ class Account implements Identifiable {
 			}
 			throw new EntryInsertionException();
 		}
+	}
+	
+	void update() {
+		holdings.update();
 	}
 
 	/**

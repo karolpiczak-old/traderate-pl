@@ -62,6 +62,9 @@ class EquityTrade extends Trade {
 		tradeToBeClosed.setCommission(partialCommission);
 		tradeStillOpen.setCommission(commission.subtract(partialCommission));
 		
+		tradeToBeClosed.update();
+		tradeStillOpen.update();
+		
 		parentHolding.attach(tradeToBeClosed);
 		parentPosition.attach(tradeToBeClosed);
 		parentHolding.attach(tradeStillOpen);
@@ -79,5 +82,12 @@ class EquityTrade extends Trade {
 
 	private void setCommission(BigDecimal commission) {
 		this.commission = commission;
+	}
+	
+	private void update() {
+		openValue = openPrice.multiply(quantity);
+		if (isClosed()) {
+			closeValue = closePrice.multiply(quantity);
+		}
 	}
 }

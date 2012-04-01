@@ -134,6 +134,10 @@ class Portfolio implements Identifiable {
 			JournalEntry latestEntry = sortedEntries.get(sortedEntries.size() - 1);
 			latestEntryDate = latestEntry.getDate();
 		}
+
+		if (!TradeRateConfig.isDeferredComputationMode()) {
+			update();
+		}
 	}
 
 	/**
@@ -147,6 +151,9 @@ class Portfolio implements Identifiable {
 			entry.apply(this);
 			entries.add(entry);
 			latestEntryDate = entry.getDate();
+			if (!TradeRateConfig.isDeferredComputationMode()) {
+				update();
+			}
 		} else {
 			try {
 				entries.add(entry);
@@ -181,6 +188,10 @@ class Portfolio implements Identifiable {
 			}
 			throw new EntryInsertionException();
 		}
+	}
+
+	void update() {
+		holdings.update();
 	}
 
 	public void applyEntry(BuyEquityTransactionEntry entry) throws EntryInsertionException {

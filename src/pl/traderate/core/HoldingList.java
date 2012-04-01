@@ -68,14 +68,10 @@ final class HoldingList {
 
 		position.attach(trade);
 		holding.attach(trade);
-
-		position.update();
-		holding.update();
 	}
 
 	void close(SellEquityTransactionEntry entry) throws EntryInsertionException {
 		EquityHolding holding;
-		EquityHolding closedHolding;
 
 		try {
 			holding = findObjectByName(entry.ticker, equityHoldings);
@@ -101,8 +97,6 @@ final class HoldingList {
 			}
 		}
 
-		HashSet<EquityPosition> updateQueue = new HashSet<>();
-
 		BigDecimal sharesLeftToClose = entry.quantity;
 		BigDecimal unallocatedCommission = entry.commission;
 
@@ -118,32 +112,27 @@ final class HoldingList {
 
 			if (sharesLeftToClose.compareTo(trade.getQuantity()) > 0) {
 				trade.close(entry, partialCommission);
-				moveToClosed(trade, updateQueue);
+				moveToClosed(trade);
 				sharesLeftToClose = sharesLeftToClose.subtract(trade.getQuantity());
 			} else {
 				EquityTrade partialTrade = trade.divide(sharesLeftToClose);
 				partialTrade.close(entry, partialCommission);
-				moveToClosed(partialTrade, updateQueue);
+				moveToClosed(partialTrade);
 			}
 		}
-
-		for (EquityPosition position: updateQueue) {
-			position.update();
+	}
+	
+	void update() {
+		for (EquityHolding holding : equityHoldings) {
+			holding.update();
 		}
 
-		holding.update();
-
-		try {
-			closedHolding = findObjectByName(entry.ticker, closedEquityHoldings);
-		} catch (ObjectNotFoundException e) {
-			throw new InternalLogicError();
+		for (EquityHolding holding : closedEquityHoldings) {
+			holding.update();
 		}
-
-		closedHolding.update();
-
 	}
 
-	private void moveToClosed(EquityTrade trade, HashSet<EquityPosition> updateQueue) {
+	private void moveToClosed(EquityTrade trade) {
 		EquityHolding closedHolding;
 
 		try {
@@ -161,9 +150,6 @@ final class HoldingList {
 			closedPosition = new EquityPosition(trade.getParent().getName(), true);
 			closedHolding.attach(closedPosition);
 		}
-
-		updateQueue.add((EquityPosition) trade.getParent());
-		updateQueue.add(closedPosition);
 
 		EquityHolding openHolding = (EquityHolding) trade.getParent().getParent();
 		EquityPosition openPosition = (EquityPosition) trade.getParent();

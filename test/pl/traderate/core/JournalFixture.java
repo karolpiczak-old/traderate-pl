@@ -408,8 +408,6 @@ public class JournalFixture {
 		int operationsPerformed = 0;
 		long startTime = System.nanoTime();
 
-//		System.out.println("Testing journal performance via shouldHandleLargeNumberOfEntries():");
-
 		PA.setValue(TradeRateConfig.class, "deferredComputationMode", true);
 
 		// Test a high volume situation (1 year worth of trading history)
@@ -430,11 +428,8 @@ public class JournalFixture {
 					journal.addSellEquityTransactionEntry(1, 6, "Example tag", new GregorianCalendar(2000, m, d).getTime(), "Some comment", "TICKER-A", new BigDecimal("5"), new BigDecimal("2.00"), new BigDecimal("0.00"));
 					operationsPerformed = operationsPerformed + 9;
 				}
-//				System.out.print('.');
 			}
 		}
-
-//		System.out.println("");
 
 		PA.setValue(TradeRateConfig.class, "deferredComputationMode", false);
 
@@ -448,33 +443,33 @@ public class JournalFixture {
 		//:--------------------------------------------------------------------
 
 		// Check how long it takes to insert a new entry at a random date (total recalc needed)
-		// Each type of operation shouldn't take more than a second to complete (per individual case)
+		// Each type of operation shouldn't take more than 3 seconds to complete (per individual case)
 		startTime = System.nanoTime();
 		journal.addCashDepositEntry(0, "Example tag", new GregorianCalendar(2000, 0, 5).getTime(), "Some comment", new BigDecimal("10.00"));
 		endTime = System.nanoTime();
 		duration = endTime - startTime;
 		durationSeconds = new BigDecimal ((double) duration / 1000000000.0);
-		assertTrue(durationSeconds.intValue() < 1);
+		assertTrue(durationSeconds.intValue() < 3);
 
 		startTime = System.nanoTime();
 		journal.addCashAllocationEntry(0, 8, "Example tag", new GregorianCalendar(2000, 0, 5).getTime(), "Some comment", new BigDecimal("5.00"));
 		endTime = System.nanoTime();
 		duration = endTime - startTime;
 		durationSeconds = new BigDecimal ((double) duration / 1000000000.0);
-		assertTrue(durationSeconds.intValue() < 1);
+		assertTrue(durationSeconds.intValue() < 3);
 
 		startTime = System.nanoTime();
 		journal.addBuyEquityTransactionEntry(0, 8, "Example tag", new GregorianCalendar(2000, 0, 5).getTime(), "Some comment", "TICKER-A", new BigDecimal("1"), new BigDecimal("2.00"), new BigDecimal("1.00"));
 		endTime = System.nanoTime();
 		duration = endTime - startTime;
 		durationSeconds = new BigDecimal ((double) duration / 1000000000.0);
-		assertTrue(durationSeconds.intValue() < 1);
+		assertTrue(durationSeconds.intValue() < 3);
 
 		startTime = System.nanoTime();
 		journal.addSellEquityTransactionEntry(0, 8, "Example tag", new GregorianCalendar(2000, 0, 5).getTime(), "Some comment", "TICKER-A", new BigDecimal("1"), new BigDecimal("2.00"), new BigDecimal("1.00"));
 		endTime = System.nanoTime();
 		duration = endTime - startTime;
 		durationSeconds = new BigDecimal ((double) duration / 1000000000.0);
-		assertTrue(durationSeconds.intValue() < 1);
+		assertTrue(durationSeconds.intValue() < 3);
 	}
 }
