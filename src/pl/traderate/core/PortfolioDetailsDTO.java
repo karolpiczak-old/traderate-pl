@@ -18,24 +18,37 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.desktop.view;
+package pl.traderate.core;
 
-import javax.swing.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 
-public class SummaryForm extends GenericForm {
+public class PortfolioDetailsDTO {
 
-	JPanel root;
+	public final int ID;
 
-	private JTable table1;
+	public final String name;
 
-	private JTable table2;
+	public final BigDecimal cashBalance;
 
-	public SummaryForm(GenericView view) {
-		super(view);
-		this.view = (SummaryView) super.view;
+	public final BigDecimal aggregatedCashBalance;
+
+	public final HoldingsDTO holdings;
+
+	public final ArrayList<EntryDTO> entries;
+
+	PortfolioDetailsDTO(Portfolio portfolio) {
+		this.ID = portfolio.getID();
+		this.name = portfolio.getName();
+		this.cashBalance = portfolio.getCashBalance();
+		this.aggregatedCashBalance = portfolio.getAggregatedCashBalance();
+		this.holdings = new HoldingsDTO(portfolio.getHoldings());
+		this.entries = new ArrayList<>();
 	}
 
-	void show() {
-
+	@Override
+	public String toString() {
+		return name;
 	}
+	
 }

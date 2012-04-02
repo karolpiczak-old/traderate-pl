@@ -21,13 +21,15 @@
 package pl.traderate.desktop.view;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 public class MainForm extends GenericForm {
 
 	MainView view;
+	
+	GenericView summaryView;
+
+	GenericView journalView;
 	
 	JFrame frame;
 
@@ -49,19 +51,25 @@ public class MainForm extends GenericForm {
 
 	JLabel topNavigationLabel;
 
-	private JButton buttonOK;
+	private JButton addAccountButton;
 
-	MainForm(GenericView view) {
+	private JButton addPortfolioButton;
+
+	MainForm(GenericView view, GenericView summaryView, GenericView journalView) {
 		super(view);
 		this.view = (MainView) super.view;
 
+		this.summaryView = summaryView;
+		this.journalView = journalView;
+
 		frame = new JFrame("Main");
-		frame.setMinimumSize(new Dimension(300, 300));
+		frame.setMinimumSize(new Dimension(640, 550));
+		frame.setPreferredSize(new Dimension(1000, 700));
 		frame.setContentPane(root);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 
-		buttonOK.addActionListener(this.view.new OnButtonOKClicked());
+		addAccountButton.addActionListener(this.view.new OnButtonOKClicked());
 	}
 
 	void show() {
@@ -74,7 +82,8 @@ public class MainForm extends GenericForm {
 		statusbar.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIManager.getDefaults().getColor("mid")));
 		
 		tabs = new JTabbedPane();
-		tabs.addTab("Podsumowanie", new SummaryForm().root);
+		tabs.addTab("Podsumowanie", ((SummaryForm) summaryView.getForm()).root);
+		tabs.addTab("Dziennik", ((JournalForm) journalView.getForm()).root);
 
 		navigationTree = new JTree();
 	}

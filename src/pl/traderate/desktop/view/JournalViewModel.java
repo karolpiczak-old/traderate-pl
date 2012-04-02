@@ -20,22 +20,23 @@
 
 package pl.traderate.desktop.view;
 
-import javax.swing.*;
+import pl.traderate.desktop.presenter.JournalPresenter;
 
-public class SummaryForm extends GenericForm {
+public class JournalViewModel extends GenericViewModel {
 
-	JPanel root;
+	protected JournalView view;
 
-	private JTable table1;
+	public JournalViewModel(JournalPresenter presenter) {
+		super(presenter);
 
-	private JTable table2;
+		view = new JournalView(this, presenter);
+		addObserver(view);
 
-	public SummaryForm(GenericView view) {
-		super(view);
-		this.view = (SummaryView) super.view;
+		// Make sure that both views reference the same object
+		super.view = view;
 	}
 
-	void show() {
-
+	public JournalView getView() {
+		return view;
 	}
 }

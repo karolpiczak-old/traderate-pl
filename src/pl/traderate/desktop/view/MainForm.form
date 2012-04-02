@@ -7,13 +7,14 @@
     </constraints>
     <properties>
       <enabled value="true"/>
+      <minimumSize width="600" height="400"/>
     </properties>
     <border type="none"/>
     <children>
       <grid id="75857" binding="statusbar" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="3" left="3" bottom="3" right="3"/>
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false">
+          <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false">
             <minimum-size width="-1" height="30"/>
             <preferred-size width="-1" height="30"/>
             <maximum-size width="-1" height="30"/>
@@ -29,9 +30,9 @@
           <component id="1b6d4" class="javax.swing.JProgressBar" binding="progressBar">
             <constraints>
               <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                <minimum-size width="50" height="-1"/>
-                <preferred-size width="100" height="-1"/>
-                <maximum-size width="150" height="-1"/>
+                <minimum-size width="50" height="20"/>
+                <preferred-size width="100" height="20"/>
+                <maximum-size width="150" height="20"/>
               </grid>
             </constraints>
             <properties>
@@ -79,7 +80,7 @@
           </hspacer>
         </children>
       </grid>
-      <grid id="d463e" binding="navigationPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="d463e" binding="navigationPanel" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -87,87 +88,56 @@
         <properties/>
         <border type="none"/>
         <children>
-          <splitpane id="25e44">
+          <component id="c8425" class="javax.swing.JButton" binding="addAccountButton">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Dodaj konto"/>
+            </properties>
+          </component>
+          <scrollpane id="3ba79">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <preferred-size width="200" height="-1"/>
               </grid>
             </constraints>
-            <properties>
-              <continuousLayout value="true"/>
-              <dividerLocation value="300"/>
-              <dividerSize value="15"/>
-              <oneTouchExpandable value="true"/>
-              <orientation value="0"/>
-            </properties>
+            <properties/>
             <border type="none"/>
             <children>
-              <grid id="b1458" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <splitpane position="left"/>
-                </constraints>
+              <component id="34f96" class="javax.swing.JTree" binding="navigationTree" custom-create="true">
+                <constraints/>
                 <properties>
-                  <enabled value="true"/>
+                  <font size="12"/>
+                  <rootVisible value="false"/>
+                  <showsRootHandles value="true"/>
                 </properties>
-                <border type="none"/>
-                <children>
-                  <component id="f7859" class="javax.swing.JLabel" binding="topNavigationLabel">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                        <preferred-size width="186" height="17"/>
-                      </grid>
-                    </constraints>
-                    <properties>
-                      <background color="-1"/>
-                      <enabled value="true"/>
-                      <font size="14" style="1"/>
-                      <horizontalAlignment value="0"/>
-                      <labelFor value="3ba79"/>
-                      <text value="Portfele i konta"/>
-                    </properties>
-                  </component>
-                  <scrollpane id="3ba79">
-                    <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children>
-                      <component id="34f96" class="javax.swing.JTree" binding="navigationTree" custom-create="true">
-                        <constraints/>
-                        <properties>
-                          <font size="12"/>
-                          <rootVisible value="false"/>
-                          <showsRootHandles value="true"/>
-                        </properties>
-                      </component>
-                    </children>
-                  </scrollpane>
-                </children>
-              </grid>
-              <grid id="7337e" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <splitpane position="right"/>
-                </constraints>
-                <properties>
-                  <enabled value="true"/>
-                </properties>
-                <border type="none"/>
-                <children>
-                  <component id="c8425" class="javax.swing.JButton" binding="buttonOK">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Update"/>
-                    </properties>
-                  </component>
-                </children>
-              </grid>
+              </component>
             </children>
-          </splitpane>
+          </scrollpane>
+          <component id="f7859" class="javax.swing.JLabel" binding="topNavigationLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="186" height="17"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+              <enabled value="true"/>
+              <font size="14" style="1"/>
+              <horizontalAlignment value="0"/>
+              <labelFor value="3ba79"/>
+              <text value="Portfele i konta"/>
+            </properties>
+          </component>
+          <component id="ae02" class="javax.swing.JButton" binding="addPortfolioButton">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Dodaj portfel"/>
+            </properties>
+          </component>
         </children>
       </grid>
       <grid id="eef24" binding="mainPanel" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

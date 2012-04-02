@@ -22,17 +22,15 @@ package pl.traderate.desktop.view;
 
 import javax.swing.*;
 
-public class SummaryForm extends GenericForm {
+public class JournalForm extends GenericForm {
 
 	JPanel root;
 
 	private JTable table1;
 
-	private JTable table2;
-
-	public SummaryForm(GenericView view) {
+	public JournalForm(GenericView view) {
 		super(view);
-		this.view = (SummaryView) super.view;
+		this.view = (JournalView) super.view;
 	}
 
 	void show() {

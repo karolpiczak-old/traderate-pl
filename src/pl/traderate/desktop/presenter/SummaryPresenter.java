@@ -21,33 +21,27 @@
 package pl.traderate.desktop.presenter;
 
 import pl.traderate.core.TradeRate;
-import pl.traderate.core.event.*;
+import pl.traderate.core.event.DataUpdateModelEvent;
+import pl.traderate.core.event.GenericModelEvent;
 import pl.traderate.desktop.event.GenericViewEvent;
-import pl.traderate.desktop.view.MainViewModel;
+import pl.traderate.desktop.view.GenericView;
+import pl.traderate.desktop.view.SummaryViewModel;
 
 import javax.swing.*;
 
-public class MainPresenter extends GenericPresenter {
+public class SummaryPresenter extends GenericPresenter {
 
-	protected MainViewModel viewModel;
+	protected SummaryViewModel viewModel;
 
-	protected HomeModelEventHandler modelEventHandler;
+	protected SummaryModelEventHandler modelEventHandler;
 
-	// Subpresenters
-	protected SummaryPresenter summaryPresenter;
-
-	protected JournalPresenter journalPresenter;
-
-	public MainPresenter(TradeRate model) {
+	public SummaryPresenter(TradeRate model) {
 		super(model);
 
-		summaryPresenter = new SummaryPresenter(model);
-		journalPresenter = new JournalPresenter(model);
-
-		viewModel = new MainViewModel(this, summaryPresenter.getView(), journalPresenter.getView());
+		viewModel = new SummaryViewModel(this);
 		initializeViewModel();
 
-		modelEventHandler = new HomeModelEventHandler();
+		modelEventHandler = new SummaryModelEventHandler();
 		model.removeEventListener(super.modelEventHandler);
 		model.addEventListener(modelEventHandler);
 
@@ -55,27 +49,24 @@ public class MainPresenter extends GenericPresenter {
 		super.viewModel = viewModel;
 		super.modelEventHandler = modelEventHandler;
 	}
-	
-	@Override
-	public void show() {
-		super.show();
-		summaryPresenter.show();
-		journalPresenter.show();
-	}
 
 	@Override
 	protected void initializeViewModel() {
-		viewModel.setRootPortfolioNode(model.getPortfolioNodes());
+		viewModel.setPortfolio(model.getPortfolio(0));
 	}
-	
+
 	@Override
 	public void handleViewEvent(GenericViewEvent e) {
 		e.handle(this);
 	}
 
+	public GenericView getView() {
+		return viewModel.getView();
+	}
+
 //:-- Model events -------------------------------------------------------------
 
-	protected class HomeModelEventHandler extends GenericPresenter.GenericModelEventHandler {
+	protected class SummaryModelEventHandler extends GenericModelEventHandler {
 
 		@Override
 		public void visitModelEvent(GenericModelEvent e) {
@@ -84,12 +75,12 @@ public class MainPresenter extends GenericPresenter {
 
 		@Override
 		public void handleModelEvent(GenericModelEvent e) {
-			// TODO: Implement
+
 		}
 
 		@Override
 		public void handleModelEvent(DataUpdateModelEvent e) {
-			// TODO: Implement
+
 		}
 
 	}
@@ -97,36 +88,6 @@ public class MainPresenter extends GenericPresenter {
 //:-- Presenter events ---------------------------------------------------------
 
 	public static class Events {
-
-		public static class FormSubmitted extends GenericViewEvent {
-
-			public FormSubmitted(Object source) {
-				super(source);
-			}
-
-			public void handle(MainPresenter presenter) {
-				presenter.viewModel.setRootPortfolioNode(presenter.model.getPortfolioNodes());
-
-				new SwingWorker<String, Object>() {
-
-					@Override
-					public String doInBackground()  {
-
-						return null;
-					}
-
-					@Override
-					protected void done() {
-						try {
-
-						} catch (Exception ignore) {
-
-						}
-					}
-				}.execute();
-			}
-
-		}
 
 	}
 }

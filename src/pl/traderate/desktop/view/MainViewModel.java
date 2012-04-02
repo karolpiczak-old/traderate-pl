@@ -34,10 +34,10 @@ public class MainViewModel extends GenericViewModel {
 
 	private DefaultTreeModel navigationTree;
 
-	public MainViewModel(MainPresenter presenter) {
+	public MainViewModel(MainPresenter presenter, GenericView summaryView, GenericView journalView) {
 		super(presenter);
 
-		view = new MainView(this, presenter);
+		view = new MainView(this, presenter, summaryView, journalView);
 		addObserver(view);
 
 		// Make sure that both views reference the same object

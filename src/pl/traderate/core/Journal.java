@@ -339,6 +339,10 @@ class Journal {
 		return portfolios.get(0);
 	}
 
+	Portfolio getPortfolio(int i) {
+		return portfolios.get(i);
+	}
+
 	void update() {
 		for (Account account : accounts) {
 			account.update();
@@ -413,5 +417,4 @@ class Journal {
 		number = number.setScale(2, RoundingMode.HALF_EVEN);
 		return number;
 	}
-
 }

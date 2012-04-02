@@ -256,6 +256,10 @@ public final class TradeRate extends GenericModelEventSource {
 		return new PortfolioNodeDTO(journal.getGlobalPortfolio(), null);
 	}
 
+	public PortfolioDetailsDTO getPortfolio(int i) {
+		return new PortfolioDetailsDTO(journal.getPortfolio(i));
+	}
+
 	/**
 	 *
 	 * @throws JournalNotLoadedException

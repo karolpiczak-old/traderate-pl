@@ -20,35 +20,31 @@
 
 package pl.traderate.desktop.view;
 
-import pl.traderate.desktop.presenter.MainPresenter;
+import pl.traderate.desktop.presenter.JournalPresenter;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import static pl.traderate.desktop.presenter.MainPresenter.Events;
+public class JournalView extends GenericView {
 
-public class MainView extends GenericView {
-
-	private MainViewModel viewModel;
+	private JournalViewModel viewModel;
 
 	/**
-	 * Typecasted reference to the main form.
+	 * Typecasted reference to the summary form.
 	 *
 	 * Hides <tt>form</tt> from superclass for convenience only.
 	 */
-	private MainForm form;
+	private JournalForm form;
 
-	MainView(MainViewModel viewModel, MainPresenter presenter, final GenericView summaryView, final GenericView journalView) {
+	JournalView(JournalViewModel viewModel, JournalPresenter presenter) {
 		super(viewModel, presenter);
-		this.viewModel = (MainViewModel) super.viewModel;
+		this.viewModel = (JournalViewModel) super.viewModel;
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				form = new MainForm(MainView.this, summaryView, journalView);
+				form = new JournalForm(JournalView.this);
 
 				// Make sure that both forms reference the same object
-				MainView.super.form = form;
+				JournalView.super.form = form;
 			}
 		});
 	}
@@ -59,21 +55,17 @@ public class MainView extends GenericView {
 	protected void syncViewModel() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				form.navigationTree.setModel(viewModel.getNavigationTree());
-				for (int i = 0; i < form.navigationTree.getRowCount(); ++i) {
-					form.navigationTree.expandRow(i);
-				}
+
 			}
 		});
 	}
 
-//:-- Listeners for GUI events -------------------------------------------------
-
-	public class OnButtonOKClicked implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			fireEvent(new Events.FormSubmitted(this));
-		}
+	@Override
+	public JournalForm getForm() {
+		return form;
 	}
+
+	//:-- Listeners for GUI events -------------------------------------------------
+
+
 }
