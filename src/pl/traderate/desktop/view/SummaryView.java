@@ -55,7 +55,9 @@ public class SummaryView extends GenericView {
 	protected void syncViewModel() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-
+				form.portfolioName.setText(viewModel.getPortfolioName());
+				form.cashAvailable.setText(viewModel.getCashAvailable().toPlainString());
+				form.aggregatedCash.setText(viewModel.getAggregatedCash().toPlainString());
 			}
 		});
 	}

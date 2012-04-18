@@ -20,12 +20,15 @@
 
 package pl.traderate.desktop.presenter;
 
+import pl.traderate.core.PortfolioDetailsDTO;
+import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.core.TradeRate;
 import pl.traderate.core.event.*;
 import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.MainViewModel;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 public class MainPresenter extends GenericPresenter {
 
@@ -128,5 +131,21 @@ public class MainPresenter extends GenericPresenter {
 
 		}
 
+		public static class NodeChanged extends GenericViewEvent {
+
+			DefaultMutableTreeNode node;
+			
+			public NodeChanged(Object source, DefaultMutableTreeNode node) {
+				super(source);
+				this.node = node;
+			}
+
+			public void handle(MainPresenter presenter) {
+				if (node.getUserObject() instanceof PortfolioNodeDTO) {
+					PortfolioDetailsDTO portfolio = presenter.model.getPortfolio(((PortfolioNodeDTO) node.getUserObject()).ID);
+					presenter.summaryPresenter.handleViewEvent(new SummaryPresenter.Events.PortfolioSelected(this, portfolio));
+				}
+			}
+		}
 	}
 }

@@ -43,4 +43,8 @@ public final class TradeRateConfig {
 	static void setDeferredComputationMode(boolean deferredComputationMode) {
 		TradeRateConfig.deferredComputationMode = deferredComputationMode;
 	}
+	
+	public static String getVersion() {
+		return "TradeRate.pl 12.04";
+	}
 }

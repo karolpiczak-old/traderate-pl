@@ -33,4 +33,8 @@ public class GenericViewEvent extends EventObject {
 	public void handle(GenericPresenter presenter) {}
 
 	public void handle(MainPresenter presenter) {}
+
+	public void handle(SummaryPresenter presenter) {}
+
+	public void handle(JournalPresenter presenter) {}
 }

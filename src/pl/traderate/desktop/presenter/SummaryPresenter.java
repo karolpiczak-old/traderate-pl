@@ -20,6 +20,8 @@
 
 package pl.traderate.desktop.presenter;
 
+import pl.traderate.core.PortfolioDetailsDTO;
+import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.core.TradeRate;
 import pl.traderate.core.event.DataUpdateModelEvent;
 import pl.traderate.core.event.GenericModelEvent;
@@ -88,6 +90,20 @@ public class SummaryPresenter extends GenericPresenter {
 //:-- Presenter events ---------------------------------------------------------
 
 	public static class Events {
+
+		public static class PortfolioSelected extends GenericViewEvent {
+
+			PortfolioDetailsDTO portfolio;
+
+			public PortfolioSelected(Object source, PortfolioDetailsDTO portfolio) {
+				super(source);
+				this.portfolio = portfolio;
+			}
+
+			public void handle(SummaryPresenter presenter) {
+				presenter.viewModel.setPortfolio(portfolio);
+			}
+		}
 
 	}
 }

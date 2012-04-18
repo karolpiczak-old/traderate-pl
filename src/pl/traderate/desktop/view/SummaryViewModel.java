@@ -34,11 +34,15 @@ public class SummaryViewModel extends GenericViewModel {
 	
 	protected String portfolioName;
 
-	protected BigDecimal currentValueOfOpenPositions;
+	protected BigDecimal currentValue;
 
-	protected BigDecimal openValueOfOpenPositions;
+	protected BigDecimal openValue;
 
 	protected BigDecimal paperGain;
+
+	protected BigDecimal cashAvailable;
+
+	protected BigDecimal aggregatedCash;
 
 	protected BigDecimal realizedIncome;
 
@@ -68,9 +72,57 @@ public class SummaryViewModel extends GenericViewModel {
 
 	public void setPortfolio(PortfolioDetailsDTO portfolio) {
 		this.portfolioName = portfolio.name;
-		//this.currentValueOfOpenPositions = portfolio.holdings;
+		this.cashAvailable = portfolio.cashBalance;
+		this.aggregatedCash = portfolio.aggregatedCashBalance;
 
-		
 		notifyChange();
+	}
+
+	public String getPortfolioName() {
+		return portfolioName;
+	}
+
+	public BigDecimal getCurrentValue() {
+		return currentValue;
+	}
+
+	public BigDecimal getOpenValue() {
+		return openValue;
+	}
+
+	public BigDecimal getPaperGain() {
+		return paperGain;
+	}
+
+	public BigDecimal getCashAvailable() {
+		return cashAvailable;
+	}
+
+	public BigDecimal getAggregatedCash() {
+		return aggregatedCash;
+	}
+
+	public BigDecimal getRealizedIncome() {
+		return realizedIncome;
+	}
+
+	public BigDecimal getRealizedCost() {
+		return realizedCost;
+	}
+
+	public BigDecimal getRealizedGain() {
+		return realizedGain;
+	}
+
+	public BigDecimal getRealizedTax() {
+		return realizedTax;
+	}
+
+	public BigDecimal getTaxPaid() {
+		return taxPaid;
+	}
+
+	public BigDecimal getTaxDue() {
+		return taxDue;
 	}
 }

@@ -26,9 +26,33 @@ public class SummaryForm extends GenericForm {
 
 	JPanel root;
 
-	private JTable table1;
+	JTable table1;
 
-	private JTable table2;
+	JTable table2;
+
+	JLabel paperGain;
+
+	JLabel currentValue;
+
+	JLabel openValue;
+
+	JLabel cashAvailable;
+
+	JLabel portfolioName;
+
+	JLabel aggregatedCash;
+
+	JLabel realizedGain;
+
+	JLabel realizedIncome;
+
+	JLabel realizedCost;
+
+	JLabel realizedTax;
+
+	JLabel taxDue;
+
+	JLabel taxPaid;
 
 	public SummaryForm(GenericView view) {
 		super(view);

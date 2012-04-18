@@ -21,6 +21,7 @@
 package pl.traderate.desktop.view;
 
 import pl.traderate.core.PortfolioNodeDTO;
+import pl.traderate.core.TradeRateConfig;
 import pl.traderate.desktop.presenter.MainPresenter;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -34,6 +35,8 @@ public class MainViewModel extends GenericViewModel {
 
 	private DefaultTreeModel navigationTree;
 
+	private String version;
+
 	public MainViewModel(MainPresenter presenter, GenericView summaryView, GenericView journalView) {
 		super(presenter);
 
@@ -42,6 +45,8 @@ public class MainViewModel extends GenericViewModel {
 
 		// Make sure that both views reference the same object
 		super.view = view;
+
+		version = TradeRateConfig.getVersion();
 	}
 
 	public void setRootPortfolioNode(PortfolioNodeDTO rootPortfolioNode) {
@@ -79,5 +84,9 @@ public class MainViewModel extends GenericViewModel {
 
 	public DefaultTreeModel getNavigationTree() {
 		return navigationTree;
+	}
+
+	public String getVersion() {
+		return version;
 	}
 }

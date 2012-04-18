@@ -51,9 +51,11 @@ public class MainForm extends GenericForm {
 
 	JLabel topNavigationLabel;
 
-	private JButton addAccountButton;
+	JButton addAccountButton;
 
-	private JButton addPortfolioButton;
+	JButton addPortfolioButton;
+
+	JLabel versionText;
 
 	MainForm(GenericView view, GenericView summaryView, GenericView journalView) {
 		super(view);

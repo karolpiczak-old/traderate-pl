@@ -65,7 +65,7 @@
             </constraints>
             <properties>
               <font size="14"/>
-              <text value="Dostępna gotówka:"/>
+              <text value="Dostępne środki pieniężne:"/>
             </properties>
           </component>
           <component id="b7f2e" class="javax.swing.JLabel">
@@ -101,55 +101,22 @@
               <text value="Zrealizowany koszt:"/>
             </properties>
           </component>
-          <component id="8e898" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="4" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                <preferred-size width="-1" height="25"/>
-              </grid>
-            </constraints>
-            <properties>
-              <font size="14"/>
-              <text value="Podatek do zapłaty:"/>
-            </properties>
-          </component>
-          <component id="15556" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="5" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                <preferred-size width="-1" height="25"/>
-              </grid>
-            </constraints>
-            <properties>
-              <font size="14"/>
-              <text value="Podatek naliczony:"/>
-            </properties>
-          </component>
-          <component id="992dc" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="6" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                <preferred-size width="-1" height="25"/>
-              </grid>
-            </constraints>
-            <properties>
-              <font size="14"/>
-              <text value="Podatek zapłacony:"/>
-            </properties>
-          </component>
-          <component id="df5ac" class="javax.swing.JLabel">
+          <component id="df5ac" class="javax.swing.JLabel" binding="paperGain">
             <constraints>
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font size="14"/>
-              <text value="Label"/>
+              <text value="---"/>
             </properties>
           </component>
-          <component id="70b12" class="javax.swing.JLabel">
+          <component id="70b12" class="javax.swing.JLabel" binding="realizedGain">
             <constraints>
               <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font size="14"/>
-              <text value="Label"/>
+              <text value="---"/>
             </properties>
           </component>
           <vspacer id="ff85d">
@@ -159,31 +126,31 @@
               </grid>
             </constraints>
           </vspacer>
-          <component id="e3019" class="javax.swing.JLabel">
+          <component id="e3019" class="javax.swing.JLabel" binding="currentValue">
             <constraints>
               <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font size="14"/>
-              <text value="Label"/>
+              <text value="---"/>
             </properties>
           </component>
-          <component id="3b9ed" class="javax.swing.JLabel">
+          <component id="3b9ed" class="javax.swing.JLabel" binding="openValue">
             <constraints>
               <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font size="14"/>
-              <text value="Label"/>
+              <text value="---"/>
             </properties>
           </component>
-          <component id="dd0ed" class="javax.swing.JLabel">
+          <component id="dd0ed" class="javax.swing.JLabel" binding="cashAvailable">
             <constraints>
               <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font size="14"/>
-              <text value="Label"/>
+              <text value="---"/>
             </properties>
           </component>
           <vspacer id="9dad7">
@@ -200,49 +167,22 @@
               </grid>
             </constraints>
           </hspacer>
-          <component id="3e60c" class="javax.swing.JLabel">
+          <component id="3e60c" class="javax.swing.JLabel" binding="realizedIncome">
             <constraints>
               <grid row="2" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font size="14"/>
-              <text value="Label"/>
+              <text value="---"/>
             </properties>
           </component>
-          <component id="d5b95" class="javax.swing.JLabel">
+          <component id="d5b95" class="javax.swing.JLabel" binding="realizedCost">
             <constraints>
               <grid row="3" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <font size="14"/>
-              <text value="Label"/>
-            </properties>
-          </component>
-          <component id="7c4c8" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="4" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font size="14"/>
-              <text value="Label"/>
-            </properties>
-          </component>
-          <component id="831e1" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="5" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font size="14"/>
-              <text value="Label"/>
-            </properties>
-          </component>
-          <component id="9221e" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="6" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font size="14"/>
-              <text value="Label"/>
+              <text value="---"/>
             </properties>
           </component>
           <component id="12952" class="javax.swing.JSeparator">
@@ -263,6 +203,86 @@
               <grid row="0" column="7" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
           </hspacer>
+          <component id="b94ff" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="25"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font size="14"/>
+              <text value="Zagregowane środki pieniężne:"/>
+            </properties>
+          </component>
+          <component id="69f75" class="javax.swing.JLabel" binding="aggregatedCash">
+            <constraints>
+              <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="14"/>
+              <text value="---"/>
+            </properties>
+          </component>
+          <component id="79f0b" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="4" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="25"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font size="14"/>
+              <text value="Podatek naliczony:"/>
+            </properties>
+          </component>
+          <component id="c5261" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="5" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="25"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font size="14"/>
+              <text value="Podatek zapłacony:"/>
+            </properties>
+          </component>
+          <component id="e4fef" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="6" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="25"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font size="14"/>
+              <text value="Podatek do zapłaty:"/>
+            </properties>
+          </component>
+          <component id="7c4c8" class="javax.swing.JLabel" binding="taxDue">
+            <constraints>
+              <grid row="6" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="14"/>
+              <text value="---"/>
+            </properties>
+          </component>
+          <component id="831e1" class="javax.swing.JLabel" binding="realizedTax">
+            <constraints>
+              <grid row="4" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="14"/>
+              <text value="---"/>
+            </properties>
+          </component>
+          <component id="fb5e3" class="javax.swing.JLabel" binding="taxPaid">
+            <constraints>
+              <grid row="5" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="14"/>
+              <text value="---"/>
+            </properties>
+          </component>
         </children>
       </grid>
       <grid id="c6781" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -323,14 +343,14 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="e69a1" class="javax.swing.JLabel">
+          <component id="e69a1" class="javax.swing.JLabel" binding="portfolioName">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="-1" height="50"/>
               </grid>
             </constraints>
             <properties>
-              <text value="Label"/>
+              <text value="Żaden portfel nie został wybrany"/>
             </properties>
           </component>
           <hspacer id="bc19a">

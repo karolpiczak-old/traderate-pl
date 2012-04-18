@@ -23,6 +23,10 @@ package pl.traderate.desktop.view;
 import pl.traderate.desktop.presenter.MainPresenter;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -49,6 +53,8 @@ public class MainView extends GenericView {
 
 				// Make sure that both forms reference the same object
 				MainView.super.form = form;
+
+				form.navigationTree.addTreeSelectionListener(new OnNodeSelected());
 			}
 		});
 	}
@@ -63,6 +69,8 @@ public class MainView extends GenericView {
 				for (int i = 0; i < form.navigationTree.getRowCount(); ++i) {
 					form.navigationTree.expandRow(i);
 				}
+
+				form.versionText.setText(viewModel.getVersion());
 			}
 		});
 	}
@@ -74,6 +82,25 @@ public class MainView extends GenericView {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			fireEvent(new Events.FormSubmitted(this));
+		}
+	}
+
+	public class OnNodeSelected implements TreeSelectionListener {
+
+		@Override
+		public void valueChanged(TreeSelectionEvent e) {
+			TreePath path = e.getNewLeadSelectionPath();
+
+			if (path != null) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+
+				// Disable selection on title nodes
+				if (node.getUserObject() instanceof String) {
+					((JTree) e.getSource()).setSelectionPath(e.getOldLeadSelectionPath());
+				} else {
+					fireEvent(new Events.NodeChanged(this, node));
+				}
+			}
 		}
 	}
 }
