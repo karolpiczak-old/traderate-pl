@@ -20,6 +20,7 @@
 
 package pl.traderate.desktop.presenter;
 
+import pl.traderate.core.AccountDTO;
 import pl.traderate.core.PortfolioDetailsDTO;
 import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.core.TradeRate;
@@ -105,5 +106,18 @@ public class SummaryPresenter extends GenericPresenter {
 			}
 		}
 
+		public static class AccountSelected extends GenericViewEvent {
+
+			AccountDTO account;
+			
+			public AccountSelected(Object source, AccountDTO account) {
+				super(source);
+				this.account = account;
+			}
+
+			public void handle(SummaryPresenter presenter) {
+				presenter.viewModel.setPortfolio(account);
+			}
+		}
 	}
 }

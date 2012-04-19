@@ -20,7 +20,6 @@
 
 package pl.traderate.core;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class PortfolioNodeDTO {
@@ -29,26 +28,11 @@ public class PortfolioNodeDTO {
 
 	public final String name;
 
-	public final BigDecimal cashBalance;
-
-	public final BigDecimal aggregatedCashBalance;
-	
-//	public final HoldingsDTO holdings;
-
-//	public final ArrayList<EntryDTO> entries;
-	
-//	public final PortfolioTreeDTO parent;
-
 	public final ArrayList<PortfolioNodeDTO> children;
 
 	PortfolioNodeDTO(Portfolio portfolio, PortfolioNodeDTO parent) {
 		this.ID = portfolio.getID();
 		this.name = portfolio.getName();
-		this.cashBalance = portfolio.getCashBalance();
-		this.aggregatedCashBalance = portfolio.getAggregatedCashBalance();
-//		this.holdings = new HoldingsDTO(portfolio.getHoldings());
-//		this.entries = new ArrayList<>();
-//		this.parent = parent;
 
 		this.children = new ArrayList<>();
 		for (Portfolio child : portfolio.getChildren()) {

@@ -252,6 +252,10 @@ public final class TradeRate extends GenericModelEventSource {
 		return accountDTOs;
 	}
 
+	public AccountDTO getAccount(int i) {
+		return new AccountDTO(journal.getAccount(i));
+	}
+
 	public PortfolioNodeDTO getPortfolioNodes() {
 		return new PortfolioNodeDTO(journal.getGlobalPortfolio(), null);
 	}

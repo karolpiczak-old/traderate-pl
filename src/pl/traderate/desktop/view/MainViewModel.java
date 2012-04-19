@@ -20,18 +20,22 @@
 
 package pl.traderate.desktop.view;
 
+import pl.traderate.core.AccountDTO;
 import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.core.TradeRateConfig;
 import pl.traderate.desktop.presenter.MainPresenter;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import java.util.ArrayList;
 
 public class MainViewModel extends GenericViewModel {
 
 	protected MainView view;
 
 	private PortfolioNodeDTO rootPortfolioNode;
+	
+	private ArrayList<AccountDTO> accountNodes;
 
 	private DefaultTreeModel navigationTree;
 
@@ -47,6 +51,7 @@ public class MainViewModel extends GenericViewModel {
 		super.view = view;
 
 		version = TradeRateConfig.getVersion();
+		accountNodes = new ArrayList<>();
 	}
 
 	public void setRootPortfolioNode(PortfolioNodeDTO rootPortfolioNode) {
@@ -55,17 +60,24 @@ public class MainViewModel extends GenericViewModel {
 		notifyChange();
 	}
 
+	public void setAccountNodes(ArrayList<AccountDTO> accounts) {
+		this.accountNodes = accounts;
+		updateNavigationTree();
+		notifyChange();
+	}
+
 	private void updateNavigationTree() {
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("TradeRate");
-		DefaultMutableTreeNode portfolios = new DefaultMutableTreeNode("Portfele");
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Portfele i konta");
 		DefaultMutableTreeNode accounts = new DefaultMutableTreeNode("Konta");
 
 		DefaultMutableTreeNode portfolio = new DefaultMutableTreeNode(rootPortfolioNode);
 		populatePortfolioChildren(portfolio);
+
+		for (AccountDTO account : accountNodes) {
+			accounts.add(new DefaultMutableTreeNode(account));
+		}
 		
-		portfolios.add(portfolio);
-		
-		root.add(portfolios);
+		root.add(portfolio);
 		root.add(accounts);
 
 		navigationTree = new DefaultTreeModel(root);

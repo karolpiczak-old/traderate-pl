@@ -21,6 +21,7 @@
 package pl.traderate.core;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 public class AccountDTO {
 	
@@ -34,9 +35,7 @@ public class AccountDTO {
 
 	public final HoldingsDTO holdings;
 
-	// TODO: Add missing fields
-	// public final ArrayList<EntryDTO> entries;
-	// cashAllocations
+	public final ArrayList<EntryDTO> entries;
 
 	AccountDTO(Account account) {
 		this.ID = account.getID();
@@ -44,5 +43,12 @@ public class AccountDTO {
 		this.cashBalance = account.getCashBalance();
 		this.unallocatedCash = account.getUnallocatedCash();
 		this.holdings = new HoldingsDTO(account.getHoldings());
+		this.entries = new ArrayList<>();
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
+
 }

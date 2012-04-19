@@ -20,6 +20,7 @@
 
 package pl.traderate.desktop.view;
 
+import pl.traderate.core.AccountDTO;
 import pl.traderate.core.PortfolioDetailsDTO;
 import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.desktop.presenter.SummaryPresenter;
@@ -74,6 +75,14 @@ public class SummaryViewModel extends GenericViewModel {
 		this.portfolioName = portfolio.name;
 		this.cashAvailable = portfolio.cashBalance;
 		this.aggregatedCash = portfolio.aggregatedCashBalance;
+
+		notifyChange();
+	}
+	
+	public void setPortfolio(AccountDTO account) {
+		this.portfolioName = account.name;
+		this.cashAvailable = account.cashBalance;
+		this.aggregatedCash = BigDecimal.ZERO;
 
 		notifyChange();
 	}

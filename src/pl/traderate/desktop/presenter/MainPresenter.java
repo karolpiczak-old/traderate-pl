@@ -20,6 +20,7 @@
 
 package pl.traderate.desktop.presenter;
 
+import pl.traderate.core.AccountDTO;
 import pl.traderate.core.PortfolioDetailsDTO;
 import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.core.TradeRate;
@@ -69,6 +70,7 @@ public class MainPresenter extends GenericPresenter {
 	@Override
 	protected void initializeViewModel() {
 		viewModel.setRootPortfolioNode(model.getPortfolioNodes());
+		viewModel.setAccountNodes(model.getAccounts());
 	}
 	
 	@Override
@@ -144,6 +146,11 @@ public class MainPresenter extends GenericPresenter {
 				if (node.getUserObject() instanceof PortfolioNodeDTO) {
 					PortfolioDetailsDTO portfolio = presenter.model.getPortfolio(((PortfolioNodeDTO) node.getUserObject()).ID);
 					presenter.summaryPresenter.handleViewEvent(new SummaryPresenter.Events.PortfolioSelected(this, portfolio));
+				}
+
+				if (node.getUserObject() instanceof AccountDTO) {
+					AccountDTO account = presenter.model.getAccount(((AccountDTO) node.getUserObject()).ID);
+					presenter.summaryPresenter.handleViewEvent(new SummaryPresenter.Events.AccountSelected(this, account));
 				}
 			}
 		}
