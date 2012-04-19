@@ -20,9 +20,84 @@
 
 package pl.traderate.core;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
 public class HoldingsDTO {
 
+	public final ArrayList<EquityHoldingDTO> equityHoldings = new ArrayList<>();
+	
+	public final ArrayList<EquityHoldingDTO> closedEquityHoldings = new ArrayList<>();
+	
 	public HoldingsDTO(HoldingList holdings) {
+		for (EquityHolding holding : holdings.getEquityHoldings()) {
+			equityHoldings.add(new EquityHoldingDTO(holding));
+		}
 
+		for (EquityHolding holding : holdings.getClosedEquityHoldings()) {
+			closedEquityHoldings.add(new EquityHoldingDTO(holding));
+		}
+	}
+
+	public class EquityHoldingDTO extends PerformanceDataDTO {
+		public final String ticker;
+		
+		public final ArrayList<EquityPositionDTO> positions;
+
+		public EquityHoldingDTO(EquityHolding holding) {
+			super(holding);
+			this.ticker = holding.getName();
+			this.positions = new ArrayList<>();
+			for (EquityPosition position: holding.getPositions()) {
+				this.positions.add(new EquityPositionDTO(position));
+			}
+		}
+
+		@Override
+		public String toString() {
+			return ticker;
+		}
+	}
+	
+	public class EquityPositionDTO extends PerformanceDataDTO {
+		public final String name;
+
+		public final ArrayList<EquityTradeDTO> trades;
+
+		public EquityPositionDTO(EquityPosition position) {
+			super(position);
+			this.name = position.name;
+			this.trades = new ArrayList<>();
+			for (EquityTrade trade: position.getTrades()) {
+				this.trades.add(new EquityTradeDTO(trade));
+			}
+		}
+
+		@Override
+		public String toString() {
+			return name;
+		}
+	}
+	
+	public class EquityTradeDTO extends PerformanceDataDTO  {
+		public final String ticker;
+
+		public EquityTradeDTO(EquityTrade trade) {
+			super(trade);
+			this.ticker = trade.ticker;
+		}
+
+		@Override
+		public String toString() {
+			return ticker;
+		}
+	}
+
+	public class PerformanceDataDTO {
+		public final BigDecimal quantity;
+
+		public PerformanceDataDTO(PerformanceData objectWithPerformance) {
+			this.quantity = objectWithPerformance.quantity;
+		}
 	}
 }

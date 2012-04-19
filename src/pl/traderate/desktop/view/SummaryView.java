@@ -58,6 +58,8 @@ public class SummaryView extends GenericView {
 				form.portfolioName.setText(viewModel.getPortfolioName());
 				form.cashAvailable.setText(viewModel.getCashAvailable().toPlainString());
 				form.aggregatedCash.setText(viewModel.getAggregatedCash().toPlainString());
+				form.openHoldingsTreeTable.setModel(viewModel.getOpenHoldingsTreeTable());
+				form.closedHoldingsTreeTable.setModel(viewModel.getClosedHoldingsTreeTable());
 			}
 		});
 	}

@@ -20,51 +20,9 @@
 
 package pl.traderate.desktop.view;
 
-import org.netbeans.swing.outline.Outline;
+import org.netbeans.swing.outline.RowModel;
+import pl.traderate.core.HoldingsDTO;
 
-import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 
-public class SummaryForm extends GenericForm {
 
-	JPanel root;
-
-	JLabel paperGain;
-
-	JLabel currentValue;
-
-	JLabel openValue;
-
-	JLabel cashAvailable;
-
-	JLabel portfolioName;
-
-	JLabel aggregatedCash;
-
-	JLabel realizedGain;
-
-	JLabel realizedIncome;
-
-	JLabel realizedCost;
-
-	JLabel realizedTax;
-
-	JLabel taxDue;
-
-	JLabel taxPaid;
-
-	Outline openHoldingsTreeTable;
-
-	Outline closedHoldingsTreeTable;
-
-	public SummaryForm(GenericView view) {
-		super(view);
-		this.view = (SummaryView) super.view;
-
-		openHoldingsTreeTable.setRootVisible(false);
-		closedHoldingsTreeTable.setRootVisible(false);
-	}
-
-	void show() {
-
-	}
-}

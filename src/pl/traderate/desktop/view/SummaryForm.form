@@ -302,9 +302,13 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="83c6f" class="javax.swing.JTable" binding="table1" default-binding="true">
+              <component id="4f72d" class="org.netbeans.swing.outline.Outline" binding="closedHoldingsTreeTable">
                 <constraints/>
                 <properties/>
+                <clientProperties>
+                  <JTable.autoStartsEdit class="java.lang.Boolean" value="false"/>
+                  <terminateEditOnFocusLost class="java.lang.Boolean" value="true"/>
+                </clientProperties>
               </component>
             </children>
           </scrollpane>
@@ -327,9 +331,13 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="abfab" class="javax.swing.JTable" binding="table2" default-binding="true">
+              <component id="efc78" class="org.netbeans.swing.outline.Outline" binding="openHoldingsTreeTable">
                 <constraints/>
                 <properties/>
+                <clientProperties>
+                  <JTable.autoStartsEdit class="java.lang.Boolean" value="false"/>
+                  <terminateEditOnFocusLost class="java.lang.Boolean" value="true"/>
+                </clientProperties>
               </component>
             </children>
           </scrollpane>

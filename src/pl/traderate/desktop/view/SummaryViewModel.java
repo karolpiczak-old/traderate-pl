@@ -20,7 +20,10 @@
 
 package pl.traderate.desktop.view;
 
+import org.netbeans.swing.outline.DefaultOutlineModel;
+import org.netbeans.swing.outline.OutlineModel;
 import pl.traderate.core.AccountDTO;
+import pl.traderate.core.HoldingsDTO;
 import pl.traderate.core.PortfolioDetailsDTO;
 import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.desktop.presenter.SummaryPresenter;
@@ -56,6 +59,12 @@ public class SummaryViewModel extends GenericViewModel {
 	protected BigDecimal taxPaid;
 
 	protected BigDecimal taxDue;
+	
+	protected HoldingsDTO holdings;
+
+	private OutlineModel openHoldingsTreeTable;
+
+	private OutlineModel closedHoldingsTreeTable;
 
 	public SummaryViewModel(SummaryPresenter presenter) {
 		super(presenter);
@@ -75,16 +84,25 @@ public class SummaryViewModel extends GenericViewModel {
 		this.portfolioName = portfolio.name;
 		this.cashAvailable = portfolio.cashBalance;
 		this.aggregatedCash = portfolio.aggregatedCashBalance;
-
+		this.holdings = portfolio.holdings;
+		
+		updateHoldings();
 		notifyChange();
 	}
-	
+
 	public void setPortfolio(AccountDTO account) {
 		this.portfolioName = account.name;
 		this.cashAvailable = account.cashBalance;
 		this.aggregatedCash = BigDecimal.ZERO;
-
+		this.holdings = account.holdings;
+		
+		updateHoldings();
 		notifyChange();
+	}
+
+	private void updateHoldings() {
+		openHoldingsTreeTable = new HoldingTable("Otwarte pozycje", holdings.equityHoldings).getOutlineModel();
+		closedHoldingsTreeTable = new HoldingTable("Zamknięte pozycje", holdings.closedEquityHoldings).getOutlineModel();
 	}
 
 	public String getPortfolioName() {
@@ -133,5 +151,13 @@ public class SummaryViewModel extends GenericViewModel {
 
 	public BigDecimal getTaxDue() {
 		return taxDue;
+	}
+
+	public OutlineModel getOpenHoldingsTreeTable() {
+		return openHoldingsTreeTable;
+	}
+
+	public OutlineModel getClosedHoldingsTreeTable() {
+		return closedHoldingsTreeTable;
 	}
 }
