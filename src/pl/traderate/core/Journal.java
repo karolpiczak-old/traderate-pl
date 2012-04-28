@@ -335,8 +335,12 @@ class Journal {
 		return accounts;
 	}
 
-	public Account getAccount(int i) {
+	Account getAccount(int i) {
 		return accounts.get(i);
+	}
+
+	ArrayList<JournalEntry> getEntries() {
+		return entries;
 	}
 	
 	Portfolio getGlobalPortfolio() {

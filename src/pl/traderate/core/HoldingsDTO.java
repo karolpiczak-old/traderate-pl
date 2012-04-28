@@ -96,8 +96,41 @@ public class HoldingsDTO {
 	public class PerformanceDataDTO {
 		public final BigDecimal quantity;
 
+		public final BigDecimal openPrice;
+
+		public final BigDecimal commission;
+
+		public final BigDecimal openValue;
+
+		public final BigDecimal closePrice;
+
+		public final BigDecimal closeValue;
+
+		public final BigDecimal lastMarketPrice;
+
+		public final BigDecimal marketValue;
+
+		public final BigDecimal paperGain;
+
+		public final BigDecimal paperGainPercentage;
+
+		public final BigDecimal realizedGain;
+
+		public final BigDecimal realizedGainPercentage;
+
 		public PerformanceDataDTO(PerformanceData objectWithPerformance) {
 			this.quantity = objectWithPerformance.quantity;
+			this.openPrice = objectWithPerformance.openPrice;
+			this.commission = objectWithPerformance.commission;
+			this.openValue = objectWithPerformance.openValue;
+			this.closePrice = objectWithPerformance.closePrice;
+			this.closeValue = objectWithPerformance.closeValue;
+			this.lastMarketPrice = objectWithPerformance.lastMarketPrice;
+			this.marketValue = objectWithPerformance.marketValue;
+			this.paperGain = objectWithPerformance.paperGain;
+			this.paperGainPercentage = objectWithPerformance.paperGainPercentage;
+			this.realizedGain = objectWithPerformance.realizedGain;
+			this.realizedGainPercentage = objectWithPerformance.realizedGainPercentage;
 		}
 	}
 }

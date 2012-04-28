@@ -20,29 +20,26 @@
 
 package pl.traderate.core;
 
-import java.util.ArrayList;
+import pl.traderate.core.exception.ObjectNotFoundException;
 
-public class PortfolioNodeDTO {
+import java.util.TreeSet;
 
-	public final int ID;
+public class ObjectFinder {
 
-	public final String name;
+	static <T extends IdentifiableByName> T findByName(String objectName, TreeSet<T> sortedSet) throws ObjectNotFoundException {
+		T object = null;
 
-	public final ArrayList<PortfolioNodeDTO> children;
-
-	PortfolioNodeDTO(Portfolio portfolio) {
-		this.ID = portfolio.getID();
-		this.name = portfolio.getName();
-
-		this.children = new ArrayList<>();
-		for (Portfolio child : portfolio.getChildren()) {
-			this.children.add(new PortfolioNodeDTO(child));
+		for (T checkedObject : sortedSet) {
+			if (checkedObject.getName().equals(objectName)) {
+				object = checkedObject;
+				break;
+			}
 		}
-	}
 
-	@Override
-	public String toString() {
-		return name;
+		if (object == null) {
+			throw new ObjectNotFoundException();
+		}
+
+		return object;
 	}
-	
 }

@@ -34,6 +34,20 @@ class EquityPosition extends Position {
 		trades = new TreeSet<>();
 	}
 
+	EquityPosition(EquityPosition position) {
+		this(position.name, position.closed);
+		
+		for (EquityTrade trade : position.trades) {
+			this.trades.add(new EquityTrade(trade));
+		}
+	}
+
+	void merge(EquityPosition otherPosition) {
+		for (EquityTrade otherTrade: otherPosition.trades) {
+			this.trades.add(new EquityTrade(otherTrade));
+		}
+	}
+
 	@Override
 	void update() {
 		quantity = BigDecimal.ZERO;

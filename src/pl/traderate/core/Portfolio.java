@@ -64,6 +64,9 @@ class Portfolio implements Identifiable {
 	private HoldingList holdings;
 
 	/** */
+	private HoldingList aggregatedHoldings;
+
+	/** */
 	private BigDecimal cashBalance;
 
 	/** */
@@ -71,6 +74,12 @@ class Portfolio implements Identifiable {
 
 	/** */
 	private Date latestEntryDate;
+
+	/** */
+	private PortfolioNodeDTO nodeDTO;
+
+	/** */
+	private PortfolioDetailsDTO detailsDTO;
 
 	/**
 	 *
@@ -100,6 +109,7 @@ class Portfolio implements Identifiable {
 
 	private void initVolatile() {
 		holdings = new HoldingList();
+		aggregatedHoldings = new HoldingList();
 		cashBalance = BigDecimal.ZERO;
 		aggregatedCashBalance = BigDecimal.ZERO;
 		latestEntryDate = new Date(0L);
@@ -192,6 +202,7 @@ class Portfolio implements Identifiable {
 
 	void update() {
 		holdings.update();
+		updateHoldingsAggregates();
 	}
 
 	public void applyEntry(BuyEquityTransactionEntry entry) throws EntryInsertionException {
@@ -249,6 +260,20 @@ class Portfolio implements Identifiable {
 		}
 	}
 
+	private void updateHoldingsAggregates() {
+		aggregatedHoldings = new HoldingList(holdings);
+
+		for (Portfolio child : children) {
+			aggregatedHoldings.merge(child.getHoldings());
+		}
+		
+		aggregatedHoldings.update();
+
+		if (parent != null) {
+			parent.update();
+		}
+	}
+
 	/**
 	 *
 	 * @return
@@ -289,7 +314,19 @@ class Portfolio implements Identifiable {
 		return holdings;
 	}
 
+	HoldingList getAggregatedHoldings() {
+		return aggregatedHoldings;
+	}
+
 	ArrayList<Portfolio> getChildren() {
 		return children;
+	}
+
+	public PortfolioNodeDTO getNodeDTO() {
+		return nodeDTO == null ? new PortfolioNodeDTO(this) : nodeDTO;
+	}
+
+	public PortfolioDetailsDTO getDetailsDTO() {
+		return detailsDTO == null ? new PortfolioDetailsDTO(this) : detailsDTO;
 	}
 }

@@ -50,7 +50,7 @@ public class JournalPresenter extends GenericPresenter {
 
 	@Override
 	protected void initializeViewModel() {
-
+		viewModel.setEntries(model.getEntries());
 	}
 
 	@Override

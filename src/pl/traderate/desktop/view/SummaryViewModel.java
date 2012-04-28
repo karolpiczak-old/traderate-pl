@@ -84,7 +84,7 @@ public class SummaryViewModel extends GenericViewModel {
 		this.portfolioName = portfolio.name;
 		this.cashAvailable = portfolio.cashBalance;
 		this.aggregatedCash = portfolio.aggregatedCashBalance;
-		this.holdings = portfolio.holdings;
+		this.holdings = portfolio.aggregatedHoldings;
 		
 		updateHoldings();
 		notifyChange();
@@ -101,8 +101,8 @@ public class SummaryViewModel extends GenericViewModel {
 	}
 
 	private void updateHoldings() {
-		openHoldingsTreeTable = new HoldingTable("Otwarte pozycje", holdings.equityHoldings).getOutlineModel();
-		closedHoldingsTreeTable = new HoldingTable("Zamknięte pozycje", holdings.closedEquityHoldings).getOutlineModel();
+		openHoldingsTreeTable = new HoldingTable("Otwarte pozycje", holdings.equityHoldings, false).getOutlineModel();
+		closedHoldingsTreeTable = new HoldingTable("Zamknięte pozycje", holdings.closedEquityHoldings, true).getOutlineModel();
 	}
 
 	public String getPortfolioName() {

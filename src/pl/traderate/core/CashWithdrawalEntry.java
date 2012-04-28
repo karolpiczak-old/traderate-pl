@@ -36,4 +36,9 @@ class CashWithdrawalEntry extends CashOperationEntry {
 	public void apply(Account account) throws EntryInsertionException {
 		account.applyEntry(this);
 	}
+
+	@Override
+	public void apply(JournalEntryDTO journalEntryDTO) {
+		journalEntryDTO.setType(this);
+	}
 }

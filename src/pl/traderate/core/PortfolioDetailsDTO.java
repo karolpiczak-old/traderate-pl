@@ -35,6 +35,8 @@ public class PortfolioDetailsDTO {
 
 	public final HoldingsDTO holdings;
 
+	public final HoldingsDTO aggregatedHoldings;
+
 	public final ArrayList<EntryDTO> entries;
 
 	PortfolioDetailsDTO(Portfolio portfolio) {
@@ -43,6 +45,7 @@ public class PortfolioDetailsDTO {
 		this.cashBalance = portfolio.getCashBalance();
 		this.aggregatedCashBalance = portfolio.getAggregatedCashBalance();
 		this.holdings = new HoldingsDTO(portfolio.getHoldings());
+		this.aggregatedHoldings = new HoldingsDTO(portfolio.getAggregatedHoldings());
 		this.entries = new ArrayList<>();
 	}
 

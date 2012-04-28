@@ -56,6 +56,8 @@ abstract class JournalEntry implements Serializable, Identifiable {
 
 	public abstract void apply(Account account) throws EntryInsertionException;
 
+	public abstract void apply(JournalEntryDTO journalEntryDTO);
+
 	public Date getDate() {
 		return new Date(date.getTime());
 	}

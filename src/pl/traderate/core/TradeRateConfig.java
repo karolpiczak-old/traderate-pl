@@ -45,6 +45,6 @@ public final class TradeRateConfig {
 	}
 	
 	public static String getVersion() {
-		return "TradeRate.pl 12.04";
+		return "TradeRate.pl 12.05";
 	}
 }

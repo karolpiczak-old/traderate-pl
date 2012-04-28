@@ -62,6 +62,9 @@ class Account implements Identifiable {
 	/** */
 	private HashMap<Integer, BigDecimal> cashAllocations;
 
+	/** */
+	private AccountDTO DTO;
+
 	/**
 	 *
 	 * @param name
@@ -338,5 +341,9 @@ class Account implements Identifiable {
 
 	HoldingList getHoldings() {
 		return holdings;
+	}
+
+	public AccountDTO getDTO() {
+		return DTO == null ? new AccountDTO(this) : DTO;
 	}
 }

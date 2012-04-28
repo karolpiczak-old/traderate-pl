@@ -26,6 +26,7 @@ import pl.traderate.core.exception.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -246,22 +247,33 @@ public final class TradeRate extends GenericModelEventSource {
 	public ArrayList<AccountDTO> getAccounts() {
 		ArrayList<AccountDTO> accountDTOs = new ArrayList<>();
 		for (Account account : journal.getAccounts()) {
-			accountDTOs.add(new AccountDTO(account));
+			accountDTOs.add(account.getDTO());
 		}
 
 		return accountDTOs;
 	}
 
 	public AccountDTO getAccount(int i) {
-		return new AccountDTO(journal.getAccount(i));
+		return journal.getAccount(i).getDTO();
+	}
+
+	public ArrayList<JournalEntryDTO> getEntries() {
+		ArrayList<JournalEntryDTO> entryDTOs = new ArrayList<>();
+		for (JournalEntry entry : journal.getEntries()) {
+			entryDTOs.add(new JournalEntryDTO(entry));
+		}
+
+		Collections.sort(entryDTOs);
+
+		return entryDTOs;
 	}
 
 	public PortfolioNodeDTO getPortfolioNodes() {
-		return new PortfolioNodeDTO(journal.getGlobalPortfolio(), null);
+		return journal.getGlobalPortfolio().getNodeDTO();
 	}
 
 	public PortfolioDetailsDTO getPortfolio(int i) {
-		return new PortfolioDetailsDTO(journal.getPortfolio(i));
+		return journal.getPortfolio(i).getDetailsDTO();
 	}
 
 	/**

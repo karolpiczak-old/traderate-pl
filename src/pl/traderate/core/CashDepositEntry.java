@@ -34,4 +34,9 @@ class CashDepositEntry extends CashOperationEntry {
 	public void apply(Account account) {
 		account.applyEntry(this);
 	}
+
+	@Override
+	public void apply(JournalEntryDTO journalEntryDTO) {
+		journalEntryDTO.setType(this);
+	}
 }

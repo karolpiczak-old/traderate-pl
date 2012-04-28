@@ -20,11 +20,18 @@
 
 package pl.traderate.desktop.view;
 
+import pl.traderate.core.JournalEntryDTO;
 import pl.traderate.desktop.presenter.JournalPresenter;
+
+import java.util.ArrayList;
 
 public class JournalViewModel extends GenericViewModel {
 
 	protected JournalView view;
+
+	protected ArrayList<JournalEntryDTO> entries;
+	
+	protected JournalTable journalTable;
 
 	public JournalViewModel(JournalPresenter presenter) {
 		super(presenter);
@@ -38,5 +45,16 @@ public class JournalViewModel extends GenericViewModel {
 
 	public JournalView getView() {
 		return view;
+	}
+
+	public void setEntries(ArrayList<JournalEntryDTO> entries) {
+		this.entries = entries;
+		journalTable = new JournalTable(this.entries);
+
+		notifyChange();
+	}
+
+	public JournalTable getJournalTable() {
+		return journalTable;
 	}
 }

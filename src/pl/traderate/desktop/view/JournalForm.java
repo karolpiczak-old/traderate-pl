@@ -26,7 +26,7 @@ public class JournalForm extends GenericForm {
 
 	JPanel root;
 
-	private JTable table1;
+	JTable entries;
 
 	public JournalForm(GenericView view) {
 		super(view);
@@ -35,5 +35,9 @@ public class JournalForm extends GenericForm {
 
 	void show() {
 
+	}
+
+	private void createUIComponents() {
+		entries = new JTable();
 	}
 }

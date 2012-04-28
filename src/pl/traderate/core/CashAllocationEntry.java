@@ -75,4 +75,9 @@ class CashAllocationEntry extends CashReallocationEntry {
 		account.applyEntry(this);
 	}
 
+	@Override
+	public void apply(JournalEntryDTO journalEntryDTO) {
+		journalEntryDTO.setType(this);
+	}
+
 }

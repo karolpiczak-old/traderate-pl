@@ -47,4 +47,9 @@ class SellEquityTransactionEntry extends SellTransactionEntry {
 	public BigDecimal getCashValue() {
 		return price.multiply(quantity).subtract(commission);
 	}
+
+	@Override
+	public void apply(JournalEntryDTO journalEntryDTO) {
+		journalEntryDTO.setType(this);
+	}
 }

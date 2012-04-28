@@ -21,14 +21,11 @@
 package pl.traderate.core;
 
 import pl.traderate.core.exception.EntryInsertionException;
-import pl.traderate.core.exception.InternalLogicError;
 import pl.traderate.core.exception.ObjectNotFoundException;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.TreeSet;
 
@@ -45,13 +42,49 @@ final class HoldingList {
 		closedEquityHoldings = new TreeSet<>();
 	}
 
+	HoldingList(HoldingList holdingList) {
+		this();
+		
+		for (EquityHolding holding : holdingList.equityHoldings) {
+			this.equityHoldings.add(new EquityHolding(holding));
+		}
+
+		for (EquityHolding holding : holdingList.closedEquityHoldings) {
+			this.closedEquityHoldings.add(new EquityHolding(holding));
+		}
+		
+		update();
+	}
+
+	void merge(HoldingList holdingList) {
+		for (EquityHolding otherHolding : holdingList.equityHoldings) {
+			EquityHolding thisHolding;
+			try {
+				thisHolding = ObjectFinder.findByName(otherHolding.ticker, this.equityHoldings);
+				thisHolding.merge(otherHolding);
+			} catch (ObjectNotFoundException e) {
+				this.equityHoldings.add(new EquityHolding(otherHolding));
+			}
+		}
+
+		for (EquityHolding otherHolding : holdingList.closedEquityHoldings) {
+			EquityHolding thisHolding;
+			try {
+				thisHolding = ObjectFinder.findByName(otherHolding.ticker, this.closedEquityHoldings);
+				thisHolding.merge(otherHolding);
+			} catch (ObjectNotFoundException e) {
+				this.closedEquityHoldings.add(new EquityHolding(otherHolding));
+			}
+		}
+	}
+
 	void open(BuyEquityTransactionEntry entry) throws EntryInsertionException {
 		EquityTrade trade = new EquityTrade(entry.account, entry.portfolio, entry.date, entry.comment, entry.ticker, entry.quantity, entry.price, entry.commission);
 
 		EquityHolding holding;
 
 		try {
-			holding = findObjectByName(entry.ticker, equityHoldings);
+			holding = ObjectFinder.findByName(entry.ticker, equityHoldings);
 		} catch (ObjectNotFoundException e) {
 			holding = new EquityHolding(entry.ticker, false);
 			equityHoldings.add(holding);
@@ -60,7 +93,7 @@ final class HoldingList {
 		EquityPosition position;
 
 		try {
-			position = findObjectByName(entry.position, holding.getPositions());
+			position = ObjectFinder.findByName(entry.position, holding.getPositions());
 		} catch (ObjectNotFoundException e) {
 			position = new EquityPosition(entry.position, false);
 			holding.attach(position);
@@ -74,7 +107,7 @@ final class HoldingList {
 		EquityHolding holding;
 
 		try {
-			holding = findObjectByName(entry.ticker, equityHoldings);
+			holding = ObjectFinder.findByName(entry.ticker, equityHoldings);
 		} catch (ObjectNotFoundException e) {
 			throw new EntryInsertionException();
 		}
@@ -136,7 +169,7 @@ final class HoldingList {
 		EquityHolding closedHolding;
 
 		try {
-			closedHolding = findObjectByName(trade.getTicker(), closedEquityHoldings);
+			closedHolding = ObjectFinder.findByName(trade.getTicker(), closedEquityHoldings);
 		} catch (ObjectNotFoundException e) {
 			closedHolding = new EquityHolding(trade.getTicker(), true);
 			closedEquityHoldings.add(closedHolding);
@@ -145,7 +178,7 @@ final class HoldingList {
 		EquityPosition closedPosition;
 
 		try {
-			closedPosition = findObjectByName(trade.getParent().getName(), closedHolding.getPositions());
+			closedPosition = ObjectFinder.findByName(trade.getParent().getName(), closedHolding.getPositions());
 		} catch (ObjectNotFoundException e) {
 			closedPosition = new EquityPosition(trade.getParent().getName(), true);
 			closedHolding.attach(closedPosition);
@@ -163,23 +196,6 @@ final class HoldingList {
 
 		closedPosition.attach(trade);
 		closedHolding.attach(trade);
-	}
-
-	private <T extends IdentifiableByName> T findObjectByName(String objectName, TreeSet<T> sortedSet) throws ObjectNotFoundException {
-		T object = null;
-
-		for (T checkedObject : sortedSet) {
-			if (checkedObject.getName().equals(objectName)) {
-				object = checkedObject;
-				break;
-			}
-		}
-
-		if (object == null) {
-			throw new ObjectNotFoundException();
-		}
-
-		return object;
 	}
 
 	TreeSet<EquityHolding> getEquityHoldings() {

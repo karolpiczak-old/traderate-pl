@@ -44,6 +44,11 @@ class BuyEquityTransactionEntry extends BuyTransactionEntry {
 		portfolio.applyEntry(this);
 	}
 
+	@Override
+	public void apply(JournalEntryDTO journalEntryDTO) {
+		journalEntryDTO.setType(this);
+	}
+
 	public BigDecimal getCashValue() {
 		return price.multiply(quantity).add(commission);
 	}

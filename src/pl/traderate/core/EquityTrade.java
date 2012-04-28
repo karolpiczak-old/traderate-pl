@@ -36,8 +36,12 @@ class EquityTrade extends Trade {
 	 *
 	 * @param equityTrade
 	 */
-	private EquityTrade(EquityTrade equityTrade) {
+	EquityTrade(EquityTrade equityTrade) {
 		super(equityTrade.account, equityTrade.portfolio, equityTrade.date, equityTrade.comment, equityTrade.ticker, equityTrade.quantity, equityTrade.openPrice, equityTrade.commission);
+
+		this.closed = equityTrade.closed;
+		this.closePrice = equityTrade.closePrice;
+		update();
 	}
 
 	void close(SellEquityTransactionEntry entry, BigDecimal allocatedCommission) {
@@ -88,6 +92,8 @@ class EquityTrade extends Trade {
 		openValue = openPrice.multiply(quantity);
 		if (isClosed()) {
 			closeValue = closePrice.multiply(quantity);
+			realizedGain = closeValue.subtract(openValue).subtract(commission);
+			realizedGainPercentage = realizedGain.divide(openValue, 4, RoundingMode.HALF_EVEN).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_EVEN);
 		}
 	}
 }

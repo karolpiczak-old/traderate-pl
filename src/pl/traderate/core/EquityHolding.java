@@ -20,6 +20,8 @@
 
 package pl.traderate.core;
 
+import pl.traderate.core.exception.ObjectNotFoundException;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -35,6 +37,34 @@ class EquityHolding extends Holding {
 		super(ticker, closed);
 		positions = new TreeSet<>();
 		trades = new TreeSet<>();
+	}
+
+	EquityHolding(EquityHolding holding) {
+		this(holding.ticker, holding.closed);
+		
+		for (EquityPosition position : holding.positions) {
+			this.positions.add(new EquityPosition(position));
+		}
+
+		for (EquityTrade trade : holding.trades) {
+			this.trades.add(new EquityTrade(trade));
+		}
+	}
+
+	void merge(EquityHolding otherHolding) {
+		for (EquityPosition otherPosition : otherHolding.positions) {
+			EquityPosition thisPosition;
+			try {
+				thisPosition = ObjectFinder.findByName(otherPosition.name, this.positions);
+				thisPosition.merge(otherPosition);
+			} catch (ObjectNotFoundException e) {
+				this.positions.add(new EquityPosition(otherPosition));
+			}
+		}
+		
+		for (EquityTrade otherTrade: otherHolding.trades) {
+			this.trades.add(new EquityTrade(otherTrade));
+		}
 	}
 
 	@Override

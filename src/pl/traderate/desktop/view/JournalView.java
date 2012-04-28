@@ -55,7 +55,8 @@ public class JournalView extends GenericView {
 	protected void syncViewModel() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-
+				form.entries.setModel(viewModel.getJournalTable());
+				viewModel.getJournalTable().install(form.entries);
 			}
 		});
 	}

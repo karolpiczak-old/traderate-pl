@@ -30,9 +30,13 @@ import java.util.ArrayList;
 
 public class HoldingTable {
 
+	boolean closedMode;
+
 	DefaultOutlineModel outlineModel;
 
-	public HoldingTable(String name, ArrayList<HoldingsDTO.EquityHoldingDTO> holdings) {
+	public HoldingTable(String name, ArrayList<HoldingsDTO.EquityHoldingDTO> holdings, boolean closedMode) {
+		this.closedMode = closedMode;
+
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode(name);
 
 		for (HoldingsDTO.EquityHoldingDTO holding : holdings) {
@@ -72,8 +76,22 @@ public class HoldingTable {
 			if (userObject instanceof HoldingsDTO.PerformanceDataDTO) {
 				HoldingsDTO.PerformanceDataDTO objectWithPerformance = (HoldingsDTO.PerformanceDataDTO) userObject;
 				switch (i) {
+					case 1:
+						return closedMode ? objectWithPerformance.closePrice : objectWithPerformance.lastMarketPrice;
+					case 2:
+						return closedMode ? objectWithPerformance.closeValue : objectWithPerformance.marketValue;
 					case 3:
 						return objectWithPerformance.quantity;
+					case 4:
+						return objectWithPerformance.openPrice;
+					case 5:
+						return objectWithPerformance.openValue;
+					case 6:
+						return objectWithPerformance.commission;
+					case 7:
+						return closedMode ? objectWithPerformance.realizedGain : objectWithPerformance.paperGain;
+					case 8:
+						return closedMode ? objectWithPerformance.realizedGainPercentage : objectWithPerformance.paperGainPercentage;
 					default:
 						return null;
 				}
@@ -103,11 +121,11 @@ public class HoldingTable {
 		public String getColumnName(int i) {
 			switch (i) {
 				case 0:
-					return "%";
+					return closedMode ? "Bieżąca cena rynkowa" : "%";
 				case 1:
-					return "Cena bieżąca";
+					return closedMode ? "Cena zamknięcia" : "Cena bieżąca";
 				case 2:
-					return "Wartość bieżąca";
+					return closedMode ? "Wartość zamknięcia" : "Wartość bieżąca";
 				case 3:
 					return "Ilość";
 				case 4:
