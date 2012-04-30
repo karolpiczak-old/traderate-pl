@@ -28,7 +28,6 @@ import pl.traderate.core.event.*;
 import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.MainViewModel;
 
-import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class MainPresenter extends GenericPresenter {
@@ -103,34 +102,45 @@ public class MainPresenter extends GenericPresenter {
 
 	public static class Events {
 
-		public static class FormSubmitted extends GenericViewEvent {
+//		public static class DummyEvent extends GenericViewEvent {
+//
+//			public DummyEvent(Object source) {
+//				super(source);
+//			}
+//
+//			public void handle(MainPresenter presenter) {
+//
+//				new SwingWorker<String, Object>() {
+//
+//					@Override
+//					public String doInBackground()  {
+//
+//						return null;
+//					}
+//
+//					@Override
+//					protected void done() {
+//						try {
+//
+//						} catch (Exception ignore) {
+//
+//						}
+//					}
+//				}.execute();
+//			}
+//
+//		}
 
-			public FormSubmitted(Object source) {
+		public static class NodeManagementRequested extends GenericViewEvent {
+
+			public NodeManagementRequested(Object source) {
 				super(source);
 			}
 
 			public void handle(MainPresenter presenter) {
-				presenter.viewModel.setRootPortfolioNode(presenter.model.getPortfolioNodes());
-
-				new SwingWorker<String, Object>() {
-
-					@Override
-					public String doInBackground()  {
-
-						return null;
-					}
-
-					@Override
-					protected void done() {
-						try {
-
-						} catch (Exception ignore) {
-
-						}
-					}
-				}.execute();
+				presenter.journalPresenter.handleViewEvent(new JournalPresenter.Events.NodeTabRequested(this));
+				presenter.viewModel.setActiveTab(1);
 			}
-
 		}
 
 		public static class NodeChanged extends GenericViewEvent {

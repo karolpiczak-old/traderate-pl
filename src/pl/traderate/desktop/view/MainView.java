@@ -75,13 +75,17 @@ public class MainView extends GenericView {
 		});
 	}
 
+	public void setActiveTab(int i) {
+		form.tabs.setSelectedIndex(i);
+	}
+
 //:-- Listeners for GUI events -------------------------------------------------
 
-	public class OnButtonOKClicked implements ActionListener {
+	public class OnManageButtonClicked implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			fireEvent(new Events.FormSubmitted(this));
+			fireEvent(new Events.NodeManagementRequested(this));
 		}
 	}
 

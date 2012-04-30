@@ -51,9 +51,7 @@ public class MainForm extends GenericForm {
 
 	JLabel topNavigationLabel;
 
-	JButton addAccountButton;
-
-	JButton addPortfolioButton;
+	JButton manageTreeButton;
 
 	JLabel versionText;
 
@@ -71,7 +69,7 @@ public class MainForm extends GenericForm {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 
-		addAccountButton.addActionListener(this.view.new OnButtonOKClicked());
+		manageTreeButton.addActionListener(this.view.new OnManageButtonClicked());
 	}
 
 	void show() {

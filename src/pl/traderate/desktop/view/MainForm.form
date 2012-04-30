@@ -61,7 +61,7 @@
             </constraints>
             <properties>
               <font size="12"/>
-              <text value="TradeRate.pl 12.03.4"/>
+              <text value="TradeRate.pl"/>
             </properties>
           </component>
           <hspacer id="ef5d5">
@@ -80,7 +80,7 @@
           </hspacer>
         </children>
       </grid>
-      <grid id="d463e" binding="navigationPanel" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="d463e" binding="navigationPanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -88,12 +88,12 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="c8425" class="javax.swing.JButton" binding="addAccountButton">
+          <component id="c8425" class="javax.swing.JButton" binding="manageTreeButton">
             <constraints>
-              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Dodaj konto"/>
+              <text value="Zarządzaj"/>
             </properties>
           </component>
           <scrollpane id="3ba79">
@@ -128,14 +128,6 @@
               <horizontalAlignment value="0"/>
               <labelFor value="3ba79"/>
               <text value="Portfele i konta"/>
-            </properties>
-          </component>
-          <component id="ae02" class="javax.swing.JButton" binding="addPortfolioButton">
-            <constraints>
-              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Dodaj portfel"/>
             </properties>
           </component>
         </children>

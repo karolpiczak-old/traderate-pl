@@ -101,4 +101,8 @@ public class MainViewModel extends GenericViewModel {
 	public String getVersion() {
 		return version;
 	}
+
+	public void setActiveTab(int i) {
+		view.setActiveTab(i);
+	}
 }

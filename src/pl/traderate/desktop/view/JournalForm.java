@@ -20,6 +20,8 @@
 
 package pl.traderate.desktop.view;
 
+import com.michaelbaranov.microba.calendar.DatePicker;
+
 import javax.swing.*;
 
 public class JournalForm extends GenericForm {
@@ -27,6 +29,28 @@ public class JournalForm extends GenericForm {
 	JPanel root;
 
 	JTable entries;
+
+	JTabbedPane entryCreator;
+
+	JSpinner spinner1;
+
+	JComboBox comboBox1;
+
+	JComboBox comboBox2;
+
+	JComboBox comboBox3;
+
+	DatePicker datePicker1;
+
+	JButton submitButton;
+
+	JPanel equityEntryCreatorTab;
+
+	JPanel cashEntryCreatorTab;
+
+	JPanel allocationEntryCreatorTab;
+
+	JPanel nodesCreatorTab;
 
 	public JournalForm(GenericView view) {
 		super(view);

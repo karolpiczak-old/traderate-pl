@@ -87,5 +87,15 @@ public class JournalPresenter extends GenericPresenter {
 
 	public static class Events {
 
+		public static class NodeTabRequested extends GenericViewEvent {
+
+			public NodeTabRequested(Object source) {
+				super(source);
+			}
+
+			public void handle(JournalPresenter presenter) {
+				presenter.viewModel.setActiveTab(3);
+			}
+		}
 	}
 }

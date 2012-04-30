@@ -57,4 +57,8 @@ public class JournalViewModel extends GenericViewModel {
 	public JournalTable getJournalTable() {
 		return journalTable;
 	}
+
+	public void setActiveTab(int i) {
+		view.setActiveTab(i);
+	}
 }

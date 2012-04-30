@@ -66,7 +66,10 @@ public class JournalView extends GenericView {
 		return form;
 	}
 
-	//:-- Listeners for GUI events -------------------------------------------------
+	public void setActiveTab(int i) {
+		form.entryCreator.setSelectedIndex(i);
+	}
 
+	//:-- Listeners for GUI events -------------------------------------------------
 
 }
