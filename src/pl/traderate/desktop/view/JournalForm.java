@@ -98,6 +98,26 @@ public class JournalForm extends GenericForm {
 
 	JButton equityEntrySubmitButton;
 
+	// Management tab
+
+	JButton addAccountButton;
+
+	JButton addPortfolioButton;
+
+	JButton removeAccountButton;
+
+	JButton removePortfolioButton;
+
+	JTextField addAccountName;
+
+	JTextField addPortfolioName;
+
+	JComboBox<PortfolioNodeDTO> addPortfolioParentSelector;
+
+	JComboBox<PortfolioNodeDTO> removePortfolioSelector;
+
+	JComboBox<AccountDTO> removeAccountSelector;
+
 	public JournalForm(GenericView view) {
 		super(view);
 		this.view = (JournalView) super.view;
@@ -141,9 +161,9 @@ public class JournalForm extends GenericForm {
 		cashEntryDate = new DatePicker(new Date(), new SimpleDateFormat("dd.MM.yyyy"));
 
 		String[] cashTypes = { "Wpłata", "Wypłata" };
-		cashEntryType = new JComboBox<String>(cashTypes);
+		cashEntryType = new JComboBox<>(cashTypes);
 
-		cashEntryAccount = new JComboBox<AccountDTO>();
+		cashEntryAccount = new JComboBox<>();
 
 		cashEntryAmount = new JSpinner(new SpinnerNumberModel(1000.0, 0.0, 999999999999.99, 1.0));
 		cashEntryAmount.setEditor(new JSpinner.NumberEditor(cashEntryAmount, "0.00"));
@@ -152,11 +172,11 @@ public class JournalForm extends GenericForm {
 		allocationEntryDate = new DatePicker(new Date(), new SimpleDateFormat("dd.MM.yyyy"));
 
 		String[] allocationTypes = { "Alokacja", "Dealokacja" };
-		allocationEntryType = new JComboBox<String>(allocationTypes);
+		allocationEntryType = new JComboBox<>(allocationTypes);
 
-		allocationEntryAccount = new JComboBox<AccountDTO>();
+		allocationEntryAccount = new JComboBox<>();
 
-		allocationEntryPortfolio = new JComboBox<PortfolioNodeDTO>();
+		allocationEntryPortfolio = new JComboBox<>();
 
 		allocationEntryAmount = new JSpinner(new SpinnerNumberModel(1000.0, 0.0, 999999999999.99, 1.0));
 		allocationEntryAmount.setEditor(new JSpinner.NumberEditor(allocationEntryAmount, "0.00"));
@@ -165,11 +185,11 @@ public class JournalForm extends GenericForm {
 		equityEntryDate = new DatePicker(new Date(), new SimpleDateFormat("dd.MM.yyyy"));
 
 		String[] equityTypes = { "Kupno", "Sprzedaż" };
-		equityEntryType = new JComboBox<String>(equityTypes);
+		equityEntryType = new JComboBox<>(equityTypes);
 
-		equityEntryAccount = new JComboBox<AccountDTO>();
+		equityEntryAccount = new JComboBox<>();
 
-		equityEntryPortfolio = new JComboBox<PortfolioNodeDTO>();
+		equityEntryPortfolio = new JComboBox<>();
 
 		equityEntryPrice = new JSpinner(new SpinnerNumberModel(10.0, 0.01, 999999999999.99, 1.0));
 		equityEntryPrice.setEditor(new JSpinner.NumberEditor(equityEntryPrice, "0.00"));
@@ -179,5 +199,10 @@ public class JournalForm extends GenericForm {
 
 		equityEntryQuantity = new JSpinner(new SpinnerNumberModel(1, 1, 999999999, 1));
 		equityEntryQuantity.setEditor(new JSpinner.NumberEditor(equityEntryQuantity, "0"));
+
+		// Management tab
+		addPortfolioParentSelector = new JComboBox<>();
+		removeAccountSelector = new JComboBox<>();
+		removePortfolioSelector = new JComboBox<>();
 	}
 }
