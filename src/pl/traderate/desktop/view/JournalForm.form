@@ -58,7 +58,7 @@
                 <border type="none"/>
                 <children/>
               </grid>
-              <grid id="f72f3" binding="allocationEntryCreatorTab" layout-manager="GridLayoutManager" row-count="5" column-count="8" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="f72f3" binding="allocationEntryCreatorTab" layout-manager="GridLayoutManager" row-count="9" column-count="8" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <tabbedpane title="Alokacja środków"/>
@@ -100,15 +100,7 @@
                       <text value="Kwota"/>
                     </properties>
                   </component>
-                  <component id="fa8ee" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Typ operacji"/>
-                    </properties>
-                  </component>
-                  <component id="ee351" class="javax.swing.JSpinner" binding="spinner1" default-binding="true">
+                  <component id="ee351" class="javax.swing.JSpinner" binding="allocationEntryAmount" custom-create="true">
                     <constraints>
                       <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
                         <minimum-size width="100" height="-1"/>
@@ -118,16 +110,7 @@
                     </constraints>
                     <properties/>
                   </component>
-                  <component id="849cb" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
-                    <constraints>
-                      <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
-                        <minimum-size width="50" height="-1"/>
-                        <preferred-size width="50" height="-1"/>
-                      </grid>
-                    </constraints>
-                    <properties/>
-                  </component>
-                  <component id="77890" class="javax.swing.JComboBox" binding="comboBox2" default-binding="true">
+                  <component id="77890" class="javax.swing.JComboBox" binding="allocationEntryAccount" custom-create="true">
                     <constraints>
                       <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
                         <minimum-size width="100" height="-1"/>
@@ -136,16 +119,16 @@
                     </constraints>
                     <properties/>
                   </component>
-                  <component id="dfdb1" class="javax.swing.JComboBox" binding="comboBox3" default-binding="true">
+                  <component id="dfdb1" class="javax.swing.JComboBox" binding="allocationEntryPortfolio" custom-create="true">
                     <constraints>
                       <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
                         <minimum-size width="100" height="-1"/>
-                        <preferred-size width="150" height="-1"/>
+                        <preferred-size width="200" height="-1"/>
                       </grid>
                     </constraints>
                     <properties/>
                   </component>
-                  <component id="ba060" class="com.michaelbaranov.microba.calendar.DatePicker" binding="datePicker1" default-binding="true">
+                  <component id="ba060" class="com.michaelbaranov.microba.calendar.DatePicker" binding="allocationEntryDate" custom-create="true">
                     <constraints>
                       <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="2" anchor="1" fill="0" indent="0" use-parent-layout="false">
                         <minimum-size width="100" height="-1"/>
@@ -153,14 +136,6 @@
                       </grid>
                     </constraints>
                     <properties/>
-                  </component>
-                  <component id="9be63" class="javax.swing.JButton" binding="submitButton" default-binding="true">
-                    <constraints>
-                      <grid row="3" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Wprowadź"/>
-                    </properties>
                   </component>
                   <vspacer id="dfc67">
                     <constraints>
@@ -173,7 +148,7 @@
                   </vspacer>
                   <vspacer id="67d47">
                     <constraints>
-                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                      <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
                         <minimum-size width="-1" height="15"/>
                       </grid>
                     </constraints>
@@ -203,6 +178,77 @@
                       </grid>
                     </constraints>
                   </hspacer>
+                  <component id="849cb" class="javax.swing.JComboBox" binding="allocationEntryType" custom-create="true">
+                    <constraints>
+                      <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="150" height="-1"/>
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="fa8ee" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Typ operacji"/>
+                    </properties>
+                  </component>
+                  <vspacer id="54841">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="5"/>
+                        <preferred-size width="-1" height="5"/>
+                        <maximum-size width="-1" height="5"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <vspacer id="1ec8e">
+                    <constraints>
+                      <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="5"/>
+                        <preferred-size width="-1" height="5"/>
+                        <maximum-size width="-1" height="5"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <component id="29158" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="5" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Komentarz"/>
+                    </properties>
+                  </component>
+                  <component id="3e815" class="javax.swing.JTextField" binding="allocationEntryComment">
+                    <constraints>
+                      <grid row="7" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                    <clientProperties>
+                      <caretAspectRatio class="java.lang.Float" value="0.04"/>
+                    </clientProperties>
+                  </component>
+                  <hspacer id="e34ea">
+                    <constraints>
+                      <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="15" height="-1"/>
+                        <preferred-size width="15" height="-1"/>
+                        <maximum-size width="15" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <component id="9be63" class="javax.swing.JButton" binding="allocationEntrySubmitButton">
+                    <constraints>
+                      <grid row="7" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Wprowadź"/>
+                    </properties>
+                  </component>
                 </children>
               </grid>
               <grid id="40ae4" binding="nodesCreatorTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

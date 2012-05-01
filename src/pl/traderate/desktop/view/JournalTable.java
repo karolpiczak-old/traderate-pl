@@ -114,7 +114,7 @@ public class JournalTable implements TableModel {
 			case 0:
 				return entry.ID;
 			case 1:
-				return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(entry.date);
+				return new SimpleDateFormat("dd.MM.yyyy").format(entry.date);
 			case 2:
 				return entry.account.toString();
 			case 3:

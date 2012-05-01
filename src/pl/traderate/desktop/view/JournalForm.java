@@ -21,28 +21,34 @@
 package pl.traderate.desktop.view;
 
 import com.michaelbaranov.microba.calendar.DatePicker;
+import pl.traderate.core.AccountDTO;
+import pl.traderate.core.PortfolioNodeDTO;
 
 import javax.swing.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class JournalForm extends GenericForm {
 
+	JournalView view;
+	
 	JPanel root;
 
 	JTable entries;
 
 	JTabbedPane entryCreator;
 
-	JSpinner spinner1;
+	JSpinner allocationEntryAmount;
 
-	JComboBox comboBox1;
+	JComboBox<String> allocationEntryType;
 
-	JComboBox comboBox2;
+	JComboBox<AccountDTO> allocationEntryAccount;
 
-	JComboBox comboBox3;
+	JComboBox<PortfolioNodeDTO> allocationEntryPortfolio;
 
-	DatePicker datePicker1;
+	DatePicker allocationEntryDate;
 
-	JButton submitButton;
+	JButton allocationEntrySubmitButton;
 
 	JPanel equityEntryCreatorTab;
 
@@ -52,9 +58,19 @@ public class JournalForm extends GenericForm {
 
 	JPanel nodesCreatorTab;
 
+	JTextField allocationEntryComment;
+
 	public JournalForm(GenericView view) {
 		super(view);
 		this.view = (JournalView) super.view;
+
+		allocationEntryDate.addActionListener(this.view.new OnAllocationEntryDateChanged());
+		allocationEntryAccount.addActionListener(this.view.new OnAllocationEntryAccountChanged());
+		allocationEntryPortfolio.addActionListener(this.view.new OnAllocationEntryPortfolioChanged());
+		allocationEntryAmount.addChangeListener(this.view.new OnAllocationEntryAmountChanged());
+		allocationEntryType.addActionListener(this.view.new OnAllocationEntryTypeChanged());
+		allocationEntryComment.getDocument().addDocumentListener(this.view.new OnAllocationEntryCommentChanged());
+		allocationEntrySubmitButton.addActionListener(this.view.new OnAllocationEntrySubmitted());
 	}
 
 	void show() {
@@ -63,5 +79,17 @@ public class JournalForm extends GenericForm {
 
 	private void createUIComponents() {
 		entries = new JTable();
+
+		allocationEntryDate = new DatePicker(new Date(), new SimpleDateFormat("dd.MM.yyyy"));
+
+		String[] allocationTypes = { "Alokacja", "Dealokacja" };
+		allocationEntryType = new JComboBox<String>(allocationTypes);
+
+		allocationEntryAccount = new JComboBox<AccountDTO>();
+
+		allocationEntryPortfolio = new JComboBox<PortfolioNodeDTO>();
+
+		allocationEntryAmount = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 999999999999.99, 1.0));
+		allocationEntryAmount.setEditor(new JSpinner.NumberEditor(allocationEntryAmount, "0.00"));
 	}
 }

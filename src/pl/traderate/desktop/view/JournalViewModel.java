@@ -20,10 +20,16 @@
 
 package pl.traderate.desktop.view;
 
+import pl.traderate.core.AccountDTO;
 import pl.traderate.core.JournalEntryDTO;
+import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.desktop.presenter.JournalPresenter;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class JournalViewModel extends GenericViewModel {
 
@@ -32,6 +38,22 @@ public class JournalViewModel extends GenericViewModel {
 	protected ArrayList<JournalEntryDTO> entries;
 	
 	protected JournalTable journalTable;
+
+	protected ArrayList<AccountDTO> accounts;
+
+	protected ArrayList<PortfolioNodeDTO> portfolios;
+
+	protected Date allocationEntryDate = new Date();
+
+	protected AccountDTO allocationEntryAccount;
+
+	protected PortfolioNodeDTO allocationEntryPortfolio;
+
+	protected BigDecimal allocationEntryAmount = BigDecimal.ZERO;
+
+	protected AllocationEntryType allocationEntryType = AllocationEntryType.ALLOCATION;
+
+	protected String allocationEntryComment;
 
 	public JournalViewModel(JournalPresenter presenter) {
 		super(presenter);
@@ -51,7 +73,7 @@ public class JournalViewModel extends GenericViewModel {
 		this.entries = entries;
 		journalTable = new JournalTable(this.entries);
 
-		notifyChange();
+		notifyChange(SyncType.ENTRIES);
 	}
 
 	public JournalTable getJournalTable() {
@@ -60,5 +82,87 @@ public class JournalViewModel extends GenericViewModel {
 
 	public void setActiveTab(int i) {
 		view.setActiveTab(i);
+	}
+
+	public void setAllocationEntryType(AllocationEntryType allocationEntryType) {
+		this.allocationEntryType = allocationEntryType;
+	}
+
+	public void setAllocationEntryAmount(double allocationEntryAmount) {
+		this.allocationEntryAmount = new BigDecimal(allocationEntryAmount).setScale(2, RoundingMode.HALF_EVEN);
+	}
+
+	public ArrayList<AccountDTO> getAccounts() {
+		return accounts;
+	}
+
+	public ArrayList<PortfolioNodeDTO> getPortfolios() {
+		return portfolios;
+	}
+
+	public void setAccounts(ArrayList<AccountDTO> accounts) {
+		this.accounts = accounts;
+		this.allocationEntryAccount = this.accounts.get(0);
+
+		notifyChange(SyncType.NODES);
+	}
+
+	public void setPortfolios(ArrayList<PortfolioNodeDTO> portfolios) {
+		this.portfolios = portfolios;
+		this.allocationEntryPortfolio = this.portfolios.get(0);
+
+		notifyChange(SyncType.NODES);
+	}
+
+	public void setAllocationEntryPortfolio(PortfolioNodeDTO allocationEntryPortfolio) {
+		this.allocationEntryPortfolio = allocationEntryPortfolio;
+	}
+
+	public void setAllocationEntryAccount(AccountDTO allocationEntryAccount) {
+		this.allocationEntryAccount = allocationEntryAccount;
+	}
+
+	public void setAllocationEntryDate(Date allocationEntryDate) {
+		this.allocationEntryDate = allocationEntryDate;
+	}
+
+	public void setAllocationEntryComment(String allocationEntryComment) {
+		this.allocationEntryComment = allocationEntryComment;
+	}
+
+	public AccountDTO getAllocationEntryAccount() {
+		return allocationEntryAccount;
+	}
+
+	public PortfolioNodeDTO getAllocationEntryPortfolio() {
+		return allocationEntryPortfolio;
+	}
+
+	public Date getAllocationEntryDate() {
+		return allocationEntryDate;
+	}
+
+	public BigDecimal getAllocationEntryAmount() {
+		return allocationEntryAmount;
+	}
+
+	public AllocationEntryType getAllocationEntryType() {
+		return allocationEntryType;
+	}
+
+	public String getAllocationEntryComment() {
+		return allocationEntryComment;
+	}
+
+	public enum AllocationEntryType {
+		ALLOCATION,
+		DEALLOCATION
+	}
+
+//:-- ViewModel sync types ---------------------------------------------------------
+
+	public enum SyncType {
+		ENTRIES,
+		NODES
 	}
 }

@@ -20,9 +20,9 @@
 
 package pl.traderate.core.event;
 
-public class DataUpdateModelEvent extends GenericModelEvent {
+public class JournalUpdatedModelEvent extends GenericModelEvent {
 
-	public DataUpdateModelEvent(Object source) {
+	public JournalUpdatedModelEvent(Object source) {
 		super(source);
 	}
 

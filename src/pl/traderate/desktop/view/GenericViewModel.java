@@ -32,12 +32,16 @@ public abstract class GenericViewModel extends Observable {
 
 	}
 
-	protected void notifyChange() {
+	protected void notifyChange(Object arg) {
 		setChanged();
-		notifyObservers();
+		notifyObservers(arg);
 	}
 
 	public void show() {
 		view.show();
+	}
+	
+	public void update(Object arg) {
+		notifyChange(arg);
 	}
 }

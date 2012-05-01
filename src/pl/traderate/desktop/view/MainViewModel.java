@@ -54,16 +54,20 @@ public class MainViewModel extends GenericViewModel {
 		accountNodes = new ArrayList<>();
 	}
 
+	public MainView getView() {
+		return view;
+	}
+
 	public void setRootPortfolioNode(PortfolioNodeDTO rootPortfolioNode) {
 		this.rootPortfolioNode = rootPortfolioNode;
 		updateNavigationTree();
-		notifyChange();
+		notifyChange(SyncType.NODES);
 	}
 
 	public void setAccountNodes(ArrayList<AccountDTO> accounts) {
 		this.accountNodes = accounts;
 		updateNavigationTree();
-		notifyChange();
+		notifyChange(SyncType.NODES);
 	}
 
 	private void updateNavigationTree() {
@@ -81,7 +85,7 @@ public class MainViewModel extends GenericViewModel {
 		root.add(accounts);
 
 		navigationTree = new DefaultTreeModel(root);
-		notifyChange();
+		notifyChange(SyncType.NODES);
 	}
 	
 	private void populatePortfolioChildren(DefaultMutableTreeNode portfolioNode) {
@@ -104,5 +108,11 @@ public class MainViewModel extends GenericViewModel {
 
 	public void setActiveTab(int i) {
 		view.setActiveTab(i);
+	}
+
+//:-- ViewModel sync types ---------------------------------------------------------
+
+	public enum SyncType {
+		NODES
 	}
 }

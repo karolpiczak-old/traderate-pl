@@ -22,15 +22,12 @@ package pl.traderate.desktop.presenter;
 
 import pl.traderate.core.AccountDTO;
 import pl.traderate.core.PortfolioDetailsDTO;
-import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.core.TradeRate;
-import pl.traderate.core.event.DataUpdateModelEvent;
+import pl.traderate.core.event.JournalUpdatedModelEvent;
 import pl.traderate.core.event.GenericModelEvent;
 import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.GenericView;
 import pl.traderate.desktop.view.SummaryViewModel;
-
-import javax.swing.*;
 
 public class SummaryPresenter extends GenericPresenter {
 
@@ -55,7 +52,7 @@ public class SummaryPresenter extends GenericPresenter {
 
 	@Override
 	protected void initializeViewModel() {
-		viewModel.setPortfolio(model.getPortfolio(0));
+		viewModel.setNode(model.getPortfolio(0));
 	}
 
 	@Override
@@ -82,8 +79,18 @@ public class SummaryPresenter extends GenericPresenter {
 		}
 
 		@Override
-		public void handleModelEvent(DataUpdateModelEvent e) {
-
+		public void handleModelEvent(JournalUpdatedModelEvent e) {
+			int nodeID = viewModel.getNodeID();
+			SummaryViewModel.NodeType nodeType = viewModel.getNodeType();
+			
+			switch (nodeType) {
+				case ACCOUNT:
+					viewModel.setNode(model.getAccount(nodeID));
+					break;
+				case PORTFOLIO:
+					viewModel.setNode(model.getPortfolio(nodeID));
+					break;
+			}
 		}
 
 	}
@@ -102,7 +109,7 @@ public class SummaryPresenter extends GenericPresenter {
 			}
 
 			public void handle(SummaryPresenter presenter) {
-				presenter.viewModel.setPortfolio(portfolio);
+				presenter.viewModel.setNode(portfolio);
 			}
 		}
 
@@ -116,7 +123,7 @@ public class SummaryPresenter extends GenericPresenter {
 			}
 
 			public void handle(SummaryPresenter presenter) {
-				presenter.viewModel.setPortfolio(account);
+				presenter.viewModel.setNode(account);
 			}
 		}
 	}

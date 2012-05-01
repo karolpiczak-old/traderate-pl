@@ -46,10 +46,10 @@ public abstract class GenericView extends GenericViewEventSource implements Obse
 		});
 	}
 
-	protected abstract void syncViewModel();
+	protected abstract void syncViewModel(Object arg);
 
 	public void update(Observable o, Object arg) {
-		syncViewModel();
+		syncViewModel(arg);
 	}
 
 	public GenericForm getForm() {

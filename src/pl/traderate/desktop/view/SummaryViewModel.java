@@ -20,23 +20,29 @@
 
 package pl.traderate.desktop.view;
 
-import org.netbeans.swing.outline.DefaultOutlineModel;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.NodeType;
 import org.netbeans.swing.outline.OutlineModel;
 import pl.traderate.core.AccountDTO;
 import pl.traderate.core.HoldingsDTO;
 import pl.traderate.core.PortfolioDetailsDTO;
-import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.desktop.presenter.SummaryPresenter;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import java.math.BigDecimal;
 
 public class SummaryViewModel extends GenericViewModel {
 
 	protected SummaryView view;
 	
-	protected String portfolioName;
+	protected int nodeID;
+	
+	protected String nodeName;
+	
+	protected NodeType nodeType;
+
+	public enum NodeType {
+		ACCOUNT,
+		PORTFOLIO
+	}
 
 	protected BigDecimal currentValue;
 
@@ -80,24 +86,28 @@ public class SummaryViewModel extends GenericViewModel {
 		return view;
 	}
 
-	public void setPortfolio(PortfolioDetailsDTO portfolio) {
-		this.portfolioName = portfolio.name;
+	public void setNode(PortfolioDetailsDTO portfolio) {
+		this.nodeID = portfolio.ID;
+		this.nodeName = portfolio.name;
+		this.nodeType = NodeType.PORTFOLIO;
 		this.cashAvailable = portfolio.cashBalance;
 		this.aggregatedCash = portfolio.aggregatedCashBalance;
 		this.holdings = portfolio.aggregatedHoldings;
 		
 		updateHoldings();
-		notifyChange();
+		notifyChange(SyncType.NODE);
 	}
 
-	public void setPortfolio(AccountDTO account) {
-		this.portfolioName = account.name;
+	public void setNode(AccountDTO account) {
+		this.nodeID = account.ID;
+		this.nodeName = account.name;
+		this.nodeType = NodeType.ACCOUNT;
 		this.cashAvailable = account.cashBalance;
 		this.aggregatedCash = BigDecimal.ZERO;
 		this.holdings = account.holdings;
 		
 		updateHoldings();
-		notifyChange();
+		notifyChange(SyncType.NODE);
 	}
 
 	private void updateHoldings() {
@@ -105,8 +115,12 @@ public class SummaryViewModel extends GenericViewModel {
 		closedHoldingsTreeTable = new HoldingTable("Zamknięte pozycje", holdings.closedEquityHoldings, true).getOutlineModel();
 	}
 
-	public String getPortfolioName() {
-		return portfolioName;
+	public String getNodeName() {
+		return nodeName;
+	}
+
+	public NodeType getNodeType() {
+		return nodeType;
 	}
 
 	public BigDecimal getCurrentValue() {
@@ -159,5 +173,15 @@ public class SummaryViewModel extends GenericViewModel {
 
 	public OutlineModel getClosedHoldingsTreeTable() {
 		return closedHoldingsTreeTable;
+	}
+
+	public int getNodeID() {
+		return nodeID;
+	}
+
+//:-- ViewModel sync types ---------------------------------------------------------
+
+	public enum SyncType {
+		NODE
 	}
 }

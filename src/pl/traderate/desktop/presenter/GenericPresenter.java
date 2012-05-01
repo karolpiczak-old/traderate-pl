@@ -66,7 +66,7 @@ public abstract class GenericPresenter implements GenericViewEventListener {
 		}
 
 		@Override
-		public void handleModelEvent(DataUpdateModelEvent e) {
+		public void handleModelEvent(JournalUpdatedModelEvent e) {
 			// TODO: Implement
 		}
 

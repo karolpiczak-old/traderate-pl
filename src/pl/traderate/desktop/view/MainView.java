@@ -62,7 +62,7 @@ public class MainView extends GenericView {
 	/**
 	 *
 	 */
-	protected void syncViewModel() {
+	protected void syncViewModel(final Object arg) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				form.navigationTree.setModel(viewModel.getNavigationTree());
@@ -77,6 +77,11 @@ public class MainView extends GenericView {
 
 	public void setActiveTab(int i) {
 		form.tabs.setSelectedIndex(i);
+	}
+
+	@Override
+	public MainForm getForm() {
+		return form;
 	}
 
 //:-- Listeners for GUI events -------------------------------------------------

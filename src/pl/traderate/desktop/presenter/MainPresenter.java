@@ -26,8 +26,10 @@ import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.core.TradeRate;
 import pl.traderate.core.event.*;
 import pl.traderate.desktop.event.GenericViewEvent;
+import pl.traderate.desktop.view.GenericView;
 import pl.traderate.desktop.view.MainViewModel;
 
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class MainPresenter extends GenericPresenter {
@@ -57,9 +59,15 @@ public class MainPresenter extends GenericPresenter {
 		// Make sure that both viewModels reference the same object
 		super.viewModel = viewModel;
 		super.modelEventHandler = modelEventHandler;
+
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				journalPresenter.setParentFrame(viewModel.getView().getForm().getFrame());
+			}
+		});
 	}
-	
-	@Override
+
+		@Override
 	public void show() {
 		super.show();
 		summaryPresenter.show();
@@ -71,10 +79,14 @@ public class MainPresenter extends GenericPresenter {
 		viewModel.setRootPortfolioNode(model.getPortfolioNodes());
 		viewModel.setAccountNodes(model.getAccounts());
 	}
-	
+
 	@Override
 	public void handleViewEvent(GenericViewEvent e) {
 		e.handle(this);
+	}
+
+	public GenericView getView() {
+		return viewModel.getView();
 	}
 
 //:-- Model events -------------------------------------------------------------
@@ -92,7 +104,7 @@ public class MainPresenter extends GenericPresenter {
 		}
 
 		@Override
-		public void handleModelEvent(DataUpdateModelEvent e) {
+		public void handleModelEvent(JournalUpdatedModelEvent e) {
 			// TODO: Implement
 		}
 
@@ -101,35 +113,6 @@ public class MainPresenter extends GenericPresenter {
 //:-- Presenter events ---------------------------------------------------------
 
 	public static class Events {
-
-//		public static class DummyEvent extends GenericViewEvent {
-//
-//			public DummyEvent(Object source) {
-//				super(source);
-//			}
-//
-//			public void handle(MainPresenter presenter) {
-//
-//				new SwingWorker<String, Object>() {
-//
-//					@Override
-//					public String doInBackground()  {
-//
-//						return null;
-//					}
-//
-//					@Override
-//					protected void done() {
-//						try {
-//
-//						} catch (Exception ignore) {
-//
-//						}
-//					}
-//				}.execute();
-//			}
-//
-//		}
 
 		public static class NodeManagementRequested extends GenericViewEvent {
 
@@ -146,7 +129,7 @@ public class MainPresenter extends GenericPresenter {
 		public static class NodeChanged extends GenericViewEvent {
 
 			DefaultMutableTreeNode node;
-			
+
 			public NodeChanged(Object source, DefaultMutableTreeNode node) {
 				super(source);
 				this.node = node;

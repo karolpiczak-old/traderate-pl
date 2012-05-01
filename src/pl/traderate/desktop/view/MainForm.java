@@ -64,7 +64,7 @@ public class MainForm extends GenericForm {
 
 		frame = new JFrame("Main");
 		frame.setMinimumSize(new Dimension(640, 550));
-		frame.setPreferredSize(new Dimension(1000, 700));
+		frame.setPreferredSize(new Dimension(1200, 800));
 		frame.setContentPane(root);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
@@ -86,5 +86,9 @@ public class MainForm extends GenericForm {
 		tabs.addTab("Dziennik", ((JournalForm) journalView.getForm()).root);
 
 		navigationTree = new JTree();
+	}
+
+	public JFrame getFrame() {
+		return frame;
 	}
 }

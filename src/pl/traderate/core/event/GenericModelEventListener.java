@@ -26,7 +26,7 @@ public interface GenericModelEventListener {
 
 	public void handleModelEvent(GenericModelEvent e);
 
-	public void handleModelEvent(DataUpdateModelEvent e);
+	public void handleModelEvent(JournalUpdatedModelEvent e);
 
 	public void handleModelEvent(QuoteUpdatedModelEvent e);
 }

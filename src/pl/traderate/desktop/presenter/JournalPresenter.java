@@ -21,14 +21,25 @@
 package pl.traderate.desktop.presenter;
 
 import pl.traderate.core.TradeRate;
-import pl.traderate.core.event.DataUpdateModelEvent;
+import pl.traderate.core.event.JournalUpdatedModelEvent;
 import pl.traderate.core.event.GenericModelEvent;
+import pl.traderate.core.exception.EntryInsertionException;
+import pl.traderate.core.exception.InvalidInputException;
+import pl.traderate.core.exception.JournalNotLoadedException;
+import pl.traderate.core.exception.ObjectNotFoundException;
 import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.GenericView;
 import pl.traderate.desktop.view.JournalViewModel;
 
+import javax.swing.*;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.concurrent.ExecutionException;
+
 public class JournalPresenter extends GenericPresenter {
 
+	protected JFrame parentFrame;
+	
 	protected JournalViewModel viewModel;
 
 	protected JournalModelEventHandler modelEventHandler;
@@ -51,6 +62,8 @@ public class JournalPresenter extends GenericPresenter {
 	@Override
 	protected void initializeViewModel() {
 		viewModel.setEntries(model.getEntries());
+		viewModel.setAccounts(model.getAccounts());
+		viewModel.setPortfolios(model.getAllPortfolioNodes());
 	}
 
 	@Override
@@ -62,7 +75,11 @@ public class JournalPresenter extends GenericPresenter {
 		return viewModel.getView();
 	}
 
-//:-- Model events -------------------------------------------------------------
+	public void setParentFrame(JFrame parentFrame) {
+		this.parentFrame = parentFrame;
+	}
+
+	//:-- Model events -------------------------------------------------------------
 
 	protected class JournalModelEventHandler extends GenericModelEventHandler {
 
@@ -77,8 +94,8 @@ public class JournalPresenter extends GenericPresenter {
 		}
 
 		@Override
-		public void handleModelEvent(DataUpdateModelEvent e) {
-
+		public void handleModelEvent(JournalUpdatedModelEvent e) {
+			viewModel.setEntries(model.getEntries());
 		}
 
 	}
@@ -95,6 +112,63 @@ public class JournalPresenter extends GenericPresenter {
 
 			public void handle(JournalPresenter presenter) {
 				presenter.viewModel.setActiveTab(3);
+			}
+		}
+
+		public static class AllocationEntrySubmitted extends GenericViewEvent {
+
+			public AllocationEntrySubmitted(Object source) {
+				super(source);
+			}
+
+			public void handle(final JournalPresenter presenter) {
+				new SwingWorker<String, Object>() {
+
+					@Override
+					public String doInBackground() throws EntryInsertionException, InvalidInputException, ObjectNotFoundException, JournalNotLoadedException {
+						int accountID = presenter.viewModel.getAllocationEntryAccount().ID;
+						int portfolioID = presenter.viewModel.getAllocationEntryPortfolio().ID;
+						Date date = presenter.viewModel.getAllocationEntryDate();
+						BigDecimal amount = presenter.viewModel.getAllocationEntryAmount();
+						String comment = presenter.viewModel.getAllocationEntryComment();
+
+						JournalViewModel.AllocationEntryType entryType = presenter.viewModel.getAllocationEntryType();
+						
+						switch (entryType) {
+							case ALLOCATION:
+								presenter.model.addCashAllocationEntry(accountID, portfolioID, "", date, comment, amount);
+								break;
+							case DEALLOCATION:
+								presenter.model.addCashDeallocationEntry(accountID, portfolioID, "", date, comment, amount);
+								break;
+						}
+
+						return null;
+					}
+
+					@Override
+					protected void done() {
+						try {
+							try {
+								get();
+							} catch (InterruptedException exception) {
+								exception.printStackTrace();
+							} catch (ExecutionException exception) {
+								throw exception.getCause();
+							}
+						} catch (EntryInsertionException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błędna operacja (np. brak pokrycia).", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (InvalidInputException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błędne dane operacji (niepoprawne wartości).", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (ObjectNotFoundException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Podany portfel/konto nie zostały odnalezione.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (JournalNotLoadedException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (Throwable e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}.execute();
 			}
 		}
 	}

@@ -21,7 +21,7 @@
 package pl.traderate.core;
 
 import pl.traderate.core.event.GenericModelEventSource;
-import pl.traderate.core.event.DataUpdateModelEvent;
+import pl.traderate.core.event.JournalUpdatedModelEvent;
 import pl.traderate.core.exception.*;
 
 import java.math.BigDecimal;
@@ -66,7 +66,7 @@ public final class TradeRate extends GenericModelEventSource {
 	public void createJournal(String name, String owner) {
 		journal = new Journal(name, owner);
 
-		fireEvent(new DataUpdateModelEvent(this));
+		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
 	public void openJournal() {
@@ -82,7 +82,7 @@ public final class TradeRate extends GenericModelEventSource {
 		saveJournal();
 		journal = null;
 
-		fireEvent(new DataUpdateModelEvent(this));
+		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
 	/**
@@ -94,7 +94,7 @@ public final class TradeRate extends GenericModelEventSource {
 		assertJournalIsLoaded();
 		journal.addAccount(name);
 
-		fireEvent(new DataUpdateModelEvent(this));
+		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
 	/**
@@ -108,7 +108,7 @@ public final class TradeRate extends GenericModelEventSource {
 		assertJournalIsLoaded();
 		journal.addPortfolio(name, parentID);
 
-		fireEvent(new DataUpdateModelEvent(this));
+		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
 	/**
@@ -128,7 +128,7 @@ public final class TradeRate extends GenericModelEventSource {
 		journal.addBuyEquityTransactionEntry(accountID, portfolioID, tags, date, comment, ticker, quantity, price, commission);
 		journal.update();
 
-		fireEvent(new DataUpdateModelEvent(this));
+		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
 	/**
@@ -148,7 +148,7 @@ public final class TradeRate extends GenericModelEventSource {
 		journal.addSellEquityTransactionEntry(accountID, portfolioID, tags, date, comment, ticker, quantity, price, commission);
 		journal.update();
 
-		fireEvent(new DataUpdateModelEvent(this));
+		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
 	/**
@@ -166,7 +166,7 @@ public final class TradeRate extends GenericModelEventSource {
 		journal.addCashAllocationEntry(accountID, portfolioID, tags, date, comment, amount);
 		journal.update();
 
-		fireEvent(new DataUpdateModelEvent(this));
+		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
 	/**
@@ -184,7 +184,7 @@ public final class TradeRate extends GenericModelEventSource {
 		journal.addCashDeallocationEntry(accountID, portfolioID, tags, date, comment, amount);
 		journal.update();
 
-		fireEvent(new DataUpdateModelEvent(this));
+		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
 	/**
@@ -203,7 +203,7 @@ public final class TradeRate extends GenericModelEventSource {
 		journal.addCashDepositEntry(accountID, tags, date, comment, amount);
 		journal.update();
 
-		fireEvent(new DataUpdateModelEvent(this));
+		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
 	/**
@@ -222,7 +222,7 @@ public final class TradeRate extends GenericModelEventSource {
 		journal.addCashWithdrawalEntry(accountID, tags, date, comment, amount);
 		journal.update();
 
-		fireEvent(new DataUpdateModelEvent(this));
+		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
 	/**
@@ -237,7 +237,7 @@ public final class TradeRate extends GenericModelEventSource {
 		journal.removeEntry(entryID);
 		journal.update();
 
-		fireEvent(new DataUpdateModelEvent(this));
+		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
 	public void updateQuotes() {
@@ -270,6 +270,23 @@ public final class TradeRate extends GenericModelEventSource {
 
 	public PortfolioNodeDTO getPortfolioNodes() {
 		return journal.getGlobalPortfolio().getNodeDTO();
+	}
+
+	public ArrayList<PortfolioNodeDTO> getAllPortfolioNodes() {
+		ArrayList<PortfolioNodeDTO> portfolios = new ArrayList<>();
+		PortfolioNodeDTO root = journal.getGlobalPortfolio().getNodeDTO();
+		portfolios.add(root);
+
+		populateChildNodes(root, portfolios);
+
+		return portfolios;
+	}
+
+	private void populateChildNodes(PortfolioNodeDTO parent, ArrayList<PortfolioNodeDTO> portfolios) {
+		for (PortfolioNodeDTO child : parent.children) {
+			portfolios.add(child);
+			populateChildNodes(child, portfolios);
+		}
 	}
 
 	public PortfolioDetailsDTO getPortfolio(int i) {

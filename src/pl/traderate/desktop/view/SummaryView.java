@@ -52,10 +52,10 @@ public class SummaryView extends GenericView {
 	/**
 	 *
 	 */
-	protected void syncViewModel() {
+	protected void syncViewModel(final Object arg) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				form.portfolioName.setText(viewModel.getPortfolioName());
+				form.portfolioName.setText(viewModel.getNodeName());
 				form.cashAvailable.setText(viewModel.getCashAvailable().toPlainString());
 				form.aggregatedCash.setText(viewModel.getAggregatedCash().toPlainString());
 				form.openHoldingsTreeTable.setModel(viewModel.getOpenHoldingsTreeTable());
