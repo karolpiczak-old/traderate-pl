@@ -23,10 +23,7 @@ package pl.traderate.desktop.presenter;
 import pl.traderate.core.TradeRate;
 import pl.traderate.core.event.JournalUpdatedModelEvent;
 import pl.traderate.core.event.GenericModelEvent;
-import pl.traderate.core.exception.EntryInsertionException;
-import pl.traderate.core.exception.InvalidInputException;
-import pl.traderate.core.exception.JournalNotLoadedException;
-import pl.traderate.core.exception.ObjectNotFoundException;
+import pl.traderate.core.exception.*;
 import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.GenericView;
 import pl.traderate.desktop.view.JournalViewModel;
@@ -140,6 +137,122 @@ public class JournalPresenter extends GenericPresenter {
 								break;
 							case DEALLOCATION:
 								presenter.model.addCashDeallocationEntry(accountID, portfolioID, "", date, comment, amount);
+								break;
+						}
+
+						return null;
+					}
+
+					@Override
+					protected void done() {
+						try {
+							try {
+								get();
+							} catch (InterruptedException exception) {
+								exception.printStackTrace();
+							} catch (ExecutionException exception) {
+								throw exception.getCause();
+							}
+						} catch (EntryInsertionException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błędna operacja (np. brak pokrycia).", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (InvalidInputException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błędne dane operacji (niepoprawne wartości).", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (ObjectNotFoundException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Podany portfel/konto nie zostały odnalezione.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (JournalNotLoadedException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (Throwable e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}.execute();
+			}
+		}
+
+		public static class CashEntrySubmitted extends GenericViewEvent {
+
+			public CashEntrySubmitted(Object source) {
+				super(source);
+			}
+
+			public void handle(final JournalPresenter presenter) {
+				new SwingWorker<String, Object>() {
+
+					@Override
+					public String doInBackground() throws EntryInsertionException, InvalidInputException, ObjectNotFoundException, JournalNotLoadedException {
+						int accountID = presenter.viewModel.getCashEntryAccount().ID;
+						Date date = presenter.viewModel.getCashEntryDate();
+						BigDecimal amount = presenter.viewModel.getCashEntryAmount();
+						String comment = presenter.viewModel.getCashEntryComment();
+
+						JournalViewModel.CashEntryType entryType = presenter.viewModel.getCashEntryType();
+
+						switch (entryType) {
+							case DEPOSIT:
+								presenter.model.addCashDepositEntry(accountID, "", date, comment, amount);
+								break;
+							case WITHDRAWAL:
+								presenter.model.addCashWithdrawalEntry(accountID, "", date, comment, amount);
+								break;
+						}
+
+						return null;
+					}
+
+					@Override
+					protected void done() {
+						try {
+							try {
+								get();
+							} catch (InterruptedException exception) {
+								exception.printStackTrace();
+							} catch (ExecutionException exception) {
+								throw exception.getCause();
+							}
+						} catch (EntryInsertionException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błędna operacja (np. brak pokrycia).", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (InvalidInputException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błędne dane operacji (niepoprawne wartości).", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (ObjectNotFoundException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Podany portfel/konto nie zostały odnalezione.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (JournalNotLoadedException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (Throwable e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}.execute();
+			}
+		}
+
+		public static class EquityEntrySubmitted extends GenericViewEvent {
+
+			public EquityEntrySubmitted(Object source) {
+				super(source);
+			}
+
+			public void handle(final JournalPresenter presenter) {
+				new SwingWorker<String, Object>() {
+
+					@Override
+					public String doInBackground() throws EntryInsertionException, InvalidInputException, ObjectNotFoundException, JournalNotLoadedException, ObjectConstraintsException {
+						int accountID = presenter.viewModel.getEquityEntryAccount().ID;
+						int portfolioID = presenter.viewModel.getEquityEntryPortfolio().ID;
+						Date date = presenter.viewModel.getEquityEntryDate();
+						BigDecimal quantity = presenter.viewModel.getEquityEntryQuantity();
+						BigDecimal price = presenter.viewModel.getEquityEntryPrice();
+						BigDecimal commission = presenter.viewModel.getEquityEntryCommission();
+						String comment = presenter.viewModel.getEquityEntryComment();
+						String ticker = presenter.viewModel.getEquityEntryTicker();
+
+						JournalViewModel.EquityEntryType entryType = presenter.viewModel.getEquityEntryType();
+
+						switch (entryType) {
+							case BUY:
+								presenter.model.addBuyEquityTransactionEntry(accountID, portfolioID, "", date, comment, ticker, quantity, price, commission);
+								break;
+							case SELL:
+								presenter.model.addSellEquityTransactionEntry(accountID, portfolioID, "", date, comment, ticker, quantity, price, commission);
 								break;
 						}
 

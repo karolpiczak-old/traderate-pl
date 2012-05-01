@@ -73,13 +73,19 @@ public class JournalView extends GenericView {
 					switch (syncType) {
 						case NODES:
 							form.allocationEntryAccount.removeAllItems();
+							form.cashEntryAccount.removeAllItems();
+							form.equityEntryAccount.removeAllItems();
 							for (AccountDTO account : viewModel.getAccounts()) {
 								form.allocationEntryAccount.addItem(account);
+								form.cashEntryAccount.addItem(account);
+								form.equityEntryAccount.addItem(account);
 							}
 
 							form.allocationEntryPortfolio.removeAllItems();
+							form.equityEntryPortfolio.removeAllItems();
 							for (PortfolioNodeDTO portfolio : viewModel.getPortfolios()) {
 								form.allocationEntryPortfolio.addItem(portfolio);
+								form.equityEntryPortfolio.addItem(portfolio);
 							}
 							break;
 						case ENTRIES:
@@ -103,6 +109,8 @@ public class JournalView extends GenericView {
 
 	//:-- Listeners for GUI events -------------------------------------------------
 
+	// Allocation entry events
+	
 	public class OnAllocationEntryDateChanged implements ActionListener {
 
 		@Override
@@ -187,6 +195,222 @@ public class JournalView extends GenericView {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			fireEvent(new Events.AllocationEntrySubmitted(this));
+		}
+	}
+	
+	// Cash entry events
+
+	public class OnCashEntryDateChanged implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			viewModel.setCashEntryDate(((DatePicker) e.getSource()).getDate());
+		}
+	}
+
+	public class OnCashEntryAccountChanged implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			AccountDTO selected = (AccountDTO) ((JComboBox) e.getSource()).getSelectedItem();
+			viewModel.setCashEntryAccount(selected);
+		}
+	}
+
+	public class OnCashEntryAmountChanged implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			viewModel.setCashEntryAmount((Double) form.cashEntryAmount.getValue());
+		}
+	}
+
+	public class OnCashEntryTypeChanged implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int index = ((JComboBox) e.getSource()).getSelectedIndex();
+
+			if (index == 0) {
+				viewModel.setCashEntryType(JournalViewModel.CashEntryType.DEPOSIT);
+			} else {
+				viewModel.setCashEntryType(JournalViewModel.CashEntryType.WITHDRAWAL);
+			}
+		}
+	}
+
+	public class OnCashEntryCommentChanged implements DocumentListener {
+
+		public void updated(DocumentEvent e) {
+			Document document = e.getDocument();
+			String comment;
+
+			try {
+				comment = document.getText(0, document.getLength());
+			} catch (BadLocationException exception) {
+				comment = "";
+			}
+
+			viewModel.setCashEntryComment(comment);
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			updated(e);
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			updated(e);
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			updated(e);
+		}
+	}
+
+	public class OnCashEntrySubmitted implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fireEvent(new Events.CashEntrySubmitted(this));
+		}
+	}
+
+	// Equity entry events
+
+	public class OnEquityEntryDateChanged implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			viewModel.setEquityEntryDate(((DatePicker) e.getSource()).getDate());
+		}
+	}
+
+	public class OnEquityEntryAccountChanged implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			AccountDTO selected = (AccountDTO) ((JComboBox) e.getSource()).getSelectedItem();
+			viewModel.setEquityEntryAccount(selected);
+		}
+	}
+
+	public class OnEquityEntryPortfolioChanged implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			PortfolioNodeDTO selected = (PortfolioNodeDTO) ((JComboBox) e.getSource()).getSelectedItem();
+			viewModel.setEquityEntryPortfolio(selected);
+		}
+	}
+
+	public class OnEquityEntryQuantityChanged implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			viewModel.setEquityEntryQuantity((Integer) form.equityEntryQuantity.getValue());
+		}
+	}
+
+	public class OnEquityEntryPriceChanged implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			viewModel.setEquityEntryPrice((Double) form.equityEntryPrice.getValue());
+		}
+	}
+
+	public class OnEquityEntryCommissionChanged implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			viewModel.setEquityEntryCommission((Double) form.equityEntryCommission.getValue());
+		}
+	}
+
+	public class OnEquityEntryTypeChanged implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int index = ((JComboBox) e.getSource()).getSelectedIndex();
+
+			if (index == 0) {
+				viewModel.setEquityEntryType(JournalViewModel.EquityEntryType.BUY);
+			} else {
+				viewModel.setEquityEntryType(JournalViewModel.EquityEntryType.SELL);
+			}
+		}
+	}
+
+	public class OnEquityEntryCommentChanged implements DocumentListener {
+
+		public void updated(DocumentEvent e) {
+			Document document = e.getDocument();
+			String comment;
+
+			try {
+				comment = document.getText(0, document.getLength());
+			} catch (BadLocationException exception) {
+				comment = "";
+			}
+
+			viewModel.setEquityEntryComment(comment);
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			updated(e);
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			updated(e);
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			updated(e);
+		}
+	}
+
+	public class OnEquityEntryTickerChanged implements DocumentListener {
+
+		public void updated(DocumentEvent e) {
+			Document document = e.getDocument();
+			String ticker;
+
+			try {
+				ticker = document.getText(0, document.getLength());
+			} catch (BadLocationException exception) {
+				ticker = "";
+			}
+
+			viewModel.setEquityEntryTicker(ticker);
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			updated(e);
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			updated(e);
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			updated(e);
+		}
+	}
+
+	public class OnEquityEntrySubmitted implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fireEvent(new Events.EquityEntrySubmitted(this));
 		}
 	}
 

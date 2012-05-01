@@ -26,7 +26,6 @@ import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.desktop.presenter.JournalPresenter;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,6 +41,8 @@ public class JournalViewModel extends GenericViewModel {
 	protected ArrayList<AccountDTO> accounts;
 
 	protected ArrayList<PortfolioNodeDTO> portfolios;
+	
+	// Allocation entry
 
 	protected Date allocationEntryDate = new Date();
 
@@ -49,11 +50,43 @@ public class JournalViewModel extends GenericViewModel {
 
 	protected PortfolioNodeDTO allocationEntryPortfolio;
 
-	protected BigDecimal allocationEntryAmount = BigDecimal.ZERO;
+	protected BigDecimal allocationEntryAmount = new BigDecimal("1000.00");
 
 	protected AllocationEntryType allocationEntryType = AllocationEntryType.ALLOCATION;
 
 	protected String allocationEntryComment;
+	
+	// Cash entry
+
+	protected Date cashEntryDate = new Date();
+
+	protected AccountDTO cashEntryAccount;
+
+	protected BigDecimal cashEntryAmount = new BigDecimal("1000.00");
+
+	protected CashEntryType cashEntryType = CashEntryType.DEPOSIT;
+
+	protected String cashEntryComment;
+	
+	// Equity entry
+
+	protected Date equityEntryDate = new Date();
+
+	protected AccountDTO equityEntryAccount;
+
+	protected PortfolioNodeDTO equityEntryPortfolio;
+
+	protected BigDecimal equityEntryQuantity = BigDecimal.ONE;
+
+	protected BigDecimal equityEntryPrice = new BigDecimal("10.00");
+
+	protected BigDecimal equityEntryCommission = BigDecimal.ZERO;
+
+	protected EquityEntryType equityEntryType = EquityEntryType.BUY;
+
+	protected String equityEntryComment;
+
+	protected String equityEntryTicker;
 
 	public JournalViewModel(JournalPresenter presenter) {
 		super(presenter);
@@ -84,14 +117,6 @@ public class JournalViewModel extends GenericViewModel {
 		view.setActiveTab(i);
 	}
 
-	public void setAllocationEntryType(AllocationEntryType allocationEntryType) {
-		this.allocationEntryType = allocationEntryType;
-	}
-
-	public void setAllocationEntryAmount(double allocationEntryAmount) {
-		this.allocationEntryAmount = new BigDecimal(allocationEntryAmount).setScale(2, RoundingMode.HALF_EVEN);
-	}
-
 	public ArrayList<AccountDTO> getAccounts() {
 		return accounts;
 	}
@@ -114,6 +139,16 @@ public class JournalViewModel extends GenericViewModel {
 		notifyChange(SyncType.NODES);
 	}
 
+	// Allocation entry handling
+
+	public void setAllocationEntryType(AllocationEntryType allocationEntryType) {
+		this.allocationEntryType = allocationEntryType;
+	}
+
+	public void setAllocationEntryAmount(double allocationEntryAmount) {
+		this.allocationEntryAmount = new BigDecimal(allocationEntryAmount).setScale(2, RoundingMode.HALF_EVEN);
+	}
+	
 	public void setAllocationEntryPortfolio(PortfolioNodeDTO allocationEntryPortfolio) {
 		this.allocationEntryPortfolio = allocationEntryPortfolio;
 	}
@@ -157,6 +192,132 @@ public class JournalViewModel extends GenericViewModel {
 	public enum AllocationEntryType {
 		ALLOCATION,
 		DEALLOCATION
+	}
+	
+	// Cash entry handling
+
+	public void setCashEntryType(CashEntryType cashEntryType) {
+		this.cashEntryType = cashEntryType;
+	}
+
+	public void setCashEntryAmount(double cashEntryAmount) {
+		this.cashEntryAmount = new BigDecimal(cashEntryAmount).setScale(2, RoundingMode.HALF_EVEN);
+	}
+
+	public void setCashEntryAccount(AccountDTO cashEntryAccount) {
+		this.cashEntryAccount = cashEntryAccount;
+	}
+
+	public void setCashEntryDate(Date cashEntryDate) {
+		this.cashEntryDate = cashEntryDate;
+	}
+
+	public void setCashEntryComment(String cashEntryComment) {
+		this.cashEntryComment = cashEntryComment;
+	}
+
+	public AccountDTO getCashEntryAccount() {
+		return cashEntryAccount;
+	}
+
+	public Date getCashEntryDate() {
+		return cashEntryDate;
+	}
+
+	public BigDecimal getCashEntryAmount() {
+		return cashEntryAmount;
+	}
+
+	public CashEntryType getCashEntryType() {
+		return cashEntryType;
+	}
+
+	public String getCashEntryComment() {
+		return cashEntryComment;
+	}
+
+	public enum CashEntryType {
+		DEPOSIT,
+		WITHDRAWAL
+	}
+
+	// Equity entry handling
+
+	public void setEquityEntryType(EquityEntryType equityEntryType) {
+		this.equityEntryType = equityEntryType;
+	}
+
+	public void setEquityEntryQuantity(int equityEntryQuantity) {
+		this.equityEntryQuantity = new BigDecimal(equityEntryQuantity);
+	}
+
+	public void setEquityEntryPrice(double equityEntryPrice) {
+		this.equityEntryPrice = new BigDecimal(equityEntryPrice).setScale(2, RoundingMode.HALF_EVEN);
+	}
+
+	public void setEquityEntryCommission(double equityEntryCommission) {
+		this.equityEntryCommission = new BigDecimal(equityEntryCommission).setScale(2, RoundingMode.HALF_EVEN);
+	}
+	
+	public void setEquityEntryPortfolio(PortfolioNodeDTO equityEntryPortfolio) {
+		this.equityEntryPortfolio = equityEntryPortfolio;
+	}
+
+	public void setEquityEntryAccount(AccountDTO equityEntryAccount) {
+		this.equityEntryAccount = equityEntryAccount;
+	}
+
+	public void setEquityEntryDate(Date equityEntryDate) {
+		this.equityEntryDate = equityEntryDate;
+	}
+
+	public void setEquityEntryComment(String equityEntryComment) {
+		this.equityEntryComment = equityEntryComment;
+	}
+
+	public void setEquityEntryTicker(String equityEntryTicker) {
+		this.equityEntryTicker = equityEntryTicker;
+	}
+
+	public AccountDTO getEquityEntryAccount() {
+		return equityEntryAccount;
+	}
+
+	public PortfolioNodeDTO getEquityEntryPortfolio() {
+		return equityEntryPortfolio;
+	}
+
+	public Date getEquityEntryDate() {
+		return equityEntryDate;
+	}
+
+	public BigDecimal getEquityEntryQuantity() {
+		return equityEntryQuantity;
+	}
+
+	public BigDecimal getEquityEntryPrice() {
+		return equityEntryPrice;
+	}
+
+	public BigDecimal getEquityEntryCommission() {
+		return equityEntryCommission;
+	}
+
+	public EquityEntryType getEquityEntryType() {
+		return equityEntryType;
+	}
+
+	public String getEquityEntryComment() {
+		return equityEntryComment;
+	}
+
+	public String getEquityEntryTicker() {
+		return equityEntryTicker;
+	}
+
+	public enum EquityEntryType {
+		BUY,
+		SELL
 	}
 
 //:-- ViewModel sync types ---------------------------------------------------------

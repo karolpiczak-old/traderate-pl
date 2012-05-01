@@ -38,6 +38,8 @@ public class JournalForm extends GenericForm {
 
 	JTabbedPane entryCreator;
 
+	// Allocation tab
+	
 	JSpinner allocationEntryAmount;
 
 	JComboBox<String> allocationEntryType;
@@ -50,15 +52,51 @@ public class JournalForm extends GenericForm {
 
 	JButton allocationEntrySubmitButton;
 
-	JPanel equityEntryCreatorTab;
-
-	JPanel cashEntryCreatorTab;
-
 	JPanel allocationEntryCreatorTab;
 
 	JPanel nodesCreatorTab;
 
 	JTextField allocationEntryComment;
+	
+	// Cash tab
+
+	JPanel cashEntryCreatorTab;
+
+	DatePicker cashEntryDate;
+
+	JComboBox<AccountDTO> cashEntryAccount;
+
+	JSpinner cashEntryAmount;
+
+	JComboBox<String> cashEntryType;
+
+	JTextField cashEntryComment;
+
+	JButton cashEntrySubmitButton;
+	
+	// Equity tab
+
+	JPanel equityEntryCreatorTab;
+
+	DatePicker equityEntryDate;
+
+	JComboBox<AccountDTO> equityEntryAccount;
+
+	JComboBox<PortfolioNodeDTO> equityEntryPortfolio;
+
+	JComboBox<String> equityEntryType;
+
+	JTextField equityEntryTicker;
+
+	JSpinner equityEntryQuantity;
+
+	JSpinner equityEntryPrice;
+
+	JSpinner equityEntryCommission;
+
+	JTextField equityEntryComment;
+
+	JButton equityEntrySubmitButton;
 
 	public JournalForm(GenericView view) {
 		super(view);
@@ -71,6 +109,25 @@ public class JournalForm extends GenericForm {
 		allocationEntryType.addActionListener(this.view.new OnAllocationEntryTypeChanged());
 		allocationEntryComment.getDocument().addDocumentListener(this.view.new OnAllocationEntryCommentChanged());
 		allocationEntrySubmitButton.addActionListener(this.view.new OnAllocationEntrySubmitted());
+
+		cashEntryDate.addActionListener(this.view.new OnCashEntryDateChanged());
+		cashEntryAccount.addActionListener(this.view.new OnCashEntryAccountChanged());
+		cashEntryAmount.addChangeListener(this.view.new OnCashEntryAmountChanged());
+		cashEntryType.addActionListener(this.view.new OnCashEntryTypeChanged());
+		cashEntryComment.getDocument().addDocumentListener(this.view.new OnCashEntryCommentChanged());
+		cashEntrySubmitButton.addActionListener(this.view.new OnCashEntrySubmitted());
+
+		equityEntryDate.addActionListener(this.view.new OnEquityEntryDateChanged());
+		equityEntryAccount.addActionListener(this.view.new OnEquityEntryAccountChanged());
+		equityEntryPortfolio.addActionListener(this.view.new OnEquityEntryPortfolioChanged());
+		equityEntryType.addActionListener(this.view.new OnEquityEntryTypeChanged());
+		equityEntryTicker.getDocument().addDocumentListener(this.view.new OnEquityEntryTickerChanged());
+		equityEntryQuantity.addChangeListener(this.view.new OnEquityEntryQuantityChanged());
+		equityEntryPrice.addChangeListener(this.view.new OnEquityEntryPriceChanged());
+		equityEntryCommission.addChangeListener(this.view.new OnEquityEntryCommissionChanged());
+		equityEntryType.addActionListener(this.view.new OnEquityEntryTypeChanged());
+		equityEntryComment.getDocument().addDocumentListener(this.view.new OnEquityEntryCommentChanged());
+		equityEntrySubmitButton.addActionListener(this.view.new OnEquityEntrySubmitted());
 	}
 
 	void show() {
@@ -80,6 +137,18 @@ public class JournalForm extends GenericForm {
 	private void createUIComponents() {
 		entries = new JTable();
 
+		// Cash entry tab
+		cashEntryDate = new DatePicker(new Date(), new SimpleDateFormat("dd.MM.yyyy"));
+
+		String[] cashTypes = { "Wpłata", "Wypłata" };
+		cashEntryType = new JComboBox<String>(cashTypes);
+
+		cashEntryAccount = new JComboBox<AccountDTO>();
+
+		cashEntryAmount = new JSpinner(new SpinnerNumberModel(1000.0, 0.0, 999999999999.99, 1.0));
+		cashEntryAmount.setEditor(new JSpinner.NumberEditor(cashEntryAmount, "0.00"));
+
+		// Allocation entry tab
 		allocationEntryDate = new DatePicker(new Date(), new SimpleDateFormat("dd.MM.yyyy"));
 
 		String[] allocationTypes = { "Alokacja", "Dealokacja" };
@@ -89,7 +158,26 @@ public class JournalForm extends GenericForm {
 
 		allocationEntryPortfolio = new JComboBox<PortfolioNodeDTO>();
 
-		allocationEntryAmount = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 999999999999.99, 1.0));
+		allocationEntryAmount = new JSpinner(new SpinnerNumberModel(1000.0, 0.0, 999999999999.99, 1.0));
 		allocationEntryAmount.setEditor(new JSpinner.NumberEditor(allocationEntryAmount, "0.00"));
+		
+		// Equity entry tab
+		equityEntryDate = new DatePicker(new Date(), new SimpleDateFormat("dd.MM.yyyy"));
+
+		String[] equityTypes = { "Kupno", "Sprzedaż" };
+		equityEntryType = new JComboBox<String>(equityTypes);
+
+		equityEntryAccount = new JComboBox<AccountDTO>();
+
+		equityEntryPortfolio = new JComboBox<PortfolioNodeDTO>();
+
+		equityEntryPrice = new JSpinner(new SpinnerNumberModel(10.0, 0.01, 999999999999.99, 1.0));
+		equityEntryPrice.setEditor(new JSpinner.NumberEditor(equityEntryPrice, "0.00"));
+
+		equityEntryCommission = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 999999999999.99, 1.0));
+		equityEntryCommission.setEditor(new JSpinner.NumberEditor(equityEntryCommission, "0.00"));
+
+		equityEntryQuantity = new JSpinner(new SpinnerNumberModel(1, 1, 999999999, 1));
+		equityEntryQuantity.setEditor(new JSpinner.NumberEditor(equityEntryQuantity, "0"));
 	}
 }

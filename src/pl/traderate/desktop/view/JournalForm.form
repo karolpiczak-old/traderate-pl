@@ -40,23 +40,445 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="f9721" binding="equityEntryCreatorTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="8a4ba" binding="equityEntryCreatorTab" layout-manager="GridLayoutManager" row-count="13" column-count="8" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <tabbedpane title="Zakup/sprzedaż akcji"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
-                <children/>
+                <children>
+                  <component id="c5d3" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Data"/>
+                    </properties>
+                  </component>
+                  <component id="ba257" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Konto"/>
+                    </properties>
+                  </component>
+                  <component id="67175" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Portfel"/>
+                    </properties>
+                  </component>
+                  <component id="4fc9d" class="javax.swing.JComboBox" binding="equityEntryAccount" custom-create="true">
+                    <constraints>
+                      <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="100" height="-1"/>
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="39f6e" class="javax.swing.JComboBox" binding="equityEntryPortfolio" custom-create="true">
+                    <constraints>
+                      <grid row="3" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="100" height="-1"/>
+                        <preferred-size width="200" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="8ee2c" class="com.michaelbaranov.microba.calendar.DatePicker" binding="equityEntryDate" custom-create="true">
+                    <constraints>
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="2" anchor="1" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="100" height="-1"/>
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <vspacer id="d9abf">
+                    <constraints>
+                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="5"/>
+                        <preferred-size width="-1" height="5"/>
+                        <maximum-size width="-1" height="5"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <vspacer id="4f4fb">
+                    <constraints>
+                      <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="15"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <vspacer id="40a66">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="10"/>
+                        <preferred-size width="-1" height="10"/>
+                        <maximum-size width="-1" height="10"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <hspacer id="dea12">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="15" height="-1"/>
+                        <preferred-size width="15" height="-1"/>
+                        <maximum-size width="15" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <hspacer id="5a419">
+                    <constraints>
+                      <grid row="3" column="7" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="15" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <vspacer id="9e47f">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="5"/>
+                        <preferred-size width="-1" height="5"/>
+                        <maximum-size width="-1" height="5"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <vspacer id="f07bb">
+                    <constraints>
+                      <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="5"/>
+                        <preferred-size width="-1" height="5"/>
+                        <maximum-size width="-1" height="5"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <component id="82cac" class="javax.swing.JTextField" binding="equityEntryComment">
+                    <constraints>
+                      <grid row="11" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                    <clientProperties>
+                      <caretAspectRatio class="java.lang.Float" value="0.04"/>
+                    </clientProperties>
+                  </component>
+                  <vspacer id="bd838">
+                    <constraints>
+                      <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="5"/>
+                        <preferred-size width="-1" height="5"/>
+                        <maximum-size width="-1" height="5"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <component id="8a730" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="9" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Komentarz"/>
+                    </properties>
+                  </component>
+                  <component id="ed1f4" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Ticker"/>
+                    </properties>
+                  </component>
+                  <component id="e51ec" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Typ operacji"/>
+                    </properties>
+                  </component>
+                  <hspacer id="23f16">
+                    <constraints>
+                      <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="15" height="-1"/>
+                        <preferred-size width="15" height="-1"/>
+                        <maximum-size width="15" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <component id="c61ac" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Ilość"/>
+                    </properties>
+                  </component>
+                  <component id="bfc0f" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Cena"/>
+                    </properties>
+                  </component>
+                  <component id="b4b44" class="javax.swing.JSpinner" binding="equityEntryQuantity" custom-create="true">
+                    <constraints>
+                      <grid row="7" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="100" height="-1"/>
+                        <preferred-size width="100" height="-1"/>
+                        <maximum-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <vspacer id="760ba">
+                    <constraints>
+                      <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="5"/>
+                        <preferred-size width="-1" height="5"/>
+                        <maximum-size width="-1" height="5"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <component id="26ccb" class="javax.swing.JSpinner" binding="equityEntryPrice" custom-create="true">
+                    <constraints>
+                      <grid row="7" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="100" height="-1"/>
+                        <preferred-size width="100" height="-1"/>
+                        <maximum-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="cb406" class="javax.swing.JTextField" binding="equityEntryTicker">
+                    <constraints>
+                      <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                    <clientProperties>
+                      <caretAspectRatio class="java.lang.Float" value="0.04"/>
+                    </clientProperties>
+                  </component>
+                  <component id="19894" class="javax.swing.JComboBox" binding="equityEntryType" custom-create="true">
+                    <constraints>
+                      <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="150" height="-1"/>
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="bee7d" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="9" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Prowizja"/>
+                    </properties>
+                  </component>
+                  <component id="2219a" class="javax.swing.JSpinner" binding="equityEntryCommission" custom-create="true">
+                    <constraints>
+                      <grid row="11" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="100" height="-1"/>
+                        <preferred-size width="100" height="-1"/>
+                        <maximum-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="c3eec" class="javax.swing.JButton" binding="equityEntrySubmitButton">
+                    <constraints>
+                      <grid row="11" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Wprowadź"/>
+                    </properties>
+                  </component>
+                </children>
               </grid>
-              <grid id="d96cd" binding="cashEntryCreatorTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="16010" binding="cashEntryCreatorTab" layout-manager="GridLayoutManager" row-count="9" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <tabbedpane title="Wpłata/wypłata"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
-                <children/>
+                <children>
+                  <component id="7a199" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Data"/>
+                    </properties>
+                  </component>
+                  <component id="8812d" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Konto"/>
+                    </properties>
+                  </component>
+                  <component id="146d1" class="javax.swing.JSpinner" binding="cashEntryAmount" custom-create="true">
+                    <constraints>
+                      <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="100" height="-1"/>
+                        <preferred-size width="100" height="-1"/>
+                        <maximum-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="f639b" class="javax.swing.JComboBox" binding="cashEntryAccount" custom-create="true">
+                    <constraints>
+                      <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="100" height="-1"/>
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="3d934" class="com.michaelbaranov.microba.calendar.DatePicker" binding="cashEntryDate" custom-create="true">
+                    <constraints>
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="2" anchor="1" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="100" height="-1"/>
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <vspacer id="2294b">
+                    <constraints>
+                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="5"/>
+                        <preferred-size width="-1" height="5"/>
+                        <maximum-size width="-1" height="5"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <vspacer id="f310e">
+                    <constraints>
+                      <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="15"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <vspacer id="368d8">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="10"/>
+                        <preferred-size width="-1" height="10"/>
+                        <maximum-size width="-1" height="10"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <hspacer id="5a455">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="15" height="-1"/>
+                        <preferred-size width="15" height="-1"/>
+                        <maximum-size width="15" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <hspacer id="3efc7">
+                    <constraints>
+                      <grid row="3" column="6" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="15" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <component id="80150" class="javax.swing.JComboBox" binding="cashEntryType" custom-create="true">
+                    <constraints>
+                      <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="150" height="-1"/>
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="32f82" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Typ operacji"/>
+                    </properties>
+                  </component>
+                  <vspacer id="4262d">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="5"/>
+                        <preferred-size width="-1" height="5"/>
+                        <maximum-size width="-1" height="5"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <vspacer id="82a78">
+                    <constraints>
+                      <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="5"/>
+                        <preferred-size width="-1" height="5"/>
+                        <maximum-size width="-1" height="5"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <component id="7959d" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="5" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Komentarz"/>
+                    </properties>
+                  </component>
+                  <component id="c676" class="javax.swing.JTextField" binding="cashEntryComment">
+                    <constraints>
+                      <grid row="7" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                    <clientProperties>
+                      <caretAspectRatio class="java.lang.Float" value="0.04"/>
+                    </clientProperties>
+                  </component>
+                  <hspacer id="5cb1a">
+                    <constraints>
+                      <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="15" height="-1"/>
+                        <preferred-size width="15" height="-1"/>
+                        <maximum-size width="15" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <component id="51007" class="javax.swing.JButton" binding="cashEntrySubmitButton">
+                    <constraints>
+                      <grid row="7" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Wprowadź"/>
+                    </properties>
+                  </component>
+                  <component id="cc2ef" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <maximum-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <text value="Kwota"/>
+                    </properties>
+                  </component>
+                </children>
               </grid>
               <grid id="f72f3" binding="allocationEntryCreatorTab" layout-manager="GridLayoutManager" row-count="9" column-count="8" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
@@ -251,14 +673,48 @@
                   </component>
                 </children>
               </grid>
-              <grid id="40ae4" binding="nodesCreatorTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="40ae4" binding="nodesCreatorTab" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <tabbedpane title="Zarządzanie portfelami/kontami"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
-                <children/>
+                <children>
+                  <hspacer id="7d522">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="15" height="-1"/>
+                        <preferred-size width="15" height="-1"/>
+                        <maximum-size width="15" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <vspacer id="77b36">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="10"/>
+                        <preferred-size width="-1" height="10"/>
+                        <maximum-size width="-1" height="10"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <hspacer id="95aab">
+                    <constraints>
+                      <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="15" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <component id="3200a" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Konto"/>
+                    </properties>
+                  </component>
+                </children>
               </grid>
             </children>
           </tabbedpane>
