@@ -20,8 +20,16 @@
 
 package pl.traderate.desktop.view;
 
+import org.pushingpixels.substance.api.SubstanceLookAndFeel;
+import org.pushingpixels.substance.api.SubstanceSkin;
+import org.pushingpixels.substance.api.renderers.SubstanceDefaultComboBoxRenderer;
+import org.pushingpixels.substance.api.skin.SkinInfo;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class MainForm extends GenericForm {
 
@@ -55,6 +63,8 @@ public class MainForm extends GenericForm {
 
 	JLabel versionText;
 
+	JComboBox changeSkin;
+
 	MainForm(GenericView view, GenericView summaryView, GenericView journalView) {
 		super(view);
 		this.view = (MainView) super.view;
@@ -86,6 +96,49 @@ public class MainForm extends GenericForm {
 		tabs.addTab("Dziennik", ((JournalForm) journalView.getForm()).root);
 
 		navigationTree = new JTree();
+
+		changeSkin = new SubstanceSkinComboSelector();
+	}
+
+	public class SubstanceSkinComboSelector extends JComboBox {
+		public SubstanceSkinComboSelector() {
+			// populate the combobox
+			super(new ArrayList<SkinInfo>(SubstanceLookAndFeel.getAllSkins().values()).toArray());
+			// set the current skin as the selected item
+			SubstanceSkin currentSkin = SubstanceLookAndFeel.getCurrentSkin();
+			for (SkinInfo skinInfo : SubstanceLookAndFeel.getAllSkins().values()) {
+				if (skinInfo.getDisplayName().compareTo(
+						currentSkin.getDisplayName()) == 0) {
+					this.setSelectedItem(skinInfo);
+					break;
+				}
+			}
+			// set custom renderer to show the skin display name
+			this.setRenderer(new SubstanceDefaultComboBoxRenderer(this) {
+				@Override
+				public Component getListCellRendererComponent(JList list,
+				                                              Object value, int index, boolean isSelected,
+				                                              boolean cellHasFocus) {
+					return super.getListCellRendererComponent(list,
+							((SkinInfo) value).getDisplayName(), index, isSelected,
+							cellHasFocus);
+				}
+			});
+			// add an action listener to change skin based on user selection
+			this.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							SubstanceLookAndFeel
+									.setSkin(((SkinInfo) SubstanceSkinComboSelector.this
+											.getSelectedItem()).getClassName());
+						}
+					});
+				}
+			});
+		}
 	}
 
 	public JFrame getFrame() {

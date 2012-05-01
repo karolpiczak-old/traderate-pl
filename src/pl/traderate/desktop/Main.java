@@ -20,15 +20,18 @@
 
 package pl.traderate.desktop;
 
+import org.pushingpixels.substance.api.skin.*;
+
 import javax.swing.*;
 
 public class Main {
 
 	public static void main(String[] args) {
 		try {
-			UIManager.setLookAndFeel(
-			UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+			//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(new SubstanceMarinerLookAndFeel());
+		//} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
 

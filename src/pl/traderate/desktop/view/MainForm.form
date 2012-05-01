@@ -193,7 +193,12 @@
               <JToolBar.isRollover class="java.lang.Boolean" value="false"/>
             </clientProperties>
             <border type="none"/>
-            <children/>
+            <children>
+              <component id="16bb1" class="javax.swing.JComboBox" binding="changeSkin" custom-create="true">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
           </toolbar>
         </children>
       </grid>
