@@ -20,6 +20,7 @@
 
 package pl.traderate.desktop.presenter;
 
+import pl.traderate.core.JournalEntryDTO;
 import pl.traderate.core.TradeRate;
 import pl.traderate.core.event.JournalUpdatedModelEvent;
 import pl.traderate.core.event.GenericModelEvent;
@@ -27,7 +28,6 @@ import pl.traderate.core.event.NodesUpdatedModelEvent;
 import pl.traderate.core.exception.*;
 import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.GenericView;
-import pl.traderate.desktop.view.JournalView;
 import pl.traderate.desktop.view.JournalViewModel;
 
 import javax.swing.*;
@@ -446,6 +446,47 @@ public class JournalPresenter extends GenericPresenter {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Wybrany portfel posiada podportfele lub istniejącą już historię operacji.\nNie jest możliwe usunięcie portfela bez wcześniejszego usunięcia zapisanych operacji i portfeli podrzędnych.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (GlobalPortfolioRemovalException e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Nie można usunąć portfela globalnego.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (Throwable e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}.execute();
+			}
+		}
+
+		public static class RemoveEntriesRequested extends GenericViewEvent {
+
+			public RemoveEntriesRequested(Object source) {
+				super(source);
+			}
+
+			public void handle(final JournalPresenter presenter) {
+				new SwingWorker<String, Object>() {
+
+					@Override
+					public String doInBackground() throws EntryInsertionException, ObjectNotFoundException, JournalNotLoadedException {
+						for (JournalEntryDTO entry : presenter.viewModel.getJournalTable().getEntriesToDelete()) {
+							presenter.model.removeEntry(entry.ID);
+						}
+						return null;
+					}
+
+					@Override
+					protected void done() {
+						try {
+							try {
+								get();
+							} catch (InterruptedException exception) {
+								exception.printStackTrace();
+							} catch (ExecutionException exception) {
+								throw exception.getCause();
+							}
+						} catch (JournalNotLoadedException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (ObjectNotFoundException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żądana operacja nie została znaleziona.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (EntryInsertionException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd rekonstrukcji historii.\nNajprawdopodobniej usunięcie jednej z wybranych operacji powoduje powstanie niespójnej historii konta/portfela.\nSpróbuj najpierw usunąć późniejsze operacje zależne.\n\nUsunięte zostały wszystkie zaznaczone operacje do momentu powstania niespójności.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (Throwable e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						}

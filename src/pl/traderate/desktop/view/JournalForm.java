@@ -123,6 +123,8 @@ public class JournalForm extends GenericForm {
 
 	JComboBox<AccountDTO> removeAccountSelector;
 
+	private JButton removeEntriesButton;
+
 	public JournalForm(GenericView view) {
 		super(view);
 		this.view = (JournalView) super.view;
@@ -163,6 +165,8 @@ public class JournalForm extends GenericForm {
 		addPortfolioParentSelector.addActionListener(this.view.new OnAddPortfolioParentChanged());
 		removePortfolioSelector.addActionListener(this.view.new OnRemovePortfolioChanged());
 		removeAccountSelector.addActionListener(this.view.new OnRemoveAccountChanged());
+
+		removeEntriesButton.addActionListener(this.view.new OnRemoveEntriesRequested());
 	}
 
 	void show() {

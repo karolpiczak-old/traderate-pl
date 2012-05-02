@@ -24,8 +24,10 @@ import pl.traderate.core.exception.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -146,6 +148,7 @@ class Journal {
 		quantity = sanitizeQuantity(quantity);
 		price = sanitizePrice(price);
 		commission = sanitizeCommission(commission);
+		date = sanitizeDate(date);
 
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
@@ -166,6 +169,7 @@ class Journal {
 		quantity = sanitizeQuantity(quantity);
 		price = sanitizePrice(price);
 		commission = sanitizeCommission(commission);
+		date = sanitizeDate(date);
 
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
@@ -192,6 +196,7 @@ class Journal {
 		assertNumberIsPositive(amount);
 
 		amount = sanitizeCashAmount(amount);
+		date = sanitizeDate(date);
 
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
@@ -217,6 +222,7 @@ class Journal {
 		assertNumberIsPositive(amount);
 
 		amount = sanitizeCashAmount(amount);
+		date = sanitizeDate(date);
 
 		Account account = findObjectByID(accountID, accounts);
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
@@ -242,6 +248,7 @@ class Journal {
 		assertNumberIsPositive(amount);
 
 		amount = sanitizeCashAmount(amount);
+		date = sanitizeDate(date);
 
 		Account account = findObjectByID(accountID, accounts);
 
@@ -265,6 +272,7 @@ class Journal {
 		assertNumberIsPositive(amount);
 
 		amount = sanitizeCashAmount(amount);
+		date = sanitizeDate(date);
 
 		Account account = findObjectByID(accountID, accounts);
 
@@ -454,5 +462,22 @@ class Journal {
 	private BigDecimal sanitizeCashAmount(BigDecimal number) {
 		number = number.setScale(2, RoundingMode.HALF_EVEN);
 		return number;
+	}
+
+	private Date sanitizeDate(Date date) {
+		SimpleDateFormat dateResolution = new SimpleDateFormat("dd.MM.yyyy");
+		String dateString = dateResolution.format(date);
+		Date roundedDate = null;
+
+		try {
+			roundedDate = dateResolution.parse(dateString);
+		} catch (ParseException e) {
+			throw new InternalLogicError();
+		}
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(roundedDate);
+		calendar.add(Calendar.HOUR, 12);
+		return calendar.getTime();
 	}
 }

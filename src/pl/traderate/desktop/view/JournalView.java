@@ -543,4 +543,12 @@ public class JournalView extends GenericView {
 		}
 	}
 
+	public class OnRemoveEntriesRequested implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fireEvent(new Events.RemoveEntriesRequested(this));
+		}
+	}
+
 }

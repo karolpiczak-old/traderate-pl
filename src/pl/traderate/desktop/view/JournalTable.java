@@ -45,13 +45,16 @@ public class JournalTable implements TableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 11;
+		return 12;
 	}
 
 	@Override
 	public Class<?> getColumnClass(int i) {
 		switch (i) {
-			default: return String.class;
+			case 11:
+				return Boolean.class;
+			default:
+				return String.class;
 		}
 	}
 
@@ -80,6 +83,8 @@ public class JournalTable implements TableModel {
 				return "Prowizja";
 			case 10:
 				return "Komentarz";
+			case 11:
+				return "Usuń";
 			default: return "";
 		}
 	}
@@ -105,6 +110,10 @@ public class JournalTable implements TableModel {
 		table.getColumnModel().getColumn(9).setCellRenderer(rightRenderer);
 
 		table.setIntercellSpacing(new Dimension(20, 3));
+
+		table.getColumnModel().getColumn(11).setMinWidth(40);
+		table.getColumnModel().getColumn(11).setPreferredWidth(40);
+		table.getColumnModel().getColumn(11).setMaxWidth(40);
 	}
 
 	@Override
@@ -133,17 +142,23 @@ public class JournalTable implements TableModel {
 				return entry.commission == null ? "---" : entry.commission;
 			case 10:
 				return entry.comment;
+			case 11:
+				return entry.deleteFlag;
 			default: return "";
 		}
 	}
 
 	@Override
-	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-
+	public void setValueAt(Object value, int row, int column) {
+		if (column == 11) {
+			JournalEntryDTO entry = entries.get(row);
+			entry.deleteFlag = (Boolean) value;
+		}
 	}
 
 	@Override
-	public boolean isCellEditable(int rowIndex, int columnIndex) {
+	public boolean isCellEditable(int row, int column) {
+		if (column == 11) return true;
 		return false;
 	}
 
@@ -155,6 +170,17 @@ public class JournalTable implements TableModel {
 	@Override
 	public void removeTableModelListener(TableModelListener l) {
 
+	}
+
+	public ArrayList<JournalEntryDTO> getEntriesToDelete() {
+		ArrayList<JournalEntryDTO> entriesToDelete = new ArrayList<>();
+		for (JournalEntryDTO entry : entries) {
+			if (entry.deleteFlag) {
+				entriesToDelete.add(entry);
+			}
+		}
+
+		return entriesToDelete;
 	}
 	
 	public class TypeCellRenderer extends DefaultTableCellRenderer {

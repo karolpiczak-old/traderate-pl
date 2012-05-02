@@ -139,14 +139,12 @@ public class JournalViewModel extends GenericViewModel {
 
 	public void setAccounts(ArrayList<AccountDTO> accounts) {
 		this.accounts = accounts;
-		this.allocationEntryAccount = this.accounts.get(0);
 
 		notifyChange(SyncType.NODES);
 	}
 
 	public void setPortfolios(ArrayList<PortfolioNodeDTO> portfolios) {
 		this.portfolios = portfolios;
-		this.allocationEntryPortfolio = this.portfolios.get(0);
 
 		notifyChange(SyncType.NODES);
 	}

@@ -87,7 +87,8 @@ abstract class JournalEntry implements Serializable, Identifiable {
 
 		@Override
 		public int compare(JournalEntry o1, JournalEntry o2) {
-			return o1.getDate().compareTo(o2.getDate());
+			int comparison = o1.date.compareTo(o2.date);
+			return (comparison == 0) ? ((Integer) o1.ID).compareTo(o2.ID) : comparison;
 		}
 	}
 }

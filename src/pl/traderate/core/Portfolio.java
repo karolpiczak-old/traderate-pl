@@ -207,6 +207,8 @@ class Portfolio implements Identifiable {
 	void update() {
 		holdings.update();
 		updateHoldingsAggregates();
+		updateCashBalance();
+		updateCashAggregates();
 	}
 
 	public void applyEntry(BuyEquityTransactionEntry entry) throws EntryInsertionException {

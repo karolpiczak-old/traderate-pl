@@ -46,12 +46,15 @@ public class JournalEntryDTO implements Comparable<JournalEntryDTO> {
 	public BigDecimal price;
 
 	public BigDecimal commission;
-	
+
+	public Boolean deleteFlag;
+
 	JournalEntryDTO(JournalEntry entry) {
 		this.ID = entry.ID;
 		this.date = new Date(entry.date.getTime());
 		this.comment = entry.comment;
 		this.account = entry.account.getDTO();
+		this.deleteFlag = Boolean.FALSE;
 
 		entry.apply(this);
 	}
