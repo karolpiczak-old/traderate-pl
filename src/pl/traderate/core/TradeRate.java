@@ -152,6 +152,7 @@ public final class TradeRate extends GenericModelEventSource {
 		assertJournalIsLoaded();
 		journal.addBuyEquityTransactionEntry(accountID, portfolioID, tags, date, comment, ticker, quantity, price, commission);
 		journal.update();
+		updateQuotes();
 
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}
@@ -172,6 +173,7 @@ public final class TradeRate extends GenericModelEventSource {
 		assertJournalIsLoaded();
 		journal.addSellEquityTransactionEntry(accountID, portfolioID, tags, date, comment, ticker, quantity, price, commission);
 		journal.update();
+		updateQuotes();
 
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}

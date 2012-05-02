@@ -20,16 +20,8 @@
 
 package pl.traderate.desktop.view;
 
-import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.SubstanceSkin;
-import org.pushingpixels.substance.api.renderers.SubstanceDefaultComboBoxRenderer;
-import org.pushingpixels.substance.api.skin.SkinInfo;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class MainForm extends GenericForm {
 
@@ -63,6 +55,16 @@ public class MainForm extends GenericForm {
 
 	JLabel versionText;
 
+	JButton updateButton;
+
+	JButton newJournalButton;
+
+	JButton openJournalButton;
+
+	JButton saveJournalButton;
+
+	JButton closeJournalButton;
+
 	MainForm(GenericView view, GenericView summaryView, GenericView journalView) {
 		super(view);
 		this.view = (MainView) super.view;
@@ -78,6 +80,7 @@ public class MainForm extends GenericForm {
 		frame.pack();
 
 		manageTreeButton.addActionListener(this.view.new OnManageButtonClicked());
+		updateButton.addActionListener(this.view.new OnUpdateButtonClicked());
 	}
 
 	void show() {

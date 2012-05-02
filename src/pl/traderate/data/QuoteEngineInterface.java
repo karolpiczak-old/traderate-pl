@@ -20,6 +20,10 @@
 
 package pl.traderate.data;
 
+import java.math.BigDecimal;
+
 interface QuoteEngineInterface {
+
+	public BigDecimal getLast(String ticker);
 
 }

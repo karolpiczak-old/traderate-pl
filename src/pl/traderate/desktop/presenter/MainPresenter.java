@@ -25,6 +25,7 @@ import pl.traderate.core.PortfolioDetailsDTO;
 import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.core.TradeRate;
 import pl.traderate.core.event.*;
+import pl.traderate.core.exception.JournalNotLoadedException;
 import pl.traderate.core.exception.ObjectNotFoundException;
 import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.GenericView;
@@ -130,6 +131,28 @@ public class MainPresenter extends GenericPresenter {
 			public void handle(MainPresenter presenter) {
 				presenter.journalPresenter.handleViewEvent(new JournalPresenter.Events.NodeTabRequested(this));
 				presenter.viewModel.setActiveTab(1);
+			}
+		}
+
+		public static class QuoteUpdateRequested extends GenericViewEvent {
+
+			public QuoteUpdateRequested(Object source) {
+				super(source);
+			}
+
+			public void handle(final MainPresenter presenter) {
+				new SwingWorker<String, Object>() {
+
+					@Override
+					public String doInBackground() {
+						try {
+							presenter.model.updateQuotes();
+						} catch (JournalNotLoadedException e) {
+							return null;
+						}
+						return null;
+					}
+				}.execute();
 			}
 		}
 

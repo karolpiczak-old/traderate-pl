@@ -94,6 +94,14 @@ public class MainView extends GenericView {
 		}
 	}
 
+	public class OnUpdateButtonClicked implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fireEvent(new Events.QuoteUpdateRequested(this));
+		}
+	}
+
 	public class OnNodeSelected implements TreeSelectionListener {
 
 		@Override

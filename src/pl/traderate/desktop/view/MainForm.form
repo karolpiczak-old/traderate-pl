@@ -195,7 +195,63 @@
               <JToolBar.isRollover class="java.lang.Boolean" value="false"/>
             </clientProperties>
             <border type="none"/>
-            <children/>
+            <children>
+              <component id="7f471" class="javax.swing.JButton" binding="newJournalButton">
+                <constraints/>
+                <properties>
+                  <icon value="pl/traderate/desktop/icons/new.png"/>
+                  <text value="Nowy dziennik"/>
+                  <toolTipText value="Stwórz nowy dziennik"/>
+                </properties>
+              </component>
+              <component id="48f1e" class="javax.swing.JButton" binding="openJournalButton">
+                <constraints/>
+                <properties>
+                  <icon value="pl/traderate/desktop/icons/open.png"/>
+                  <text value="Wczytaj..."/>
+                  <toolTipText value="Otwórz plik dziennika"/>
+                </properties>
+              </component>
+              <component id="bf7cb" class="javax.swing.JButton" binding="saveJournalButton">
+                <constraints/>
+                <properties>
+                  <icon value="pl/traderate/desktop/icons/save.png"/>
+                  <text value="Zapisz"/>
+                  <toolTipText value="Zapisz otwarty dziennik"/>
+                </properties>
+              </component>
+              <component id="a37b" class="javax.swing.JButton">
+                <constraints/>
+                <properties>
+                  <icon value="pl/traderate/desktop/icons/saveas.png"/>
+                  <text value="Zapisz jako..."/>
+                  <toolTipText value="Zapisz otwarty dziennik do wybranego pliku"/>
+                </properties>
+              </component>
+              <component id="b9e90" class="javax.swing.JButton" binding="closeJournalButton">
+                <constraints/>
+                <properties>
+                  <icon value="pl/traderate/desktop/icons/close.png"/>
+                  <text value="Zamknij"/>
+                  <toolTipText value="Zamknij bieżący dziennik"/>
+                </properties>
+              </component>
+              <component id="1475f" class="javax.swing.JSeparator">
+                <constraints/>
+                <properties>
+                  <orientation value="1"/>
+                </properties>
+              </component>
+              <component id="c27c5" class="javax.swing.JButton" binding="updateButton">
+                <constraints/>
+                <properties>
+                  <hideActionText value="false"/>
+                  <icon value="pl/traderate/desktop/icons/update.png"/>
+                  <text value="Odśwież"/>
+                  <toolTipText value="Odśwież notowania"/>
+                </properties>
+              </component>
+            </children>
           </toolbar>
         </children>
       </grid>

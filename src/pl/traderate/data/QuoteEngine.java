@@ -1,8 +1,6 @@
 package pl.traderate.data;
 
-import java.math.BigDecimal;
-
-public class QuoteEngine extends CachedQuoteEngine {
+public class QuoteEngine extends CachingQuoteEngine {
 
 	/** */
 	private final static QuoteEngine instance = new QuoteEngine();
@@ -11,7 +9,7 @@ public class QuoteEngine extends CachedQuoteEngine {
 	 *
 	 */
 	private QuoteEngine() {
-
+		super();
 	}
 
 	/**
@@ -20,12 +18,5 @@ public class QuoteEngine extends CachedQuoteEngine {
 	 */
 	public static QuoteEngine getInstance() {
 		return instance;
-	}
-
-	public BigDecimal getLast(String ticker) {
-		if (ticker.equals("KGHM")) {
-			return new BigDecimal("134.00");
-		}
-		return null;
 	}
 }

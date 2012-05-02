@@ -37,14 +37,14 @@ public class Main {
 
 		Font defaultFont = null;
 		try {
-			defaultFont = Font.createFont(Font.TRUETYPE_FONT, (Main.class.getResourceAsStream("/pl/traderate/desktop/Roboto-Medium.ttf")));
+			defaultFont = Font.createFont(Font.TRUETYPE_FONT, (Main.class.getResourceAsStream("/pl/traderate/desktop/fonts/Roboto-Medium.ttf")));
 		} catch (IOException | FontFormatException e) {
 			e.printStackTrace();
 		}
 
 		Font boldFont = null;
 		try {
-			boldFont = Font.createFont(Font.TRUETYPE_FONT, (Main.class.getResourceAsStream("/pl/traderate/desktop/Roboto-Bold.ttf")));
+			boldFont = Font.createFont(Font.TRUETYPE_FONT, (Main.class.getResourceAsStream("/pl/traderate/desktop/fonts/Roboto-Bold.ttf")));
 		} catch (IOException | FontFormatException e) {
 			e.printStackTrace();
 		}
