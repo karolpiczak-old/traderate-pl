@@ -25,6 +25,7 @@ import pl.traderate.core.PortfolioDetailsDTO;
 import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.core.TradeRate;
 import pl.traderate.core.event.*;
+import pl.traderate.core.exception.ObjectNotFoundException;
 import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.GenericView;
 import pl.traderate.desktop.view.MainViewModel;
@@ -108,6 +109,12 @@ public class MainPresenter extends GenericPresenter {
 			// TODO: Implement
 		}
 
+		@Override
+		public void handleModelEvent(NodesUpdatedModelEvent e) {
+			viewModel.setRootPortfolioNode(model.getPortfolioNodes());
+			viewModel.setAccountNodes(model.getAccounts());
+		}
+
 	}
 
 //:-- Presenter events ---------------------------------------------------------
@@ -137,12 +144,22 @@ public class MainPresenter extends GenericPresenter {
 
 			public void handle(MainPresenter presenter) {
 				if (node.getUserObject() instanceof PortfolioNodeDTO) {
-					PortfolioDetailsDTO portfolio = presenter.model.getPortfolio(((PortfolioNodeDTO) node.getUserObject()).ID);
+					PortfolioDetailsDTO portfolio = null;
+					try {
+						portfolio = presenter.model.getPortfolio(((PortfolioNodeDTO) node.getUserObject()).ID);
+					} catch (ObjectNotFoundException e) {
+						e.printStackTrace();
+					}
 					presenter.summaryPresenter.handleViewEvent(new SummaryPresenter.Events.PortfolioSelected(this, portfolio));
 				}
 
 				if (node.getUserObject() instanceof AccountDTO) {
-					AccountDTO account = presenter.model.getAccount(((AccountDTO) node.getUserObject()).ID);
+					AccountDTO account = null;
+					try {
+						account = presenter.model.getAccount(((AccountDTO) node.getUserObject()).ID);
+					} catch (ObjectNotFoundException e) {
+						e.printStackTrace();
+					}
 					presenter.summaryPresenter.handleViewEvent(new SummaryPresenter.Events.AccountSelected(this, account));
 				}
 			}

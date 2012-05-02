@@ -18,17 +18,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core.event;
+package pl.traderate.core.exception;
 
-public interface GenericModelEventListener {
+public class GlobalPortfolioRemovalException extends Exception {
 
-	public void visitModelEvent(GenericModelEvent e);
-
-	public void handleModelEvent(GenericModelEvent e);
-
-	public void handleModelEvent(JournalUpdatedModelEvent e);
-
-	public void handleModelEvent(QuoteUpdatedModelEvent e);
-
-	public void handleModelEvent(NodesUpdatedModelEvent e);
 }

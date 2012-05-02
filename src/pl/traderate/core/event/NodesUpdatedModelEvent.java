@@ -20,15 +20,14 @@
 
 package pl.traderate.core.event;
 
-public interface GenericModelEventListener {
+public class NodesUpdatedModelEvent extends GenericModelEvent {
 
-	public void visitModelEvent(GenericModelEvent e);
+	public NodesUpdatedModelEvent(Object source) {
+		super(source);
+	}
 
-	public void handleModelEvent(GenericModelEvent e);
-
-	public void handleModelEvent(JournalUpdatedModelEvent e);
-
-	public void handleModelEvent(QuoteUpdatedModelEvent e);
-
-	public void handleModelEvent(NodesUpdatedModelEvent e);
+	@Override
+	public void accept(GenericModelEventListener listener) {
+		listener.handleModelEvent(this);
+	}
 }

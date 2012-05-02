@@ -70,5 +70,10 @@ public abstract class GenericPresenter implements GenericViewEventListener {
 			// TODO: Implement
 		}
 
+		@Override
+		public void handleModelEvent(NodesUpdatedModelEvent e) {
+			// TODO: Implement
+		}
+
 	}
 }

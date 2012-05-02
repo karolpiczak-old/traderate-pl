@@ -346,4 +346,8 @@ class Account implements Identifiable {
 	public AccountDTO getDTO() {
 		return DTO == null ? new AccountDTO(this) : DTO;
 	}
+
+	public ArrayList<JournalEntry> getEntries() {
+		return entries;
+	}
 }

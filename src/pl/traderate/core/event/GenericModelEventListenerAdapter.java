@@ -41,4 +41,9 @@ public abstract class GenericModelEventListenerAdapter implements GenericModelEv
 	public void handleModelEvent(QuoteUpdatedModelEvent e) {
 
 	}
+
+	@Override
+	public void handleModelEvent(NodesUpdatedModelEvent e) {
+
+	}
 }

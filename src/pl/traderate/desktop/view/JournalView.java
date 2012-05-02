@@ -75,17 +75,23 @@ public class JournalView extends GenericView {
 							form.allocationEntryAccount.removeAllItems();
 							form.cashEntryAccount.removeAllItems();
 							form.equityEntryAccount.removeAllItems();
+							form.removeAccountSelector.removeAllItems();
 							for (AccountDTO account : viewModel.getAccounts()) {
 								form.allocationEntryAccount.addItem(account);
 								form.cashEntryAccount.addItem(account);
 								form.equityEntryAccount.addItem(account);
+								form.removeAccountSelector.addItem(account);
 							}
 
 							form.allocationEntryPortfolio.removeAllItems();
 							form.equityEntryPortfolio.removeAllItems();
+							form.addPortfolioParentSelector.removeAllItems();
+							form.removePortfolioSelector.removeAllItems();
 							for (PortfolioNodeDTO portfolio : viewModel.getPortfolios()) {
 								form.allocationEntryPortfolio.addItem(portfolio);
 								form.equityEntryPortfolio.addItem(portfolio);
+								form.addPortfolioParentSelector.addItem(portfolio);
+								form.removePortfolioSelector.addItem(portfolio);
 							}
 							break;
 						case ENTRIES:
@@ -411,6 +417,129 @@ public class JournalView extends GenericView {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			fireEvent(new Events.EquityEntrySubmitted(this));
+		}
+	}
+
+	// Management events
+
+	public class OnAddAccountRequested implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fireEvent(new Events.AddAccountRequested(this));
+		}
+	}
+
+	public class OnAddPortfolioRequested implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fireEvent(new Events.AddPortfolioRequested(this));
+		}
+	}
+
+	public class OnRemoveAccountRequested implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fireEvent(new Events.RemoveAccountRequested(this));
+		}
+	}
+
+	public class OnRemovePortfolioRequested implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fireEvent(new Events.RemovePortfolioRequested(this));
+		}
+	}
+
+	public class OnAddAccountNameChanged implements DocumentListener {
+
+		public void updated(DocumentEvent e) {
+			Document document = e.getDocument();
+			String name;
+
+			try {
+				name = document.getText(0, document.getLength());
+			} catch (BadLocationException exception) {
+				name = "";
+			}
+
+			viewModel.setAddAccountName(name);
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			updated(e);
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			updated(e);
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			updated(e);
+		}
+	}
+
+	public class OnAddPortfolioNameChanged implements DocumentListener {
+
+		public void updated(DocumentEvent e) {
+			Document document = e.getDocument();
+			String name;
+
+			try {
+				name = document.getText(0, document.getLength());
+			} catch (BadLocationException exception) {
+				name = "";
+			}
+
+			viewModel.setAddPortfolioName(name);
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			updated(e);
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			updated(e);
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			updated(e);
+		}
+	}
+
+	public class OnAddPortfolioParentChanged implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			PortfolioNodeDTO selected = (PortfolioNodeDTO) ((JComboBox) e.getSource()).getSelectedItem();
+			viewModel.setAddPortfolioParent(selected);
+		}
+	}
+
+	public class OnRemovePortfolioChanged implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			PortfolioNodeDTO selected = (PortfolioNodeDTO) ((JComboBox) e.getSource()).getSelectedItem();
+			viewModel.setRemovePortfolio(selected);
+		}
+	}
+
+	public class OnRemoveAccountChanged implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			AccountDTO selected = (AccountDTO) ((JComboBox) e.getSource()).getSelectedItem();
+			viewModel.setRemoveAccount(selected);
 		}
 	}
 

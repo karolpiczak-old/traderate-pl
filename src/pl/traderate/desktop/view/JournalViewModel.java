@@ -88,6 +88,18 @@ public class JournalViewModel extends GenericViewModel {
 
 	protected String equityEntryTicker;
 
+	// Management tab
+
+	protected String addPortfolioName = "Nowy portfel";
+
+	protected String addAccountName = "Nowe konto";
+
+	protected AccountDTO removeAccount;
+
+	protected PortfolioNodeDTO removePortfolio;
+
+	protected PortfolioNodeDTO addPortfolioParent;
+
 	public JournalViewModel(JournalPresenter presenter) {
 		super(presenter);
 
@@ -318,6 +330,48 @@ public class JournalViewModel extends GenericViewModel {
 	public enum EquityEntryType {
 		BUY,
 		SELL
+	}
+
+	// Management handling
+
+	public void setAddPortfolioName(String addPortfolioName) {
+		this.addPortfolioName = addPortfolioName;
+	}
+
+	public void setAddAccountName(String addAccountName) {
+		this.addAccountName = addAccountName;
+	}
+
+	public void setRemoveAccount(AccountDTO removeAccount) {
+		this.removeAccount = removeAccount;
+	}
+
+	public void setRemovePortfolio(PortfolioNodeDTO removePortfolio) {
+		this.removePortfolio = removePortfolio;
+	}
+
+	public void setAddPortfolioParent(PortfolioNodeDTO addPortfolioParent) {
+		this.addPortfolioParent = addPortfolioParent;
+	}
+
+	public String getAddAccountName() {
+		return addAccountName;
+	}
+
+	public String getAddPortfolioName() {
+		return addPortfolioName;
+	}
+
+	public PortfolioNodeDTO getAddPortfolioParent() {
+		return addPortfolioParent;
+	}
+
+	public AccountDTO getRemoveAccount() {
+		return removeAccount;
+	}
+
+	public PortfolioNodeDTO getRemovePortfolio() {
+		return removePortfolio;
 	}
 
 //:-- ViewModel sync types ---------------------------------------------------------

@@ -20,10 +20,7 @@
 
 package pl.traderate.core;
 
-import pl.traderate.core.exception.EntryInsertionException;
-import pl.traderate.core.exception.InvalidInputException;
-import pl.traderate.core.exception.ObjectConstraintsException;
-import pl.traderate.core.exception.ObjectNotFoundException;
+import pl.traderate.core.exception.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -98,6 +95,20 @@ class Journal {
 	}
 
 	/**
+	 * 
+	 * @param accountID
+	 */
+	void removeAccount(int accountID) throws ObjectNotFoundException, NodeNotEmptyException {
+		Account account = findObjectByID(accountID, accounts);
+		
+		if (account.getEntries().size() == 0) {
+			accounts.remove(account);
+		} else {
+			throw new NodeNotEmptyException();
+		}
+	}
+
+	/**
 	 *
 	 * @param name
 	 * @param parentID
@@ -105,6 +116,25 @@ class Journal {
 	 */
 	void addPortfolio(String name, int parentID) throws ObjectNotFoundException {
 		portfolios.add(new Portfolio(this, name, findObjectByID(parentID, portfolios)));
+	}
+
+	/**
+	 *
+	 * @param portfolioID
+	 */
+	void removePortfolio(int portfolioID) throws ObjectNotFoundException, NodeNotEmptyException, GlobalPortfolioRemovalException {
+		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
+
+		if (portfolio.getEntries().size() == 0 && portfolio.getChildren().size() == 0) {
+			if (portfolio.getParent() == null) {
+				throw new GlobalPortfolioRemovalException();
+			}
+			
+			portfolio.getParent().removeChild(portfolio);
+			portfolios.remove(portfolio);
+		} else {
+			throw new NodeNotEmptyException();
+		}
 	}
 
 	void addBuyEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws ObjectNotFoundException, EntryInsertionException, ObjectConstraintsException, InvalidInputException {
@@ -335,8 +365,8 @@ class Journal {
 		return accounts;
 	}
 
-	Account getAccount(int i) {
-		return accounts.get(i);
+	Account getAccount(int accountID) throws ObjectNotFoundException {
+		return findObjectByID(accountID, accounts);
 	}
 
 	ArrayList<JournalEntry> getEntries() {
@@ -347,8 +377,8 @@ class Journal {
 		return portfolios.get(0);
 	}
 
-	Portfolio getPortfolio(int i) {
-		return portfolios.get(i);
+	Portfolio getPortfolio(int portfolioID) throws ObjectNotFoundException {
+		return findObjectByID(portfolioID, portfolios);
 	}
 
 	void update() {

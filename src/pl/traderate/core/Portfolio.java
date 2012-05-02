@@ -107,6 +107,10 @@ class Portfolio implements Identifiable {
 		parent.children.add(this);
 	}
 
+	void removeChild(Portfolio portfolio) {
+		children.remove(portfolio);
+	}
+
 	private void initVolatile() {
 		holdings = new HoldingList();
 		aggregatedHoldings = new HoldingList();
@@ -328,5 +332,13 @@ class Portfolio implements Identifiable {
 
 	public PortfolioDetailsDTO getDetailsDTO() {
 		return detailsDTO == null ? new PortfolioDetailsDTO(this) : detailsDTO;
+	}
+
+	public ArrayList<PortfolioEntry> getEntries() {
+		return entries;
+	}
+
+	public Portfolio getParent() {
+		return parent;
 	}
 }

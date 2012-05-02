@@ -37,6 +37,8 @@ public class JournalForm extends GenericForm {
 	
 	JPanel root;
 
+	JPanel rootPanel;
+
 	JTable entries;
 
 	JTabbedPane entryCreator;
@@ -121,8 +123,6 @@ public class JournalForm extends GenericForm {
 
 	JComboBox<AccountDTO> removeAccountSelector;
 
-	private JPanel rootPanel;
-
 	public JournalForm(GenericView view) {
 		super(view);
 		this.view = (JournalView) super.view;
@@ -153,6 +153,16 @@ public class JournalForm extends GenericForm {
 		equityEntryType.addActionListener(this.view.new OnEquityEntryTypeChanged());
 		equityEntryComment.getDocument().addDocumentListener(this.view.new OnEquityEntryCommentChanged());
 		equityEntrySubmitButton.addActionListener(this.view.new OnEquityEntrySubmitted());
+
+		addAccountButton.addActionListener(this.view.new OnAddAccountRequested());
+		addPortfolioButton.addActionListener(this.view.new OnAddPortfolioRequested());
+		removeAccountButton.addActionListener(this.view.new OnRemoveAccountRequested());
+		removePortfolioButton.addActionListener(this.view.new OnRemovePortfolioRequested());
+		addAccountName.getDocument().addDocumentListener(this.view.new OnAddAccountNameChanged());
+		addPortfolioName.getDocument().addDocumentListener(this.view.new OnAddPortfolioNameChanged());
+		addPortfolioParentSelector.addActionListener(this.view.new OnAddPortfolioParentChanged());
+		removePortfolioSelector.addActionListener(this.view.new OnRemovePortfolioChanged());
+		removeAccountSelector.addActionListener(this.view.new OnRemoveAccountChanged());
 	}
 
 	void show() {

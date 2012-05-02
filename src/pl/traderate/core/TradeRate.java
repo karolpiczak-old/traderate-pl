@@ -22,6 +22,7 @@ package pl.traderate.core;
 
 import pl.traderate.core.event.GenericModelEventSource;
 import pl.traderate.core.event.JournalUpdatedModelEvent;
+import pl.traderate.core.event.NodesUpdatedModelEvent;
 import pl.traderate.core.exception.*;
 
 import java.math.BigDecimal;
@@ -94,7 +95,18 @@ public final class TradeRate extends GenericModelEventSource {
 		assertJournalIsLoaded();
 		journal.addAccount(name);
 
-		fireEvent(new JournalUpdatedModelEvent(this));
+		fireEvent(new NodesUpdatedModelEvent(this));
+	}
+
+	/**
+	 *
+	 * @param accountID
+	 */
+	public void removeAccount(int accountID) throws JournalNotLoadedException, ObjectNotFoundException, NodeNotEmptyException {
+		assertJournalIsLoaded();
+		journal.removeAccount(accountID);
+
+		fireEvent(new NodesUpdatedModelEvent(this));
 	}
 
 	/**
@@ -108,7 +120,19 @@ public final class TradeRate extends GenericModelEventSource {
 		assertJournalIsLoaded();
 		journal.addPortfolio(name, parentID);
 
-		fireEvent(new JournalUpdatedModelEvent(this));
+		fireEvent(new NodesUpdatedModelEvent(this));
+	}
+
+	/**
+	 *
+	 * @param portfolioID
+	 * @throws JournalNotLoadedException
+	 */
+	public void removePortfolio(int portfolioID) throws JournalNotLoadedException, ObjectNotFoundException, NodeNotEmptyException, GlobalPortfolioRemovalException {
+		assertJournalIsLoaded();
+		journal.removePortfolio(portfolioID);
+
+		fireEvent(new NodesUpdatedModelEvent(this));
 	}
 
 	/**
@@ -253,8 +277,8 @@ public final class TradeRate extends GenericModelEventSource {
 		return accountDTOs;
 	}
 
-	public AccountDTO getAccount(int i) {
-		return journal.getAccount(i).getDTO();
+	public AccountDTO getAccount(int accountID) throws ObjectNotFoundException {
+		return journal.getAccount(accountID).getDTO();
 	}
 
 	public ArrayList<JournalEntryDTO> getEntries() {
@@ -289,8 +313,8 @@ public final class TradeRate extends GenericModelEventSource {
 		}
 	}
 
-	public PortfolioDetailsDTO getPortfolio(int i) {
-		return journal.getPortfolio(i).getDetailsDTO();
+	public PortfolioDetailsDTO getPortfolio(int portfolioID) throws ObjectNotFoundException {
+		return journal.getPortfolio(portfolioID).getDetailsDTO();
 	}
 
 	/**

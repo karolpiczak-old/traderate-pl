@@ -23,9 +23,11 @@ package pl.traderate.desktop.presenter;
 import pl.traderate.core.TradeRate;
 import pl.traderate.core.event.JournalUpdatedModelEvent;
 import pl.traderate.core.event.GenericModelEvent;
+import pl.traderate.core.event.NodesUpdatedModelEvent;
 import pl.traderate.core.exception.*;
 import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.GenericView;
+import pl.traderate.desktop.view.JournalView;
 import pl.traderate.desktop.view.JournalViewModel;
 
 import javax.swing.*;
@@ -93,6 +95,12 @@ public class JournalPresenter extends GenericPresenter {
 		@Override
 		public void handleModelEvent(JournalUpdatedModelEvent e) {
 			viewModel.setEntries(model.getEntries());
+		}
+
+		@Override
+		public void handleModelEvent(NodesUpdatedModelEvent e) {
+			viewModel.setAccounts(model.getAccounts());
+			viewModel.setPortfolios(model.getAllPortfolioNodes());
 		}
 
 	}
@@ -277,6 +285,167 @@ public class JournalPresenter extends GenericPresenter {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Podany portfel/konto nie zostały odnalezione.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (JournalNotLoadedException e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (Throwable e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}.execute();
+			}
+		}
+
+		public static class AddAccountRequested extends GenericViewEvent {
+
+			public AddAccountRequested(Object source) {
+				super(source);
+			}
+
+			public void handle(final JournalPresenter presenter) {
+				new SwingWorker<String, Object>() {
+
+					@Override
+					public String doInBackground() throws JournalNotLoadedException {
+						String name = presenter.viewModel.getAddAccountName();
+
+						presenter.model.addAccount(name);
+						return null;
+					}
+
+					@Override
+					protected void done() {
+						try {
+							try {
+								get();
+							} catch (InterruptedException exception) {
+								exception.printStackTrace();
+							} catch (ExecutionException exception) {
+								throw exception.getCause();
+							}
+						} catch (JournalNotLoadedException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (Throwable e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}.execute();
+			}
+		}
+
+		public static class RemoveAccountRequested extends GenericViewEvent {
+
+			public RemoveAccountRequested(Object source) {
+				super(source);
+			}
+
+			public void handle(final JournalPresenter presenter) {
+				new SwingWorker<String, Object>() {
+
+					@Override
+					public String doInBackground() throws JournalNotLoadedException, ObjectNotFoundException, NodeNotEmptyException {
+						int accountID = presenter.viewModel.getRemoveAccount().ID;
+
+						presenter.model.removeAccount(accountID);
+						return null;
+					}
+
+					@Override
+					protected void done() {
+						try {
+							try {
+								get();
+							} catch (InterruptedException exception) {
+								exception.printStackTrace();
+							} catch (ExecutionException exception) {
+								throw exception.getCause();
+							}
+						} catch (JournalNotLoadedException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (ObjectNotFoundException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Podane konto nie zostało znalezione.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (NodeNotEmptyException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Wybrane konto posiada historię operacji. Nie jest możliwe usunięcie konta bez wcześniejszego usunięcia zapisanych operacji.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (Throwable e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}.execute();
+			}
+		}
+
+		public static class AddPortfolioRequested extends GenericViewEvent {
+
+			public AddPortfolioRequested(Object source) {
+				super(source);
+			}
+
+			public void handle(final JournalPresenter presenter) {
+				new SwingWorker<String, Object>() {
+
+					@Override
+					public String doInBackground() throws JournalNotLoadedException, ObjectNotFoundException {
+						String name = presenter.viewModel.getAddPortfolioName();
+						int parentID = presenter.viewModel.getAddPortfolioParent().ID;
+
+						presenter.model.addPortfolio(name, parentID);
+						return null;
+					}
+
+					@Override
+					protected void done() {
+						try {
+							try {
+								get();
+							} catch (InterruptedException exception) {
+								exception.printStackTrace();
+							} catch (ExecutionException exception) {
+								throw exception.getCause();
+							}
+						} catch (JournalNotLoadedException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (ObjectNotFoundException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Podany portfel nadrzędny nie został znaleziony.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (Throwable e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}.execute();
+			}
+		}
+
+		public static class RemovePortfolioRequested extends GenericViewEvent {
+
+			public RemovePortfolioRequested(Object source) {
+				super(source);
+			}
+
+			public void handle(final JournalPresenter presenter) {
+				new SwingWorker<String, Object>() {
+
+					@Override
+					public String doInBackground() throws JournalNotLoadedException, ObjectNotFoundException, NodeNotEmptyException, GlobalPortfolioRemovalException {
+						int portfolioID = presenter.viewModel.getRemovePortfolio().ID;
+
+						presenter.model.removePortfolio(portfolioID);
+						return null;
+					}
+
+					@Override
+					protected void done() {
+						try {
+							try {
+								get();
+							} catch (InterruptedException exception) {
+								exception.printStackTrace();
+							} catch (ExecutionException exception) {
+								throw exception.getCause();
+							}
+						} catch (JournalNotLoadedException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (ObjectNotFoundException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Podany portfel nie został znaleziony.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (NodeNotEmptyException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Wybrany portfel posiada podportfele lub istniejącą już historię operacji.\nNie jest możliwe usunięcie portfela bez wcześniejszego usunięcia zapisanych operacji i portfeli podrzędnych.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+						} catch (GlobalPortfolioRemovalException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Nie można usunąć portfela globalnego.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (Throwable e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						}
