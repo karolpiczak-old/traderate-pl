@@ -25,6 +25,9 @@ import pl.traderate.core.AccountDTO;
 import pl.traderate.core.PortfolioNodeDTO;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -118,6 +121,8 @@ public class JournalForm extends GenericForm {
 
 	JComboBox<AccountDTO> removeAccountSelector;
 
+	private JPanel rootPanel;
+
 	public JournalForm(GenericView view) {
 		super(view);
 		this.view = (JournalView) super.view;
@@ -155,6 +160,9 @@ public class JournalForm extends GenericForm {
 	}
 
 	private void createUIComponents() {
+		rootPanel = new JPanel();
+		rootPanel.setBorder(new TitledBorder(new EmptyBorder(5, 5, 5, 5), "Zbiorcze zestawienie operacji", TitledBorder.LEFT, TitledBorder.TOP, (Font) UIManager.get("Panel.font")));
+
 		entries = new JTable();
 
 		// Cash entry tab

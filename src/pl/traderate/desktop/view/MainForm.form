@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="pl.traderate.desktop.view.MainForm">
-  <grid id="27dc6" binding="root" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="root" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="19" y="18" width="1067" height="535"/>
@@ -14,7 +14,7 @@
       <grid id="75857" binding="statusbar" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="3" left="3" bottom="3" right="3"/>
         <constraints>
-          <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false">
+          <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false">
             <minimum-size width="-1" height="30"/>
             <preferred-size width="-1" height="30"/>
             <maximum-size width="-1" height="30"/>
@@ -29,7 +29,7 @@
         <children>
           <component id="1b6d4" class="javax.swing.JProgressBar" binding="progressBar">
             <constraints>
-              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false">
+              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="1" fill="1" indent="0" use-parent-layout="false">
                 <minimum-size width="50" height="20"/>
                 <preferred-size width="100" height="20"/>
                 <maximum-size width="150" height="20"/>
@@ -57,10 +57,12 @@
           </hspacer>
           <component id="e4988" class="javax.swing.JLabel" binding="versionText">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="200" height="-1"/>
+              </grid>
             </constraints>
             <properties>
-              <font size="12"/>
+              <font swing-font="Label.font"/>
               <text value="TradeRate.pl"/>
             </properties>
           </component>
@@ -124,7 +126,7 @@
             <properties>
               <background color="-1"/>
               <enabled value="true"/>
-              <font size="14" style="1"/>
+              <font swing-font="Label.font"/>
               <horizontalAlignment value="0"/>
               <labelFor value="3ba79"/>
               <text value="Portfele i konta"/>
@@ -193,12 +195,7 @@
               <JToolBar.isRollover class="java.lang.Boolean" value="false"/>
             </clientProperties>
             <border type="none"/>
-            <children>
-              <component id="16bb1" class="javax.swing.JComboBox" binding="changeSkin" custom-create="true">
-                <constraints/>
-                <properties/>
-              </component>
-            </children>
+            <children/>
           </toolbar>
         </children>
       </grid>
@@ -211,6 +208,16 @@
           </grid>
         </constraints>
       </hspacer>
+      <component id="69be0" class="javax.swing.JSeparator">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="1" fill="1" indent="0" use-parent-layout="false">
+            <minimum-size width="-1" height="2"/>
+            <preferred-size width="-1" height="2"/>
+            <maximum-size width="-1" height="2"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
     </children>
   </grid>
 </form>
