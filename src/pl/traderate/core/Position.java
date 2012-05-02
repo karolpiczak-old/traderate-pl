@@ -42,6 +42,8 @@ abstract class Position extends PerformanceData implements IdentifiableByName, C
 
 	abstract void update();
 
+	abstract void updateQuotes();
+
 	@Override
 	public int compareTo(Position o) {
 		return this.name.compareTo(o.name);

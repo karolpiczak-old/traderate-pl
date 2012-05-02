@@ -20,5 +20,6 @@
 
 package pl.traderate.data;
 
-public class CachedQuoteEngine extends QuoteEngine {
+class CachedQuoteEngine implements QuoteEngineInterface {
+
 }

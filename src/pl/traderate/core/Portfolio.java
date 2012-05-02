@@ -211,6 +211,11 @@ class Portfolio implements Identifiable {
 		updateCashAggregates();
 	}
 
+	void updateQuotes() {
+		holdings.updateQuotes();
+		aggregatedHoldings.updateQuotes();
+	}
+
 	public void applyEntry(BuyEquityTransactionEntry entry) throws EntryInsertionException {
 		holdings.open(entry);
 		updateCashBalance();

@@ -110,6 +110,32 @@ class EquityHolding extends Holding {
 		}
 	}
 
+	@Override
+	void updateQuotes() {
+		for (EquityPosition position : positions) {
+			position.updateQuotes();
+		}
+
+		marketValue = BigDecimal.ZERO;
+
+		for (EquityPosition position : positions) {
+			lastMarketPrice = position.lastMarketPrice;
+			if (lastMarketPrice != null) {
+				marketValue = marketValue.add(position.marketValue);
+			}
+		}
+
+		if (marketValue.equals(BigDecimal.ZERO)) {
+			lastMarketPrice = null;
+			marketValue = null;
+			paperGain = null;
+			paperGainPercentage = null;
+		} else {
+			paperGain = marketValue.subtract(openValue).subtract(commission);
+			paperGainPercentage = paperGain.divide(openValue, 4, RoundingMode.HALF_EVEN).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_EVEN);
+		}
+	}
+
 	void attach(EquityPosition position) {
 		position.setParent(this);
 		positions.add(position);

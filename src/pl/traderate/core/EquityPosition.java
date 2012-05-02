@@ -87,6 +87,32 @@ class EquityPosition extends Position {
 			}
 		}
 	}
+
+	@Override
+	void updateQuotes() {
+		for (EquityTrade trade : trades) {
+			trade.updateQuotes();
+		}
+		
+		marketValue = BigDecimal.ZERO;
+		
+		for (EquityTrade trade : trades) {
+			lastMarketPrice = trade.lastMarketPrice;
+			if (lastMarketPrice != null) {
+				marketValue = marketValue.add(trade.marketValue);
+			}
+		}
+
+		if (marketValue.equals(BigDecimal.ZERO)) {
+			lastMarketPrice = null;
+			marketValue = null;
+			paperGain = null;
+			paperGainPercentage = null;
+		} else {
+			paperGain = marketValue.subtract(openValue).subtract(commission);
+			paperGainPercentage = paperGain.divide(openValue, 4, RoundingMode.HALF_EVEN).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_EVEN);
+		}
+	}
 	
 	void attach(EquityTrade trade) {
 		trade.setParent(this);

@@ -30,4 +30,9 @@ class FixedIncomeHolding extends Holding {
 	void update() {
 
 	}
+
+	@Override
+	void updateQuotes() {
+
+	}
 }

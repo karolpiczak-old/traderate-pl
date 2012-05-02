@@ -20,6 +20,8 @@
 
 package pl.traderate.core;
 
+import pl.traderate.data.QuoteEngine;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -94,6 +96,20 @@ class EquityTrade extends Trade {
 			closeValue = closePrice.multiply(quantity);
 			realizedGain = closeValue.subtract(openValue).subtract(commission);
 			realizedGainPercentage = realizedGain.divide(openValue, 4, RoundingMode.HALF_EVEN).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_EVEN);
+		}
+	}
+
+	@Override
+	void updateQuotes() {
+		lastMarketPrice = QuoteEngine.getInstance().getLast(ticker);
+		
+		if (lastMarketPrice != null) {
+			marketValue = lastMarketPrice.multiply(quantity);
+			paperGain = marketValue.subtract(openValue).subtract(commission);
+			paperGainPercentage = paperGain.divide(openValue, 4, RoundingMode.HALF_EVEN).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_EVEN);
+		} else {
+			paperGain = null;
+			paperGainPercentage = null;
 		}
 	}
 }

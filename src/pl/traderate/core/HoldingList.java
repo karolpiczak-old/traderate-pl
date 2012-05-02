@@ -165,6 +165,16 @@ final class HoldingList {
 		}
 	}
 
+	void updateQuotes() {
+		for (EquityHolding holding : equityHoldings) {
+			holding.updateQuotes();
+		}
+
+		for (EquityHolding holding : closedEquityHoldings) {
+			holding.updateQuotes();
+		}
+	}
+
 	private void moveToClosed(EquityTrade trade) {
 		EquityHolding closedHolding;
 

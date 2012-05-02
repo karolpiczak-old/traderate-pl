@@ -30,4 +30,9 @@ class DerivativePosition extends Position {
 	void update() {
 
 	}
+
+	@Override
+	void updateQuotes() {
+
+	}
 }

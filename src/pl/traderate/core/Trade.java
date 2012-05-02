@@ -110,4 +110,6 @@ abstract class Trade extends PerformanceData implements Comparable<Trade>, Ident
 	boolean isClosed() {
 		return closed;
 	}
+
+	abstract void updateQuotes();
 }

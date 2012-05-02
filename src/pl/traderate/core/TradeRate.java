@@ -23,6 +23,7 @@ package pl.traderate.core;
 import pl.traderate.core.event.GenericModelEventSource;
 import pl.traderate.core.event.JournalUpdatedModelEvent;
 import pl.traderate.core.event.NodesUpdatedModelEvent;
+import pl.traderate.core.event.QuoteUpdatedModelEvent;
 import pl.traderate.core.exception.*;
 
 import java.math.BigDecimal;
@@ -264,8 +265,11 @@ public final class TradeRate extends GenericModelEventSource {
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
-	public void updateQuotes() {
+	public void updateQuotes() throws JournalNotLoadedException {
+		assertJournalIsLoaded();
+		journal.updateQuotes();
 
+		fireEvent(new QuoteUpdatedModelEvent(this));
 	}
 	
 	public ArrayList<AccountDTO> getAccounts() {

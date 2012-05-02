@@ -44,6 +44,8 @@ abstract class Holding extends PerformanceData implements IdentifiableByName, Co
 
 	abstract void update();
 
+	abstract void updateQuotes();
+
 	@Override
 	public int compareTo(Holding o) {
 		return this.ticker.compareTo(o.ticker);

@@ -18,21 +18,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.data;
 
-class FixedIncomePosition extends Position {
+interface QuoteEngineInterface {
 
-	FixedIncomePosition(String name, boolean closed) {
-		super(name, closed);
-	}
-
-	@Override
-	void update() {
-
-	}
-
-	@Override
-	void updateQuotes() {
-
-	}
 }

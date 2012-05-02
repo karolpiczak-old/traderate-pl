@@ -398,6 +398,16 @@ class Journal {
 			portfolio.update();
 		}
 	}
+
+	void updateQuotes() {
+		for (Account account : accounts) {
+			account.updateQuotes();
+		}
+
+		for (Portfolio portfolio : portfolios) {
+			portfolio.updateQuotes();
+		}
+	}
 	
 	/**
 	 *

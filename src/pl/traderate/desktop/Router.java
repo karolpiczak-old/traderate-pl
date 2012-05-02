@@ -24,6 +24,7 @@ import pl.traderate.core.TradeRate;
 import pl.traderate.core.exception.*;
 import pl.traderate.desktop.presenter.MainPresenter;
 
+import javax.swing.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -82,19 +83,26 @@ public final class Router {
 		model.addSellEquityTransactionEntry(0, 1, "Example tag", new GregorianCalendar(2000, 0, 6).getTime(), "Some comment", "TICKER-A", new BigDecimal("3"), new BigDecimal("10.00"), new BigDecimal("0.00"));
 
 		model.addSellEquityTransactionEntry(0, 2, "Example tag", new GregorianCalendar(2001, 0, 5).getTime(), "Some comment", "TICKER-A", new BigDecimal("5"), new BigDecimal("20.00"), new BigDecimal("0.00"));
-		} catch (ObjectNotFoundException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-		} catch (ObjectConstraintsException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-		} catch (EntryInsertionException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-		} catch (JournalNotLoadedException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-		} catch (InvalidInputException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+
+		model.addBuyEquityTransactionEntry(0, 2, "Example tag", new GregorianCalendar(2000, 0, 2).getTime(), "Some comment", "KGHM", new BigDecimal("1"), new BigDecimal("100.00"), new BigDecimal("3.00"));
+		} catch (ObjectNotFoundException | ObjectConstraintsException | EntryInsertionException | JournalNotLoadedException | InvalidInputException e) {
+			e.printStackTrace();
 		}
 
 		MainPresenter presenter = new MainPresenter(model);
 		presenter.show();
+
+		new SwingWorker<String, Object>() {
+
+			@Override
+			public String doInBackground() {
+				try {
+					model.updateQuotes();
+				} catch (JournalNotLoadedException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+		}.execute();
 	}
 }

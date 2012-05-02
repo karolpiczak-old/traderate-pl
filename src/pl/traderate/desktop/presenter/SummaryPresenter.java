@@ -25,6 +25,7 @@ import pl.traderate.core.PortfolioDetailsDTO;
 import pl.traderate.core.TradeRate;
 import pl.traderate.core.event.JournalUpdatedModelEvent;
 import pl.traderate.core.event.GenericModelEvent;
+import pl.traderate.core.event.QuoteUpdatedModelEvent;
 import pl.traderate.core.exception.ObjectNotFoundException;
 import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.GenericView;
@@ -88,6 +89,29 @@ public class SummaryPresenter extends GenericPresenter {
 			int nodeID = viewModel.getNodeID();
 			SummaryViewModel.NodeType nodeType = viewModel.getNodeType();
 			
+			switch (nodeType) {
+				case ACCOUNT:
+					try {
+						viewModel.setNode(model.getAccount(nodeID));
+					} catch (ObjectNotFoundException e1) {
+						e1.printStackTrace();
+					}
+					break;
+				case PORTFOLIO:
+					try {
+						viewModel.setNode(model.getPortfolio(nodeID));
+					} catch (ObjectNotFoundException e1) {
+						e1.printStackTrace();
+					}
+					break;
+			}
+		}
+
+		@Override
+		public void handleModelEvent(QuoteUpdatedModelEvent e) {
+			int nodeID = viewModel.getNodeID();
+			SummaryViewModel.NodeType nodeType = viewModel.getNodeType();
+
 			switch (nodeType) {
 				case ACCOUNT:
 					try {

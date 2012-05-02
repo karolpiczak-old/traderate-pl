@@ -176,6 +176,10 @@ class Account implements Identifiable {
 		holdings.update();
 	}
 
+	void updateQuotes() {
+		holdings.updateQuotes();
+	}
+
 	/**
 	 *
 	 * @param entry

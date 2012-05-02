@@ -30,4 +30,9 @@ class DerivativeHolding extends Holding {
 	void update() {
 
 	}
+
+	@Override
+	void updateQuotes() {
+
+	}
 }
