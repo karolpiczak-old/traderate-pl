@@ -29,6 +29,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import static pl.traderate.desktop.presenter.MainPresenter.Events;
 
@@ -65,12 +66,36 @@ public class MainView extends GenericView {
 	protected void syncViewModel(final Object arg) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				form.navigationTree.setModel(viewModel.getNavigationTree());
-				for (int i = 0; i < form.navigationTree.getRowCount(); ++i) {
-					form.navigationTree.expandRow(i);
+				if (arg instanceof MainViewModel.SyncType) {
+					MainViewModel.SyncType syncType = (MainViewModel.SyncType) arg;
+					switch (syncType) {
+						case NODES:
+							form.navigationTree.setModel(viewModel.getNavigationTree());
+							for (int i = 0; i < form.navigationTree.getRowCount(); ++i) {
+								form.navigationTree.expandRow(i);
+							}
+						case META:
+							form.versionText.setText(viewModel.getVersion());
+							if (viewModel.getJournalName() == null || viewModel.getJournalOwner() == null) {
+								form.journalName.setText("[Brak otwartego dziennika]");
+							} else {
+								form.journalName.setText(viewModel.getJournalName() + " (" + viewModel.getJournalOwner() + ")");
+							}
+							break;
+						case LOCK:
+							if (viewModel.isInterfaceLocked()) {
+								form.saveJournalButton.setEnabled(false);
+								form.saveAsJournalButton.setEnabled(false);
+								form.closeJournalButton.setEnabled(false);
+								form.updateButton.setEnabled(false);
+							} else {
+								form.saveJournalButton.setEnabled(true);
+								form.saveAsJournalButton.setEnabled(true);
+								form.closeJournalButton.setEnabled(true);
+								form.updateButton.setEnabled(true);
+							}
+					}
 				}
-
-				form.versionText.setText(viewModel.getVersion());
 			}
 		});
 	}
@@ -99,6 +124,61 @@ public class MainView extends GenericView {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			fireEvent(new Events.QuoteUpdateRequested(this));
+		}
+	}
+
+	public class OnNewButtonClicked implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String name = (String) JOptionPane.showInputDialog(form.frame, "<html>Podaj <b>nazwę</b> tworzonego dziennika:</html>", "Nowy dziennik", JOptionPane.PLAIN_MESSAGE);
+			String owner = (String) JOptionPane.showInputDialog(form.frame, "<html>Podaj <b>autora</b> tworzonego dziennika:</html>", "Nowy dziennik", JOptionPane.PLAIN_MESSAGE);
+
+			if (name != null && owner != null) {
+				fireEvent(new Events.NewJournal(this, name, owner));
+			}
+		}
+	}
+
+	public class OnOpenButtonClicked implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int state = form.fileChooser.showOpenDialog(form.openJournalButton);
+
+			if (state == JFileChooser.APPROVE_OPTION) {
+				File file = form.fileChooser.getSelectedFile();
+				fireEvent(new Events.OpenJournal(this, file));
+			}
+		}
+	}
+
+	public class OnSaveButtonClicked implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fireEvent(new Events.SaveJournal(this));
+		}
+	}
+
+	public class OnSaveAsButtonClicked implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int state = form.fileChooser.showSaveDialog(form.openJournalButton);
+
+			if (state == JFileChooser.APPROVE_OPTION) {
+				File file = form.fileChooser.getSelectedFile();
+				fireEvent(new Events.SaveJournalAs(this, file));
+			}
+		}
+	}
+
+	public class OnCloseButtonClicked implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fireEvent(new Events.CloseJournal(this));
 		}
 	}
 

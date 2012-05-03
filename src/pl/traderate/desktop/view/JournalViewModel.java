@@ -149,6 +149,22 @@ public class JournalViewModel extends GenericViewModel {
 		notifyChange(SyncType.NODES);
 	}
 
+	public void purgeEntries() {
+		entries = new ArrayList<>();
+		journalTable = new JournalTable(entries);
+		notifyChange(SyncType.ENTRIES);
+	}
+
+	public void purgeAccounts() {
+		accounts = new ArrayList<>();
+		notifyChange(SyncType.NODES);
+	}
+
+	public void purgePortfolios() {
+		portfolios = new ArrayList<>();
+		notifyChange(SyncType.NODES);
+	}
+
 	// Allocation entry handling
 
 	public void setAllocationEntryType(AllocationEntryType allocationEntryType) {

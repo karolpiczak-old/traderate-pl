@@ -33,6 +33,7 @@ import pl.traderate.desktop.view.MainViewModel;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.io.File;
 
 public class MainPresenter extends GenericPresenter {
 
@@ -78,8 +79,22 @@ public class MainPresenter extends GenericPresenter {
 
 	@Override
 	protected void initializeViewModel() {
-		viewModel.setRootPortfolioNode(model.getPortfolioNodes());
-		viewModel.setAccountNodes(model.getAccounts());
+		try {
+			viewModel.setRootPortfolioNode(model.getPortfolioNodes());
+			viewModel.setAccountNodes(model.getAccounts());
+			viewModel.setJournalName(model.getJournalName());
+			viewModel.setJournalOwner(model.getJournalOwner());
+		} catch (JournalNotLoadedException ignored) {
+
+		}
+	}
+	
+	@Override
+	protected void purgeViewModel() {
+		viewModel.purgeRootPortfolioNode();
+		viewModel.purgeAccountNodes();
+		viewModel.purgeJournalName();
+		viewModel.purgeJournalOwner();
 	}
 
 	@Override
@@ -112,10 +127,40 @@ public class MainPresenter extends GenericPresenter {
 
 		@Override
 		public void handleModelEvent(NodesUpdatedModelEvent e) {
-			viewModel.setRootPortfolioNode(model.getPortfolioNodes());
-			viewModel.setAccountNodes(model.getAccounts());
+			try {
+				viewModel.setRootPortfolioNode(model.getPortfolioNodes());
+				viewModel.setAccountNodes(model.getAccounts());
+			} catch (JournalNotLoadedException e1) {
+				e1.printStackTrace();
+			}
 		}
 
+		@Override
+		public void handleModelEvent(QuoteUpdatedModelEvent e) {
+
+		}
+
+		@Override
+		public void handleModelEvent(JournalClosedModelEvent e) {
+			purgeViewModel();
+			viewModel.setInterfaceLock(true);
+		}
+
+		@Override
+		public void handleModelEvent(JournalCreatedModelEvent e) {
+			initializeViewModel();
+			viewModel.setInterfaceLock(false);
+		}
+
+		@Override
+		public void handleModelEvent(JournalOpenedModelEvent e) {
+
+		}
+
+		@Override
+		public void handleModelEvent(JournalSavedModelEvent e) {
+
+		}
 	}
 
 //:-- Presenter events ---------------------------------------------------------
@@ -131,6 +176,109 @@ public class MainPresenter extends GenericPresenter {
 			public void handle(MainPresenter presenter) {
 				presenter.journalPresenter.handleViewEvent(new JournalPresenter.Events.NodeTabRequested(this));
 				presenter.viewModel.setActiveTab(1);
+			}
+		}
+
+		public static class NewJournal extends GenericViewEvent {
+
+			String name;
+			
+			String owner;
+			
+			public NewJournal(Object source, String name, String owner) {
+				super(source);
+				this.name = name;
+				this.owner = owner;
+			}
+
+			public void handle(final MainPresenter presenter) {
+				new SwingWorker<String, Object>() {
+
+					@Override
+					public String doInBackground() {
+						presenter.model.createJournal(name, owner);
+						return null;
+					}
+				}.execute();
+			}
+		}
+
+		public static class OpenJournal extends GenericViewEvent {
+
+			File file;
+
+			public OpenJournal(Object source, File file) {
+				super(source);
+				this.file = file;
+			}
+
+			public void handle(final MainPresenter presenter) {
+				new SwingWorker<String, Object>() {
+
+					@Override
+					public String doInBackground() {
+						presenter.model.openJournal(file);
+						return null;
+					}
+				}.execute();
+			}
+		}
+
+		public static class SaveJournal extends GenericViewEvent {
+
+			public SaveJournal(Object source) {
+				super(source);
+			}
+
+			public void handle(MainPresenter presenter) {
+
+			}
+		}
+
+		public static class SaveJournalAs extends GenericViewEvent {
+
+			File file;
+
+			public SaveJournalAs(Object source, File file) {
+				super(source);
+				this.file = file;
+			}
+
+			public void handle(final MainPresenter presenter) {
+				new SwingWorker<String, Object>() {
+
+					@Override
+					public String doInBackground() {
+						try {
+							presenter.model.saveJournal(file);
+						} catch (JournalNotLoadedException e) {
+							e.printStackTrace();
+						}
+						return null;
+					}
+				}.execute();
+			}
+		}
+
+		public static class CloseJournal extends GenericViewEvent {
+
+			public CloseJournal(Object source) {
+				super(source);
+			}
+
+			public void handle(final MainPresenter presenter) {
+				new SwingWorker<String, Object>() {
+
+					@Override
+					public String doInBackground() {
+						try {
+							presenter.model.closeJournal();
+						} catch (JournalNotLoadedException e) {
+							e.printStackTrace();
+						}
+						return null;
+					}
+				}.execute();
 			}
 		}
 
@@ -170,7 +318,7 @@ public class MainPresenter extends GenericPresenter {
 					PortfolioDetailsDTO portfolio = null;
 					try {
 						portfolio = presenter.model.getPortfolio(((PortfolioNodeDTO) node.getUserObject()).ID);
-					} catch (ObjectNotFoundException e) {
+					} catch (ObjectNotFoundException | JournalNotLoadedException e) {
 						e.printStackTrace();
 					}
 					presenter.summaryPresenter.handleViewEvent(new SummaryPresenter.Events.PortfolioSelected(this, portfolio));
@@ -180,7 +328,7 @@ public class MainPresenter extends GenericPresenter {
 					AccountDTO account = null;
 					try {
 						account = presenter.model.getAccount(((AccountDTO) node.getUserObject()).ID);
-					} catch (ObjectNotFoundException e) {
+					} catch (ObjectNotFoundException | JournalNotLoadedException e) {
 						e.printStackTrace();
 					}
 					presenter.summaryPresenter.handleViewEvent(new SummaryPresenter.Events.AccountSelected(this, account));

@@ -41,6 +41,12 @@ public class MainViewModel extends GenericViewModel {
 
 	private String version;
 
+	private String journalName;
+
+	private String journalOwner;
+
+	private boolean interfaceLocked;
+
 	public MainViewModel(MainPresenter presenter, GenericView summaryView, GenericView journalView) {
 		super(presenter);
 
@@ -52,6 +58,11 @@ public class MainViewModel extends GenericViewModel {
 
 		version = TradeRateConfig.getVersion();
 		accountNodes = new ArrayList<>();
+
+		interfaceLocked = true;
+
+		notifyChange(SyncType.META);
+		notifyChange(SyncType.LOCK);
 	}
 
 	public MainView getView() {
@@ -71,20 +82,24 @@ public class MainViewModel extends GenericViewModel {
 	}
 
 	private void updateNavigationTree() {
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Portfele i konta");
-		DefaultMutableTreeNode accounts = new DefaultMutableTreeNode("Konta");
+		if (rootPortfolioNode == null) {
+			navigationTree = new DefaultTreeModel(new DefaultMutableTreeNode("---"));
+		} else {
+			DefaultMutableTreeNode root = new DefaultMutableTreeNode("Portfele i konta");
+			DefaultMutableTreeNode accounts = new DefaultMutableTreeNode("Konta");
 
-		DefaultMutableTreeNode portfolio = new DefaultMutableTreeNode(rootPortfolioNode);
-		populatePortfolioChildren(portfolio);
+			DefaultMutableTreeNode portfolio = new DefaultMutableTreeNode(rootPortfolioNode);
+			populatePortfolioChildren(portfolio);
 
-		for (AccountDTO account : accountNodes) {
-			accounts.add(new DefaultMutableTreeNode(account));
+			for (AccountDTO account : accountNodes) {
+				accounts.add(new DefaultMutableTreeNode(account));
+			}
+
+			root.add(portfolio);
+			root.add(accounts);
+
+			navigationTree = new DefaultTreeModel(root);
 		}
-		
-		root.add(portfolio);
-		root.add(accounts);
-
-		navigationTree = new DefaultTreeModel(root);
 		notifyChange(SyncType.NODES);
 	}
 	
@@ -110,9 +125,60 @@ public class MainViewModel extends GenericViewModel {
 		view.setActiveTab(i);
 	}
 
-//:-- ViewModel sync types ---------------------------------------------------------
+	public void setJournalName(String journalName) {
+		this.journalName = journalName;
+		notifyChange(SyncType.META);
+	}
+
+	public void setJournalOwner(String journalOwner) {
+		this.journalOwner = journalOwner;
+		notifyChange(SyncType.META);
+	}
+
+	public String getJournalName() {
+		return journalName;
+	}
+
+	public String getJournalOwner() {
+		return journalOwner;
+	}
+
+	public void setInterfaceLock(boolean lock) {
+		interfaceLocked = lock;
+		notifyChange(SyncType.LOCK);
+	}
+
+	public boolean isInterfaceLocked() {
+		return interfaceLocked;
+	}
+
+	public void purgeRootPortfolioNode() {
+		rootPortfolioNode = null;
+		updateNavigationTree();
+		notifyChange(SyncType.NODES);
+	}
+
+	public void purgeAccountNodes() {
+		accountNodes = new ArrayList<>();
+		updateNavigationTree();
+		notifyChange(SyncType.NODES);
+	}
+
+	public void purgeJournalName() {
+		journalName = null;
+		notifyChange(SyncType.META);
+	}
+
+	public void purgeJournalOwner() {
+		journalOwner = null;
+		notifyChange(SyncType.META);
+	}
+
+	//:-- ViewModel sync types ---------------------------------------------------------
 
 	public enum SyncType {
-		NODES
+		NODES,
+		META,
+		LOCK
 	}
 }

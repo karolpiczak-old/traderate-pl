@@ -20,50 +20,14 @@
 
 package pl.traderate.core.event;
 
-public abstract class GenericModelEventListenerAdapter implements GenericModelEventListener {
+public class JournalSavedModelEvent extends GenericModelEvent {
 
-	@Override
-	public void visitModelEvent(GenericModelEvent e) {
-		e.accept(this);
+	public JournalSavedModelEvent(Object source) {
+		super(source);
 	}
 
 	@Override
-	public void handleModelEvent(GenericModelEvent e) {
-
-	}
-
-	@Override
-	public void handleModelEvent(JournalUpdatedModelEvent e) {
-
-	}
-
-	@Override
-	public void handleModelEvent(QuoteUpdatedModelEvent e) {
-
-	}
-
-	@Override
-	public void handleModelEvent(NodesUpdatedModelEvent e) {
-
-	}
-
-	@Override
-	public void handleModelEvent(JournalClosedModelEvent e) {
-
-	}
-
-	@Override
-	public void handleModelEvent(JournalCreatedModelEvent e) {
-
-	}
-
-	@Override
-	public void handleModelEvent(JournalOpenedModelEvent e) {
-
-	}
-
-	@Override
-	public void handleModelEvent(JournalSavedModelEvent e) {
-
+	public void accept(GenericModelEventListener listener) {
+		listener.handleModelEvent(this);
 	}
 }

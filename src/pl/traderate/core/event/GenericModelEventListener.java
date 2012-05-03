@@ -31,4 +31,12 @@ public interface GenericModelEventListener {
 	public void handleModelEvent(QuoteUpdatedModelEvent e);
 
 	public void handleModelEvent(NodesUpdatedModelEvent e);
+
+	public void handleModelEvent(JournalClosedModelEvent e);
+
+	public void handleModelEvent(JournalCreatedModelEvent e);
+
+	public void handleModelEvent(JournalOpenedModelEvent e);
+
+	public void handleModelEvent(JournalSavedModelEvent e);
 }

@@ -22,9 +22,7 @@ package pl.traderate.desktop.presenter;
 
 import pl.traderate.core.JournalEntryDTO;
 import pl.traderate.core.TradeRate;
-import pl.traderate.core.event.JournalUpdatedModelEvent;
-import pl.traderate.core.event.GenericModelEvent;
-import pl.traderate.core.event.NodesUpdatedModelEvent;
+import pl.traderate.core.event.*;
 import pl.traderate.core.exception.*;
 import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.GenericView;
@@ -60,9 +58,20 @@ public class JournalPresenter extends GenericPresenter {
 
 	@Override
 	protected void initializeViewModel() {
-		viewModel.setEntries(model.getEntries());
-		viewModel.setAccounts(model.getAccounts());
-		viewModel.setPortfolios(model.getAllPortfolioNodes());
+		try {
+			viewModel.setEntries(model.getEntries());
+			viewModel.setAccounts(model.getAccounts());
+			viewModel.setPortfolios(model.getAllPortfolioNodes());
+		} catch (JournalNotLoadedException ignored) {
+
+		}
+	}
+
+	@Override
+	protected void purgeViewModel() {
+		viewModel.purgeEntries();
+		viewModel.purgeAccounts();
+		viewModel.purgePortfolios();
 	}
 
 	@Override
@@ -94,15 +103,47 @@ public class JournalPresenter extends GenericPresenter {
 
 		@Override
 		public void handleModelEvent(JournalUpdatedModelEvent e) {
-			viewModel.setEntries(model.getEntries());
+			try {
+				viewModel.setEntries(model.getEntries());
+			} catch (JournalNotLoadedException ignored) {
+
+			}
 		}
 
 		@Override
 		public void handleModelEvent(NodesUpdatedModelEvent e) {
-			viewModel.setAccounts(model.getAccounts());
-			viewModel.setPortfolios(model.getAllPortfolioNodes());
+			try {
+				viewModel.setAccounts(model.getAccounts());
+				viewModel.setPortfolios(model.getAllPortfolioNodes());
+			} catch (JournalNotLoadedException ignored) {
+
+			}
 		}
 
+		@Override
+		public void handleModelEvent(QuoteUpdatedModelEvent e) {
+
+		}
+
+		@Override
+		public void handleModelEvent(JournalClosedModelEvent e) {
+			purgeViewModel();
+		}
+
+		@Override
+		public void handleModelEvent(JournalCreatedModelEvent e) {
+			initializeViewModel();
+		}
+
+		@Override
+		public void handleModelEvent(JournalOpenedModelEvent e) {
+
+		}
+
+		@Override
+		public void handleModelEvent(JournalSavedModelEvent e) {
+
+		}
 	}
 
 //:-- Presenter events ---------------------------------------------------------
@@ -168,9 +209,9 @@ public class JournalPresenter extends GenericPresenter {
 						} catch (ObjectNotFoundException e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Podany portfel/konto nie zostały odnalezione.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (JournalNotLoadedException e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (Throwable e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.\nNie został wybrany odpowiedni obiekt lub żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}.execute();
@@ -224,9 +265,9 @@ public class JournalPresenter extends GenericPresenter {
 						} catch (ObjectNotFoundException e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Podany portfel/konto nie zostały odnalezione.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (JournalNotLoadedException e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (Throwable e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.\nNie został wybrany odpowiedni obiekt lub żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}.execute();
@@ -284,9 +325,9 @@ public class JournalPresenter extends GenericPresenter {
 						} catch (ObjectNotFoundException e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Podany portfel/konto nie zostały odnalezione.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (JournalNotLoadedException e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (Throwable e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.\nNie został wybrany odpowiedni obiekt lub żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}.execute();
@@ -321,9 +362,9 @@ public class JournalPresenter extends GenericPresenter {
 								throw exception.getCause();
 							}
 						} catch (JournalNotLoadedException e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (Throwable e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.\nNie został wybrany odpowiedni obiekt lub żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}.execute();
@@ -358,13 +399,13 @@ public class JournalPresenter extends GenericPresenter {
 								throw exception.getCause();
 							}
 						} catch (JournalNotLoadedException e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (ObjectNotFoundException e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Podane konto nie zostało znalezione.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (NodeNotEmptyException e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Wybrane konto posiada historię operacji. Nie jest możliwe usunięcie konta bez wcześniejszego usunięcia zapisanych operacji.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (Throwable e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.\nNie został wybrany odpowiedni obiekt lub żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}.execute();
@@ -400,11 +441,11 @@ public class JournalPresenter extends GenericPresenter {
 								throw exception.getCause();
 							}
 						} catch (JournalNotLoadedException e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (ObjectNotFoundException e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Podany portfel nadrzędny nie został znaleziony.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (Throwable e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.\nNie został wybrany odpowiedni obiekt lub żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}.execute();
@@ -439,7 +480,7 @@ public class JournalPresenter extends GenericPresenter {
 								throw exception.getCause();
 							}
 						} catch (JournalNotLoadedException e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (ObjectNotFoundException e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Podany portfel nie został znaleziony.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (NodeNotEmptyException e) {
@@ -447,7 +488,7 @@ public class JournalPresenter extends GenericPresenter {
 						} catch (GlobalPortfolioRemovalException e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Nie można usunąć portfela globalnego.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (Throwable e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.\nNie został wybrany odpowiedni obiekt lub żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}.execute();
@@ -482,13 +523,13 @@ public class JournalPresenter extends GenericPresenter {
 								throw exception.getCause();
 							}
 						} catch (JournalNotLoadedException e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie został załadowany.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (ObjectNotFoundException e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Żądana operacja nie została znaleziona.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (EntryInsertionException e) {
 							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd rekonstrukcji historii.\nNajprawdopodobniej usunięcie jednej z wybranych operacji powoduje powstanie niespójnej historii konta/portfela.\nSpróbuj najpierw usunąć późniejsze operacje zależne.\n\nUsunięte zostały wszystkie zaznaczone operacje do momentu powstania niespójności.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						} catch (Throwable e) {
-							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Błąd wewnętrzny.\nNie został wybrany odpowiedni obiekt lub żaden dziennik nie jest otwarty.", "Błąd operacji", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}.execute();

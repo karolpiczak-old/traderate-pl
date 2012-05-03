@@ -23,9 +23,8 @@ package pl.traderate.desktop.presenter;
 import pl.traderate.core.AccountDTO;
 import pl.traderate.core.PortfolioDetailsDTO;
 import pl.traderate.core.TradeRate;
-import pl.traderate.core.event.JournalUpdatedModelEvent;
-import pl.traderate.core.event.GenericModelEvent;
-import pl.traderate.core.event.QuoteUpdatedModelEvent;
+import pl.traderate.core.event.*;
+import pl.traderate.core.exception.JournalNotLoadedException;
 import pl.traderate.core.exception.ObjectNotFoundException;
 import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.GenericView;
@@ -58,7 +57,14 @@ public class SummaryPresenter extends GenericPresenter {
 			viewModel.setNode(model.getPortfolio(0));
 		} catch (ObjectNotFoundException e) {
 			e.printStackTrace();
+		} catch (JournalNotLoadedException ignored) {
+
 		}
+	}
+
+	@Override
+	protected void purgeViewModel() {
+		viewModel.purgeNode();
 	}
 
 	@Override
@@ -93,14 +99,14 @@ public class SummaryPresenter extends GenericPresenter {
 				case ACCOUNT:
 					try {
 						viewModel.setNode(model.getAccount(nodeID));
-					} catch (ObjectNotFoundException e1) {
+					} catch (ObjectNotFoundException | JournalNotLoadedException e1) {
 						e1.printStackTrace();
 					}
 					break;
 				case PORTFOLIO:
 					try {
 						viewModel.setNode(model.getPortfolio(nodeID));
-					} catch (ObjectNotFoundException e1) {
+					} catch (ObjectNotFoundException | JournalNotLoadedException e1) {
 						e1.printStackTrace();
 					}
 					break;
@@ -116,20 +122,44 @@ public class SummaryPresenter extends GenericPresenter {
 				case ACCOUNT:
 					try {
 						viewModel.setNode(model.getAccount(nodeID));
-					} catch (ObjectNotFoundException e1) {
+					} catch (ObjectNotFoundException | JournalNotLoadedException e1) {
 						e1.printStackTrace();
 					}
 					break;
 				case PORTFOLIO:
 					try {
 						viewModel.setNode(model.getPortfolio(nodeID));
-					} catch (ObjectNotFoundException e1) {
+					} catch (ObjectNotFoundException | JournalNotLoadedException e1) {
 						e1.printStackTrace();
 					}
 					break;
 			}
 		}
 
+		@Override
+		public void handleModelEvent(NodesUpdatedModelEvent e) {
+
+		}
+
+		@Override
+		public void handleModelEvent(JournalClosedModelEvent e) {
+			purgeViewModel();
+		}
+
+		@Override
+		public void handleModelEvent(JournalCreatedModelEvent e) {
+			initializeViewModel();
+		}
+
+		@Override
+		public void handleModelEvent(JournalOpenedModelEvent e) {
+
+		}
+
+		@Override
+		public void handleModelEvent(JournalSavedModelEvent e) {
+
+		}
 	}
 
 //:-- Presenter events ---------------------------------------------------------

@@ -20,7 +20,6 @@
 
 package pl.traderate.desktop.view;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.NodeType;
 import org.netbeans.swing.outline.OutlineModel;
 import pl.traderate.core.AccountDTO;
 import pl.traderate.core.HoldingsDTO;
@@ -28,12 +27,13 @@ import pl.traderate.core.PortfolioDetailsDTO;
 import pl.traderate.desktop.presenter.SummaryPresenter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 public class SummaryViewModel extends GenericViewModel {
 
 	protected SummaryView view;
 	
-	protected int nodeID;
+	protected Integer nodeID;
 	
 	protected String nodeName;
 	
@@ -87,32 +87,49 @@ public class SummaryViewModel extends GenericViewModel {
 	}
 
 	public void setNode(PortfolioDetailsDTO portfolio) {
-		this.nodeID = portfolio.ID;
-		this.nodeName = portfolio.name;
-		this.nodeType = NodeType.PORTFOLIO;
-		this.cashAvailable = portfolio.cashBalance;
-		this.aggregatedCash = portfolio.aggregatedCashBalance;
-		this.holdings = portfolio.aggregatedHoldings;
+		nodeID = portfolio.ID;
+		nodeName = portfolio.name;
+		nodeType = NodeType.PORTFOLIO;
+		cashAvailable = portfolio.cashBalance;
+		aggregatedCash = portfolio.aggregatedCashBalance;
+		holdings = portfolio.aggregatedHoldings;
 		
 		updateHoldings();
 		notifyChange(SyncType.NODE);
 	}
 
 	public void setNode(AccountDTO account) {
-		this.nodeID = account.ID;
-		this.nodeName = account.name;
-		this.nodeType = NodeType.ACCOUNT;
-		this.cashAvailable = account.cashBalance;
-		this.aggregatedCash = BigDecimal.ZERO;
-		this.holdings = account.holdings;
+		nodeID = account.ID;
+		nodeName = account.name;
+		nodeType = NodeType.ACCOUNT;
+		cashAvailable = account.cashBalance;
+		aggregatedCash = BigDecimal.ZERO;
+		holdings = account.holdings;
 		
 		updateHoldings();
+		notifyChange(SyncType.NODE);
+	}
+
+	public void purgeNode() {
+		nodeID = null;
+		nodeName = null;
+		nodeType = null;
+		cashAvailable = null;
+		aggregatedCash = null;
+		holdings = null;
+
+		purgeHoldings();
 		notifyChange(SyncType.NODE);
 	}
 
 	private void updateHoldings() {
 		openHoldingsTreeTable = new HoldingTable("Otwarte pozycje", holdings.equityHoldings, false).getOutlineModel();
 		closedHoldingsTreeTable = new HoldingTable("Zamknięte pozycje", holdings.closedEquityHoldings, true).getOutlineModel();
+	}
+
+	private void purgeHoldings() {
+		openHoldingsTreeTable = new HoldingTable("Otwarte pozycje", new ArrayList<HoldingsDTO.EquityHoldingDTO>(), false).getOutlineModel();
+		closedHoldingsTreeTable = new HoldingTable("Zamknięte pozycje", new ArrayList<HoldingsDTO.EquityHoldingDTO>(), true).getOutlineModel();
 	}
 
 	public String getNodeName() {

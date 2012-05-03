@@ -23,6 +23,7 @@ package pl.traderate.desktop.view;
 import pl.traderate.desktop.presenter.SummaryPresenter;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class SummaryView extends GenericView {
 
@@ -55,11 +56,18 @@ public class SummaryView extends GenericView {
 	protected void syncViewModel(final Object arg) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				form.portfolioName.setText(viewModel.getNodeName());
-				form.cashAvailable.setText(viewModel.getCashAvailable().toPlainString());
-				form.aggregatedCash.setText(viewModel.getAggregatedCash().toPlainString());
-				form.openHoldingsTreeTable.setModel(viewModel.getOpenHoldingsTreeTable());
-				form.closedHoldingsTreeTable.setModel(viewModel.getClosedHoldingsTreeTable());
+				if (arg instanceof SummaryViewModel.SyncType) {
+					SummaryViewModel.SyncType syncType = (SummaryViewModel.SyncType) arg;
+					switch (syncType) {
+						case NODE:
+							form.portfolioName.setText(viewModel.getNodeName() == null ? "" : viewModel.getNodeName());
+							form.cashAvailable.setText(viewModel.getCashAvailable() == null ? "---" : viewModel.getCashAvailable().toPlainString());
+							form.aggregatedCash.setText(viewModel.getAggregatedCash() == null ? "---" : viewModel.getAggregatedCash().toPlainString());
+							form.openHoldingsTreeTable.setModel(viewModel.getOpenHoldingsTreeTable());
+							form.closedHoldingsTreeTable.setModel(viewModel.getClosedHoldingsTreeTable());
+							break;
+					}
+				}
 			}
 		});
 	}

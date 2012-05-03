@@ -21,7 +21,10 @@
 package pl.traderate.desktop.view;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class MainForm extends GenericForm {
 
@@ -65,6 +68,12 @@ public class MainForm extends GenericForm {
 
 	JButton closeJournalButton;
 
+	JButton saveAsJournalButton;
+
+	JLabel journalName;
+
+	JFileChooser fileChooser;
+
 	MainForm(GenericView view, GenericView summaryView, GenericView journalView) {
 		super(view);
 		this.view = (MainView) super.view;
@@ -78,8 +87,15 @@ public class MainForm extends GenericForm {
 		frame.setContentPane(root);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
+		
+		fileChooser = new JFileChooser();
 
 		manageTreeButton.addActionListener(this.view.new OnManageButtonClicked());
+		newJournalButton.addActionListener(this.view.new OnNewButtonClicked());
+		openJournalButton.addActionListener(this.view.new OnOpenButtonClicked());
+		saveJournalButton.addActionListener(this.view.new OnSaveButtonClicked());
+		saveAsJournalButton.addActionListener(this.view.new OnSaveAsButtonClicked());
+		closeJournalButton.addActionListener(this.view.new OnCloseButtonClicked());
 		updateButton.addActionListener(this.view.new OnUpdateButtonClicked());
 	}
 
@@ -97,6 +113,7 @@ public class MainForm extends GenericForm {
 		tabs.addTab("Dziennik", ((JournalForm) journalView.getForm()).root);
 
 		navigationTree = new JTree();
+		navigationTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("---")));
 	}
 
 	public JFrame getFrame() {

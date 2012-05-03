@@ -43,6 +43,8 @@ public abstract class GenericPresenter implements GenericViewEventListener {
 
 	protected abstract void initializeViewModel();
 
+	protected abstract void purgeViewModel();
+
 	public void show() {
 		viewModel.show();
 	}
@@ -59,21 +61,5 @@ public abstract class GenericPresenter implements GenericViewEventListener {
 		public void visitModelEvent(GenericModelEvent e) {
 			e.accept(this);
 		}
-
-		@Override
-		public void handleModelEvent(GenericModelEvent e) {
-			// TODO: Implement
-		}
-
-		@Override
-		public void handleModelEvent(JournalUpdatedModelEvent e) {
-			// TODO: Implement
-		}
-
-		@Override
-		public void handleModelEvent(NodesUpdatedModelEvent e) {
-			// TODO: Implement
-		}
-
 	}
 }

@@ -20,12 +20,10 @@
 
 package pl.traderate.core;
 
-import pl.traderate.core.event.GenericModelEventSource;
-import pl.traderate.core.event.JournalUpdatedModelEvent;
-import pl.traderate.core.event.NodesUpdatedModelEvent;
-import pl.traderate.core.event.QuoteUpdatedModelEvent;
+import pl.traderate.core.event.*;
 import pl.traderate.core.exception.*;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,6 +46,8 @@ public final class TradeRate extends GenericModelEventSource {
 	 */
 	private Journal journal;
 
+	private String journalName;
+
 	/**
 	 * Restricted constructor.
 	 *
@@ -67,24 +67,24 @@ public final class TradeRate extends GenericModelEventSource {
 
 	public void createJournal(String name, String owner) {
 		journal = new Journal(name, owner);
-
-		fireEvent(new JournalUpdatedModelEvent(this));
+		fireEvent(new JournalCreatedModelEvent(this));
 	}
 
-	public void openJournal() {
-
+	public void openJournal(File file) {
+		System.out.println(file);
+		fireEvent(new JournalOpenedModelEvent(this));
 	}
 
-
-	public void saveJournal() {
-
+	public void saveJournal(File file) throws JournalNotLoadedException {
+		assertJournalIsLoaded();
+		System.out.println(file);
+		fireEvent(new JournalSavedModelEvent(this));
 	}
 
-	public void closeJournal() {
-		saveJournal();
+	public void closeJournal() throws JournalNotLoadedException {
+		assertJournalIsLoaded();
 		journal = null;
-
-		fireEvent(new JournalUpdatedModelEvent(this));
+		fireEvent(new JournalClosedModelEvent(this));
 	}
 
 	/**
@@ -274,7 +274,8 @@ public final class TradeRate extends GenericModelEventSource {
 		fireEvent(new QuoteUpdatedModelEvent(this));
 	}
 	
-	public ArrayList<AccountDTO> getAccounts() {
+	public ArrayList<AccountDTO> getAccounts() throws JournalNotLoadedException {
+		assertJournalIsLoaded();
 		ArrayList<AccountDTO> accountDTOs = new ArrayList<>();
 		for (Account account : journal.getAccounts()) {
 			accountDTOs.add(account.getDTO());
@@ -283,11 +284,13 @@ public final class TradeRate extends GenericModelEventSource {
 		return accountDTOs;
 	}
 
-	public AccountDTO getAccount(int accountID) throws ObjectNotFoundException {
+	public AccountDTO getAccount(int accountID) throws ObjectNotFoundException, JournalNotLoadedException {
+		assertJournalIsLoaded();
 		return journal.getAccount(accountID).getDTO();
 	}
 
-	public ArrayList<JournalEntryDTO> getEntries() {
+	public ArrayList<JournalEntryDTO> getEntries() throws JournalNotLoadedException {
+		assertJournalIsLoaded();
 		ArrayList<JournalEntryDTO> entryDTOs = new ArrayList<>();
 		for (JournalEntry entry : journal.getEntries()) {
 			entryDTOs.add(new JournalEntryDTO(entry));
@@ -298,11 +301,13 @@ public final class TradeRate extends GenericModelEventSource {
 		return entryDTOs;
 	}
 
-	public PortfolioNodeDTO getPortfolioNodes() {
+	public PortfolioNodeDTO getPortfolioNodes() throws JournalNotLoadedException {
+		assertJournalIsLoaded();
 		return journal.getGlobalPortfolio().getNodeDTO();
 	}
 
-	public ArrayList<PortfolioNodeDTO> getAllPortfolioNodes() {
+	public ArrayList<PortfolioNodeDTO> getAllPortfolioNodes() throws JournalNotLoadedException {
+		assertJournalIsLoaded();
 		ArrayList<PortfolioNodeDTO> portfolios = new ArrayList<>();
 		PortfolioNodeDTO root = journal.getGlobalPortfolio().getNodeDTO();
 		portfolios.add(root);
@@ -319,7 +324,8 @@ public final class TradeRate extends GenericModelEventSource {
 		}
 	}
 
-	public PortfolioDetailsDTO getPortfolio(int portfolioID) throws ObjectNotFoundException {
+	public PortfolioDetailsDTO getPortfolio(int portfolioID) throws ObjectNotFoundException, JournalNotLoadedException {
+		assertJournalIsLoaded();
 		return journal.getPortfolio(portfolioID).getDetailsDTO();
 	}
 
@@ -329,5 +335,15 @@ public final class TradeRate extends GenericModelEventSource {
 	 */
 	private void assertJournalIsLoaded() throws JournalNotLoadedException {
 		if (journal == null) throw new JournalNotLoadedException();
+	}
+
+	public String getJournalName() throws JournalNotLoadedException {
+		assertJournalIsLoaded();
+		return journal.getName();
+	}
+	
+	public String getJournalOwner() throws JournalNotLoadedException {
+		assertJournalIsLoaded();
+		return journal.getOwner();
 	}
 }
