@@ -137,7 +137,7 @@ public class JournalPresenter extends GenericPresenter {
 
 		@Override
 		public void handleModelEvent(JournalOpenedModelEvent e) {
-
+			initializeViewModel();
 		}
 
 		@Override

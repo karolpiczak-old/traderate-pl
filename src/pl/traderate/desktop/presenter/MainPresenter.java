@@ -25,7 +25,9 @@ import pl.traderate.core.PortfolioDetailsDTO;
 import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.core.TradeRate;
 import pl.traderate.core.event.*;
+import pl.traderate.core.exception.JournalLoadException;
 import pl.traderate.core.exception.JournalNotLoadedException;
+import pl.traderate.core.exception.JournalSaveException;
 import pl.traderate.core.exception.ObjectNotFoundException;
 import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.GenericView;
@@ -34,6 +36,7 @@ import pl.traderate.desktop.view.MainViewModel;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
+import java.util.concurrent.ExecutionException;
 
 public class MainPresenter extends GenericPresenter {
 
@@ -45,6 +48,8 @@ public class MainPresenter extends GenericPresenter {
 	protected SummaryPresenter summaryPresenter;
 
 	protected JournalPresenter journalPresenter;
+
+	protected JFrame parentFrame;
 
 	public MainPresenter(TradeRate model) {
 		super(model);
@@ -64,8 +69,10 @@ public class MainPresenter extends GenericPresenter {
 		super.modelEventHandler = modelEventHandler;
 
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				journalPresenter.setParentFrame(viewModel.getView().getForm().getFrame());
+				setParentFrame(viewModel.getView().getForm().getFrame());
 			}
 		});
 	}
@@ -104,6 +111,10 @@ public class MainPresenter extends GenericPresenter {
 
 	public GenericView getView() {
 		return viewModel.getView();
+	}
+
+	public void setParentFrame(JFrame parentFrame) {
+		this.parentFrame = parentFrame;
 	}
 
 //:-- Model events -------------------------------------------------------------
@@ -154,7 +165,8 @@ public class MainPresenter extends GenericPresenter {
 
 		@Override
 		public void handleModelEvent(JournalOpenedModelEvent e) {
-
+			initializeViewModel();
+			viewModel.setInterfaceLock(false);
 		}
 
 		@Override
@@ -173,6 +185,7 @@ public class MainPresenter extends GenericPresenter {
 				super(source);
 			}
 
+			@Override
 			public void handle(MainPresenter presenter) {
 				presenter.journalPresenter.handleViewEvent(new JournalPresenter.Events.NodeTabRequested(this));
 				presenter.viewModel.setActiveTab(1);
@@ -191,13 +204,25 @@ public class MainPresenter extends GenericPresenter {
 				this.owner = owner;
 			}
 
+			@Override
 			public void handle(final MainPresenter presenter) {
 				new SwingWorker<String, Object>() {
 
 					@Override
 					public String doInBackground() {
 						presenter.model.createJournal(name, owner);
+
 						return null;
+					}
+
+					@Override
+					protected void done() {
+						try {
+							get();
+							presenter.viewModel.setJournalFile(null);
+						} catch (InterruptedException | ExecutionException ignored) {
+
+						}
 					}
 				}.execute();
 			}
@@ -212,13 +237,32 @@ public class MainPresenter extends GenericPresenter {
 				this.file = file;
 			}
 
+			@Override
 			public void handle(final MainPresenter presenter) {
 				new SwingWorker<String, Object>() {
 
 					@Override
-					public String doInBackground() {
+					public String doInBackground() throws JournalLoadException {
 						presenter.model.openJournal(file);
 						return null;
+					}
+
+					@Override
+					protected void done() {
+						try {
+							try {
+								get();
+								presenter.viewModel.setJournalFile(file);
+							} catch (InterruptedException ignored) {
+
+							} catch (ExecutionException e) {
+								throw e.getCause();
+							}
+						} catch (JournalLoadException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Odczyt pliku dziennika nie powiódł się.", "Błąd odczytu", JOptionPane.ERROR_MESSAGE);
+						} catch (Throwable ignored) {
+
+						}
 					}
 				}.execute();
 			}
@@ -226,35 +270,43 @@ public class MainPresenter extends GenericPresenter {
 
 		public static class SaveJournal extends GenericViewEvent {
 
-			public SaveJournal(Object source) {
-				super(source);
-			}
-
-			public void handle(MainPresenter presenter) {
-
-			}
-		}
-
-		public static class SaveJournalAs extends GenericViewEvent {
-
 			File file;
 
-			public SaveJournalAs(Object source, File file) {
+			public SaveJournal(Object source, File file) {
 				super(source);
 				this.file = file;
 			}
 
+			@Override
 			public void handle(final MainPresenter presenter) {
 				new SwingWorker<String, Object>() {
 
 					@Override
-					public String doInBackground() {
+					public String doInBackground() throws JournalSaveException {
 						try {
 							presenter.model.saveJournal(file);
 						} catch (JournalNotLoadedException e) {
 							e.printStackTrace();
 						}
 						return null;
+					}
+
+					@Override
+					protected void done() {
+						try {
+							try {
+								get();
+								presenter.viewModel.setJournalFile(file);
+							} catch (InterruptedException ignored) {
+
+							} catch (ExecutionException e) {
+								throw e.getCause();
+							}
+						} catch (JournalSaveException e) {
+							JOptionPane.showMessageDialog(presenter.parentFrame, "Zapis dziennika nie powiódł się.", "Błąd zapisu", JOptionPane.ERROR_MESSAGE);
+						} catch (Throwable ignored) {
+
+						}
 					}
 				}.execute();
 			}
@@ -266,6 +318,7 @@ public class MainPresenter extends GenericPresenter {
 				super(source);
 			}
 
+			@Override
 			public void handle(final MainPresenter presenter) {
 				new SwingWorker<String, Object>() {
 
@@ -278,6 +331,16 @@ public class MainPresenter extends GenericPresenter {
 						}
 						return null;
 					}
+
+					@Override
+					protected void done() {
+						try {
+							get();
+							presenter.viewModel.setJournalFile(null);
+						} catch (InterruptedException | ExecutionException ignored) {
+
+						}
+					}
 				}.execute();
 			}
 		}
@@ -288,6 +351,7 @@ public class MainPresenter extends GenericPresenter {
 				super(source);
 			}
 
+			@Override
 			public void handle(final MainPresenter presenter) {
 				new SwingWorker<String, Object>() {
 
@@ -313,6 +377,7 @@ public class MainPresenter extends GenericPresenter {
 				this.node = node;
 			}
 
+			@Override
 			public void handle(MainPresenter presenter) {
 				if (node.getUserObject() instanceof PortfolioNodeDTO) {
 					PortfolioDetailsDTO portfolio = null;

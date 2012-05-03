@@ -28,4 +28,9 @@ class DerivativeTrade extends Trade {
 	DerivativeTrade(Account account, Portfolio portfolio, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
 		super(account, portfolio, date, comment, ticker, quantity, price, commission);
 	}
+
+	@Override
+	void updateQuotes() {
+
+	}
 }

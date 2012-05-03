@@ -107,6 +107,20 @@ class Portfolio implements Identifiable {
 		parent.children.add(this);
 	}
 
+	Portfolio(Journal journal, String name, int ID, Portfolio parent) {
+		this.journal = journal;
+		this.ID = ID;
+		numberOfPortfoliosCreated++;
+		setName(name);
+		entries = new ArrayList<PortfolioEntry>();
+		children = new ArrayList<Portfolio>();
+
+		initVolatile();
+
+		this.parent = parent;
+		parent.children.add(this);
+	}
+
 	void removeChild(Portfolio portfolio) {
 		children.remove(portfolio);
 	}
@@ -295,6 +309,14 @@ class Portfolio implements Identifiable {
 
 	static void resetIDIncrement() {
 		numberOfPortfoliosCreated = 0;
+	}
+
+	public static int getNumberOfPortfoliosCreated() {
+		return numberOfPortfoliosCreated;
+	}
+
+	public static void setNumberOfPortfoliosCreated(Integer numberOfPortfoliosCreated) {
+		Portfolio.numberOfPortfoliosCreated = numberOfPortfoliosCreated;
 	}
 
 	/**

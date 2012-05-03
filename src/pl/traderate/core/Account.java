@@ -36,10 +36,10 @@ import java.util.HashMap;
 class Account implements Identifiable {
 
 	/** */
-	private final int ID;
+	private static int numberOfAccountsCreated;
 
 	/** */
-	private static int numberOfAccountsCreated;
+	private final int ID;
 
 	/** */
 	private String name;
@@ -71,6 +71,14 @@ class Account implements Identifiable {
 	 */
 	Account(String name) {
 		ID = numberOfAccountsCreated++;
+		setName(name);
+		entries = new ArrayList<>();
+		initVolatile();
+	}
+	
+	Account(String name, int ID) {
+		this.ID = ID;
+		numberOfAccountsCreated++;
 		setName(name);
 		entries = new ArrayList<>();
 		initVolatile();
@@ -285,6 +293,14 @@ class Account implements Identifiable {
 
 	static void resetIDIncrement() {
 		numberOfAccountsCreated = 0;
+	}
+
+	public static int getNumberOfAccountsCreated() {
+		return numberOfAccountsCreated;
+	}
+
+	static void setNumberOfAccountsCreated(Integer numberOfAccountsCreated) {
+		Account.numberOfAccountsCreated = numberOfAccountsCreated;
 	}
 
 	/**

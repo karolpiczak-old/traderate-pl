@@ -18,19 +18,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package pl.traderate.core;
+package pl.traderate.core.exception;
 
-import java.math.BigDecimal;
-import java.util.Date;
+public class JournalSaveException extends Exception {
 
-class FixedIncomeTrade extends Trade {
-
-	FixedIncomeTrade(Account account, Portfolio portfolio, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
-		super(account, portfolio, date, comment, ticker, quantity, price, commission);
-	}
-
-	@Override
-	void updateQuotes() {
-
-	}
 }

@@ -67,6 +67,14 @@ abstract class JournalEntry implements Serializable, Identifiable {
 		return ID;
 	}
 
+	public static int getNumberOfJournalEntriesCreated() {
+		return numberOfJournalEntriesCreated;
+	}
+
+	public static void setNumberOfJournalEntriesCreated(int numberOfJournalEntriesCreated) {
+		JournalEntry.numberOfJournalEntriesCreated = numberOfJournalEntriesCreated;
+	}
+
 	static void resetIDIncrement() {
 		numberOfJournalEntriesCreated = 0;
 	}
@@ -81,6 +89,14 @@ abstract class JournalEntry implements Serializable, Identifiable {
 
 	public void detach() throws EntryInsertionException {
 		account.removeEntry(this);
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setID(Integer entryID) {
+		this.ID = entryID;
 	}
 
 	public static class DateComparator implements Comparator<JournalEntry> {

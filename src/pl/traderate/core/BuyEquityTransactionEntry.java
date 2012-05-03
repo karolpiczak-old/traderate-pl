@@ -52,4 +52,5 @@ class BuyEquityTransactionEntry extends BuyTransactionEntry {
 	public BigDecimal getCashValue() {
 		return price.multiply(quantity).add(commission);
 	}
+
 }

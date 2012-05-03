@@ -157,7 +157,13 @@ public class MainView extends GenericView {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			fireEvent(new Events.SaveJournal(this));
+			File file = viewModel.getJournalFile();
+
+			if (file != null) {
+				fireEvent(new Events.SaveJournal(this, file));
+			} else {
+				new OnSaveAsButtonClicked().actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ""));
+			}
 		}
 	}
 
@@ -165,11 +171,24 @@ public class MainView extends GenericView {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int state = form.fileChooser.showSaveDialog(form.openJournalButton);
+			int state = form.fileChooser.showSaveDialog(form.saveAsJournalButton);
 
 			if (state == JFileChooser.APPROVE_OPTION) {
 				File file = form.fileChooser.getSelectedFile();
-				fireEvent(new Events.SaveJournalAs(this, file));
+
+				if (file.exists()) {
+					if (JOptionPane.showConfirmDialog(form.frame, "Czy na pewno nadpisać wybrany plik?\n(" + file + ")", "Zapisz dziennik", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) != 0) {
+						return;
+					}
+				} else {
+					if (form.fileChooser.getFileFilter() instanceof MainForm.XMLFileFilter) {
+						if (!file.getPath().toLowerCase().endsWith(".xml")) {
+							file = new File(file.getPath() + ".xml");
+						}
+					}
+				}
+
+				fireEvent(new Events.SaveJournal(this, file));
 			}
 		}
 	}

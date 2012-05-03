@@ -21,10 +21,12 @@
 package pl.traderate.desktop.view;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class MainForm extends GenericForm {
 
@@ -89,6 +91,9 @@ public class MainForm extends GenericForm {
 		frame.pack();
 		
 		fileChooser = new JFileChooser();
+		FileFilter xmlFilter = new XMLFileFilter();
+		fileChooser.addChoosableFileFilter(xmlFilter);
+		fileChooser.setFileFilter(xmlFilter);
 
 		manageTreeButton.addActionListener(this.view.new OnManageButtonClicked());
 		newJournalButton.addActionListener(this.view.new OnNewButtonClicked());
@@ -118,5 +123,40 @@ public class MainForm extends GenericForm {
 
 	public JFrame getFrame() {
 		return frame;
+	}
+
+	public static class XMLFileFilter extends FileFilter {
+
+		@Override
+		public boolean accept(File file) {
+			if (file.isDirectory()) {
+				return true;
+			}
+
+			String extension = getExtension(file);
+
+			if (extension != null) {
+				if (extension.equals("xml")) return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public String getDescription() {
+			return "Pliki dziennika (.xml)";
+		}
+
+		public String getExtension(File file) {
+			String extension = null;
+			String name = file.getName();
+			int pos = name.lastIndexOf('.');
+
+			if (pos > 0 &&  pos < name.length() - 1) {
+				extension = name.substring(pos + 1).toLowerCase();
+			}
+
+			return extension;
+		}
 	}
 }

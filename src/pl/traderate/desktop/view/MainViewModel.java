@@ -27,6 +27,7 @@ import pl.traderate.desktop.presenter.MainPresenter;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import java.io.File;
 import java.util.ArrayList;
 
 public class MainViewModel extends GenericViewModel {
@@ -46,6 +47,8 @@ public class MainViewModel extends GenericViewModel {
 	private String journalOwner;
 
 	private boolean interfaceLocked;
+
+	private File journalFile;
 
 	public MainViewModel(MainPresenter presenter, GenericView summaryView, GenericView journalView) {
 		super(presenter);
@@ -172,6 +175,14 @@ public class MainViewModel extends GenericViewModel {
 	public void purgeJournalOwner() {
 		journalOwner = null;
 		notifyChange(SyncType.META);
+	}
+
+	public File getJournalFile() {
+		return journalFile;
+	}
+
+	public void setJournalFile(File journalFile) {
+		this.journalFile = journalFile;
 	}
 
 	//:-- ViewModel sync types ---------------------------------------------------------

@@ -153,7 +153,7 @@ public class SummaryPresenter extends GenericPresenter {
 
 		@Override
 		public void handleModelEvent(JournalOpenedModelEvent e) {
-
+			initializeViewModel();
 		}
 
 		@Override

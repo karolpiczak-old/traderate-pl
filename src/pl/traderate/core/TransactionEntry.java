@@ -60,4 +60,20 @@ abstract class TransactionEntry extends PortfolioEntry {
 		this.commission = commission;
 		this.position = position;
 	}
+
+	public String getTicker() {
+		return ticker;
+	}
+
+	public BigDecimal getQuantity() {
+		return quantity;
+	}
+
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public BigDecimal getCommission() {
+		return commission;
+	}
 }

@@ -70,14 +70,16 @@ public final class TradeRate extends GenericModelEventSource {
 		fireEvent(new JournalCreatedModelEvent(this));
 	}
 
-	public void openJournal(File file) {
-		System.out.println(file);
+	public void openJournal(File file) throws JournalLoadException {
+		Journal openedJournal = new Journal("", "");
+		openedJournal.loadFromFile(file);
+		journal = openedJournal;
 		fireEvent(new JournalOpenedModelEvent(this));
 	}
 
-	public void saveJournal(File file) throws JournalNotLoadedException {
+	public void saveJournal(File file) throws JournalNotLoadedException, JournalSaveException {
 		assertJournalIsLoaded();
-		System.out.println(file);
+		journal.saveToFile(file);
 		fireEvent(new JournalSavedModelEvent(this));
 	}
 
