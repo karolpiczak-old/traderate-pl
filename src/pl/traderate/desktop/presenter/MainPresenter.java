@@ -91,8 +91,11 @@ public class MainPresenter extends GenericPresenter {
 			viewModel.setAccountNodes(model.getAccounts());
 			viewModel.setJournalName(model.getJournalName());
 			viewModel.setJournalOwner(model.getJournalOwner());
+			viewModel.setSelectedNode(model.getPortfolio(0));
 		} catch (JournalNotLoadedException ignored) {
 
+		} catch (ObjectNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -102,6 +105,7 @@ public class MainPresenter extends GenericPresenter {
 		viewModel.purgeAccountNodes();
 		viewModel.purgeJournalName();
 		viewModel.purgeJournalOwner();
+		viewModel.purgeSelectedNode();
 	}
 
 	@Override
@@ -391,16 +395,13 @@ public class MainPresenter extends GenericPresenter {
 						e.printStackTrace();
 					}
 					presenter.summaryPresenter.handleViewEvent(new SummaryPresenter.Events.PortfolioSelected(this, portfolio));
+					presenter.viewModel.setSelectedNode(portfolio);
 				}
 
 				if (node.getUserObject() instanceof AccountDTO) {
-					AccountDTO account = null;
-					try {
-						account = presenter.model.getAccount(((AccountDTO) node.getUserObject()).ID);
-					} catch (ObjectNotFoundException | JournalNotLoadedException e) {
-						e.printStackTrace();
-					}
+					AccountDTO account = (AccountDTO) node.getUserObject();
 					presenter.summaryPresenter.handleViewEvent(new SummaryPresenter.Events.AccountSelected(this, account));
+					presenter.viewModel.setSelectedNode(account);
 				}
 			}
 		}

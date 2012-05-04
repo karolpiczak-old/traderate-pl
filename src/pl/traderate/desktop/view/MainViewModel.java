@@ -21,6 +21,7 @@
 package pl.traderate.desktop.view;
 
 import pl.traderate.core.AccountDTO;
+import pl.traderate.core.PortfolioDetailsDTO;
 import pl.traderate.core.PortfolioNodeDTO;
 import pl.traderate.core.TradeRateConfig;
 import pl.traderate.desktop.presenter.MainPresenter;
@@ -28,6 +29,7 @@ import pl.traderate.desktop.presenter.MainPresenter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class MainViewModel extends GenericViewModel {
@@ -35,7 +37,17 @@ public class MainViewModel extends GenericViewModel {
 	protected MainView view;
 
 	private PortfolioNodeDTO rootPortfolioNode;
+
+	private Object selectedNode;
 	
+	private SelectedType selectedType;
+
+	private String selectedName;
+
+	private BigDecimal selectedCash;
+
+	private BigDecimal selectedAggregatedCash;
+
 	private ArrayList<AccountDTO> accountNodes;
 
 	private DefaultTreeModel navigationTree;
@@ -107,7 +119,37 @@ public class MainViewModel extends GenericViewModel {
 		}
 		notifyChange(SyncType.NODES);
 	}
-	
+
+	public void setSelectedNode(Object selectedNode) {
+		this.selectedNode = selectedNode;
+		
+		if (this.selectedNode instanceof PortfolioDetailsDTO) {
+			PortfolioDetailsDTO portfolio = (PortfolioDetailsDTO) this.selectedNode;
+			this.selectedType = SelectedType.PORTFOLIO;
+			this.selectedName = portfolio.name;
+			this.selectedCash = portfolio.cashBalance;
+			this.selectedAggregatedCash = portfolio.aggregatedCashBalance;
+			notifyChange(SyncType.INFO);
+		}
+		
+		if (this.selectedNode instanceof AccountDTO) {
+			AccountDTO account = (AccountDTO) this.selectedNode;
+			this.selectedType = SelectedType.ACCOUNT;
+			this.selectedName = account.name;
+			this.selectedCash = account.unallocatedCash;
+			this.selectedAggregatedCash = account.cashBalance;
+			notifyChange(SyncType.INFO);
+		}
+	}
+
+	public void purgeSelectedNode() {
+		this.selectedNode = null;
+		this.selectedType = null;
+		this.selectedName = null;
+		this.selectedCash = null;
+		this.selectedAggregatedCash = null;
+	}
+
 	private void populatePortfolioChildren(DefaultMutableTreeNode portfolioNode) {
 		PortfolioNodeDTO portfolioTree = (PortfolioNodeDTO) portfolioNode.getUserObject();
 		
@@ -196,11 +238,33 @@ public class MainViewModel extends GenericViewModel {
 		return journalUnsaved;
 	}
 
+	public SelectedType getSelectedType() {
+		return selectedType;
+	}
+
+	public String getSelectedName() {
+		return selectedName;
+	}
+
+	public BigDecimal getSelectedCash() {
+		return selectedCash;
+	}
+
+	public BigDecimal getSelectedAggregatedCash() {
+		return selectedAggregatedCash;
+	}
+
 	//:-- ViewModel sync types ---------------------------------------------------------
 
 	public enum SyncType {
 		NODES,
 		META,
-		LOCK
+		LOCK,
+		INFO
+	}
+	
+	public enum SelectedType {
+		ACCOUNT,
+		PORTFOLIO
 	}
 }

@@ -40,8 +40,8 @@ public class AccountDTO {
 	AccountDTO(Account account) {
 		this.ID = account.getID();
 		this.name = account.getName();
-		this.cashBalance = account.getCashBalance();
-		this.unallocatedCash = account.getUnallocatedCash();
+		this.cashBalance = account.getCashBalance().setScale(2);
+		this.unallocatedCash = account.getUnallocatedCash().setScale(2);
 		this.holdings = new HoldingsDTO(account.getHoldings());
 		this.entries = new ArrayList<>();
 	}

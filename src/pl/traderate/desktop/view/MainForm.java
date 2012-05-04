@@ -74,6 +74,20 @@ public class MainForm extends GenericForm {
 
 	JLabel journalName;
 
+	JLabel infoNodeName;
+
+	JLabel infoNodeCash;
+
+	JLabel infoNodeCashLabel;
+
+	JLabel infoNodeHoldingsLabel;
+
+	JLabel infoNodeHoldings;
+
+	JLabel infoNodeValue;
+
+	JLabel infoNodeValueLabel;
+
 	JFileChooser fileChooser;
 
 	MainForm(GenericView view, GenericView summaryView, GenericView journalView) {
@@ -122,6 +136,7 @@ public class MainForm extends GenericForm {
 
 		navigationTree = new JTree();
 		navigationTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("---")));
+		navigationTree.setCellRenderer(new NodesTable.NodeRenderer());
 	}
 
 	public JFrame getFrame() {

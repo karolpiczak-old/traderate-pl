@@ -105,6 +105,29 @@ public class MainView extends GenericView {
 								form.closeJournalButton.setEnabled(true);
 								form.updateButton.setEnabled(true);
 							}
+							break;
+						case INFO:
+							if (viewModel.getSelectedName() == null) {
+								form.infoNodeName.setText("Brak wybranego portfela");
+								form.infoNodeName.setEnabled(false);
+								form.infoNodeCash.setText("---");
+								form.infoNodeCash.setEnabled(false);
+								form.infoNodeHoldings.setText("---");
+								form.infoNodeHoldings.setEnabled(false);
+								form.infoNodeValue.setText("---");
+								form.infoNodeValue.setEnabled(false);
+							} else {
+								form.infoNodeName.setText(viewModel.getSelectedName());
+								form.infoNodeName.setEnabled(true);
+								form.infoNodeCashLabel.setText(viewModel.getSelectedType() == MainViewModel.SelectedType.PORTFOLIO ? "Dostępne/zagregowane środki pieniężne:" : "Niezaalokowane/całkowite środki pieniężne:");
+								form.infoNodeCash.setText(viewModel.getSelectedCash() + " / " + viewModel.getSelectedAggregatedCash());
+								form.infoNodeCash.setEnabled(true);
+								form.infoNodeHoldings.setText("---");
+								form.infoNodeHoldings.setEnabled(true);
+								form.infoNodeValue.setText("---");
+								form.infoNodeValue.setEnabled(false);
+							}
+							break;
 					}
 				}
 			}

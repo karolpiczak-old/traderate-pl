@@ -42,8 +42,8 @@ public class PortfolioDetailsDTO {
 	PortfolioDetailsDTO(Portfolio portfolio) {
 		this.ID = portfolio.getID();
 		this.name = portfolio.getName();
-		this.cashBalance = portfolio.getCashBalance();
-		this.aggregatedCashBalance = portfolio.getAggregatedCashBalance();
+		this.cashBalance = portfolio.getCashBalance().setScale(2);
+		this.aggregatedCashBalance = portfolio.getAggregatedCashBalance().setScale(2);
 		this.holdings = new HoldingsDTO(portfolio.getHoldings());
 		this.aggregatedHoldings = new HoldingsDTO(portfolio.getAggregatedHoldings());
 		this.entries = new ArrayList<>();
