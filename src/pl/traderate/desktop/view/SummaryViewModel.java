@@ -102,8 +102,8 @@ public class SummaryViewModel extends GenericViewModel {
 		nodeID = account.ID;
 		nodeName = account.name;
 		nodeType = NodeType.ACCOUNT;
-		cashAvailable = account.cashBalance;
-		aggregatedCash = BigDecimal.ZERO;
+		cashAvailable = account.unallocatedCash;
+		aggregatedCash = account.cashBalance;
 		holdings = account.holdings;
 		
 		updateHoldings();
@@ -123,13 +123,14 @@ public class SummaryViewModel extends GenericViewModel {
 	}
 
 	private void updateHoldings() {
-		openHoldingsTreeTable = new HoldingTable("Otwarte pozycje", holdings.equityHoldings, false).getOutlineModel();
-		closedHoldingsTreeTable = new HoldingTable("Zamknięte pozycje", holdings.closedEquityHoldings, true).getOutlineModel();
+		HoldingTable.ParentType parentType = nodeType == NodeType.PORTFOLIO ? HoldingTable.ParentType.PORTFOLIO : HoldingTable.ParentType.ACCOUNT;
+		openHoldingsTreeTable = new HoldingTable("Otwarte pozycje", holdings.equityHoldings, false, parentType, nodeID).getOutlineModel();
+		closedHoldingsTreeTable = new HoldingTable("Zamknięte pozycje", holdings.closedEquityHoldings, true, parentType, nodeID).getOutlineModel();
 	}
 
 	private void purgeHoldings() {
-		openHoldingsTreeTable = new HoldingTable("Otwarte pozycje", new ArrayList<HoldingsDTO.EquityHoldingDTO>(), false).getOutlineModel();
-		closedHoldingsTreeTable = new HoldingTable("Zamknięte pozycje", new ArrayList<HoldingsDTO.EquityHoldingDTO>(), true).getOutlineModel();
+		openHoldingsTreeTable = new HoldingTable("Otwarte pozycje", new ArrayList<HoldingsDTO.EquityHoldingDTO>(), false, HoldingTable.ParentType.PORTFOLIO, 0).getOutlineModel();
+		closedHoldingsTreeTable = new HoldingTable("Zamknięte pozycje", new ArrayList<HoldingsDTO.EquityHoldingDTO>(), true, HoldingTable.ParentType.PORTFOLIO, 0).getOutlineModel();
 	}
 
 	public String getNodeName() {

@@ -22,6 +22,7 @@ package pl.traderate.desktop.view;
 
 import org.netbeans.swing.outline.DefaultOutlineModel;
 import org.netbeans.swing.outline.Outline;
+import org.netbeans.swing.outline.RenderDataProvider;
 import org.netbeans.swing.outline.RowModel;
 import pl.traderate.core.HoldingsDTO;
 
@@ -38,7 +39,7 @@ public class HoldingTable {
 
 	DefaultOutlineModel outlineModel;
 
-	public HoldingTable(String name, ArrayList<HoldingsDTO.EquityHoldingDTO> holdings, boolean closedMode) {
+	public HoldingTable(String name, ArrayList<HoldingsDTO.EquityHoldingDTO> holdings, boolean closedMode, ParentType parentType, int parentID) {
 		this.closedMode = closedMode;
 
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode(name);
@@ -59,7 +60,7 @@ public class HoldingTable {
 			root.add(holdingNode);
 		}
 
-		outlineModel = (DefaultOutlineModel) DefaultOutlineModel.createOutlineModel(new DefaultTreeModel(root), new HoldingRowModel(), true, "Ticker");
+		outlineModel = (DefaultOutlineModel) DefaultOutlineModel.createOutlineModel(new DefaultTreeModel(root), new HoldingRowModel(parentType, parentID), true, "Ticker");
 	}
 
 	public DefaultOutlineModel getOutlineModel() {
@@ -85,6 +86,15 @@ public class HoldingTable {
 	}
 
 	public class HoldingRowModel implements RowModel {
+
+		private ParentType parentType;
+
+		private int parentID;
+
+		public HoldingRowModel(ParentType parentType, int parentID) {
+			this.parentType = parentType;
+			this.parentID = parentID;
+		}
 
 		@Override
 		public int getColumnCount() {
@@ -124,17 +134,22 @@ public class HoldingTable {
 		}
 		
 		@Override
-		public Object getValueFor(Object o, int i) {
+		public Object getValueFor(Object o, int column) {
 			Object userObject = ((DefaultMutableTreeNode) o).getUserObject();
 
 			if (userObject instanceof HoldingsDTO.PerformanceDataDTO) {
 				HoldingsDTO.PerformanceDataDTO objectWithPerformance = (HoldingsDTO.PerformanceDataDTO) userObject;
-				switch (i) {
+				switch (column) {
 					case 1:
 						return closedMode ? objectWithPerformance.closePrice : objectWithPerformance.lastMarketPrice;
 					case 2:
 						return closedMode ? objectWithPerformance.closeValue : objectWithPerformance.marketValue;
 					case 3:
+						if (userObject instanceof HoldingsDTO.EquityTradeDTO) {
+							if (parentType == ParentType.PORTFOLIO && (((HoldingsDTO.EquityTradeDTO) userObject).portfolioID == parentID)) {
+								return objectWithPerformance.quantity +  " (wybrany portfel)";
+							}
+						}
 						return objectWithPerformance.quantity;
 					case 4:
 						return objectWithPerformance.openPrice;
@@ -163,5 +178,10 @@ public class HoldingTable {
 		public void setValueFor(Object o, int i, Object o1) {
 
 		}
+	}
+	
+	public enum ParentType {
+		ACCOUNT,
+		PORTFOLIO
 	}
 }

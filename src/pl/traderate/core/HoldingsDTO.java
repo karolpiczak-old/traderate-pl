@@ -82,9 +82,15 @@ public class HoldingsDTO {
 	public class EquityTradeDTO extends PerformanceDataDTO  {
 		public final String ticker;
 
+		public final int accountID;
+
+		public final int portfolioID;
+
 		public EquityTradeDTO(EquityTrade trade) {
 			super(trade);
 			this.ticker = trade.ticker;
+			this.accountID = trade.account.getID();
+			this.portfolioID = trade.portfolio.getID();
 		}
 
 		@Override
