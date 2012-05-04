@@ -170,6 +170,7 @@ public class MainPresenter extends GenericPresenter {
 		public void handleModelEvent(JournalOpenedModelEvent e) {
 			initializeViewModel();
 			viewModel.setInterfaceLock(false);
+			handleViewEvent(new Events.QuoteUpdateRequested(this));
 		}
 
 		@Override
