@@ -79,7 +79,11 @@ public class MainView extends GenericView {
 							if (viewModel.getJournalName() == null || viewModel.getJournalOwner() == null) {
 								form.journalName.setText("[Brak otwartego dziennika]");
 							} else {
-								form.journalName.setText(viewModel.getJournalName() + " (" + viewModel.getJournalOwner() + ")");
+								if (viewModel.isJournalUnsaved()) {
+									form.journalName.setText(viewModel.getJournalName() + " (" + viewModel.getJournalOwner() + ") *");
+								} else {
+									form.journalName.setText(viewModel.getJournalName() + " (" + viewModel.getJournalOwner() + ")");
+								}
 							}
 							break;
 						case LOCK:
@@ -89,8 +93,15 @@ public class MainView extends GenericView {
 								form.closeJournalButton.setEnabled(false);
 								form.updateButton.setEnabled(false);
 							} else {
-								form.saveJournalButton.setEnabled(true);
-								form.saveAsJournalButton.setEnabled(true);
+								if (viewModel.isJournalUnsaved()) {
+									form.saveJournalButton.setEnabled(true);
+									form.saveAsJournalButton.setEnabled(true);
+									form.journalName.setText(viewModel.getJournalName() + " (" + viewModel.getJournalOwner() + ") *");
+								} else {
+									form.saveJournalButton.setEnabled(false);
+									form.saveAsJournalButton.setEnabled(false);
+									form.journalName.setText(viewModel.getJournalName() + " (" + viewModel.getJournalOwner() + ")");
+								}
 								form.closeJournalButton.setEnabled(true);
 								form.updateButton.setEnabled(true);
 							}

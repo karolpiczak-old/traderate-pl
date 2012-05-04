@@ -133,11 +133,12 @@ public class MainPresenter extends GenericPresenter {
 
 		@Override
 		public void handleModelEvent(JournalUpdatedModelEvent e) {
-			// TODO: Implement
+			viewModel.setJournalUnsaved(true);
 		}
 
 		@Override
 		public void handleModelEvent(NodesUpdatedModelEvent e) {
+			viewModel.setJournalUnsaved(true);
 			try {
 				viewModel.setRootPortfolioNode(model.getPortfolioNodes());
 				viewModel.setAccountNodes(model.getAccounts());
@@ -153,12 +154,14 @@ public class MainPresenter extends GenericPresenter {
 
 		@Override
 		public void handleModelEvent(JournalClosedModelEvent e) {
+			viewModel.setJournalUnsaved(false);
 			purgeViewModel();
 			viewModel.setInterfaceLock(true);
 		}
 
 		@Override
 		public void handleModelEvent(JournalCreatedModelEvent e) {
+			viewModel.setJournalUnsaved(true);
 			initializeViewModel();
 			viewModel.setInterfaceLock(false);
 		}
@@ -171,7 +174,7 @@ public class MainPresenter extends GenericPresenter {
 
 		@Override
 		public void handleModelEvent(JournalSavedModelEvent e) {
-
+			viewModel.setJournalUnsaved(false);
 		}
 	}
 

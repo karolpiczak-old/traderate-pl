@@ -50,6 +50,8 @@ public class MainViewModel extends GenericViewModel {
 
 	private File journalFile;
 
+	private boolean journalUnsaved;
+
 	public MainViewModel(MainPresenter presenter, GenericView summaryView, GenericView journalView) {
 		super(presenter);
 
@@ -183,6 +185,15 @@ public class MainViewModel extends GenericViewModel {
 
 	public void setJournalFile(File journalFile) {
 		this.journalFile = journalFile;
+	}
+
+	public void setJournalUnsaved(boolean journalUnsaved) {
+		this.journalUnsaved = journalUnsaved;
+		notifyChange(SyncType.LOCK);
+	}
+
+	public boolean isJournalUnsaved() {
+		return journalUnsaved;
 	}
 
 	//:-- ViewModel sync types ---------------------------------------------------------
