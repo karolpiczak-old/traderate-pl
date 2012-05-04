@@ -83,11 +83,14 @@ public class MainForm extends GenericForm {
 		this.summaryView = summaryView;
 		this.journalView = journalView;
 
-		frame = new JFrame("Main");
+		Image icon = Toolkit.getDefaultToolkit().createImage(MainForm.class.getResource("/pl/traderate/desktop/icons/traderate.png"));
+		
+		frame = new JFrame("TradeRate.pl");
 		frame.setMinimumSize(new Dimension(640, 550));
 		frame.setPreferredSize(new Dimension(1200, 800));
 		frame.setContentPane(root);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setIconImage(icon);
 		frame.pack();
 		
 		fileChooser = new JFileChooser();
