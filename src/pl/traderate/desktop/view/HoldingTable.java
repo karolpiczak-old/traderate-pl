@@ -21,11 +21,15 @@
 package pl.traderate.desktop.view;
 
 import org.netbeans.swing.outline.DefaultOutlineModel;
+import org.netbeans.swing.outline.Outline;
 import org.netbeans.swing.outline.RowModel;
 import pl.traderate.core.HoldingsDTO;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class HoldingTable {
@@ -61,6 +65,24 @@ public class HoldingTable {
 	public DefaultOutlineModel getOutlineModel() {
 		return outlineModel;
 	}
+	
+	public static void install(Outline outline) {
+		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+
+		// Column 0 is now Ticker column, so rest is +1 to HoldingRowModel column index
+		outline.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
+		outline.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
+		outline.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+		outline.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+		outline.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
+		outline.getColumnModel().getColumn(6).setCellRenderer(rightRenderer);
+		outline.getColumnModel().getColumn(7).setCellRenderer(rightRenderer);
+		outline.getColumnModel().getColumn(8).setCellRenderer(rightRenderer);
+		outline.getColumnModel().getColumn(9).setCellRenderer(rightRenderer);
+
+		outline.setIntercellSpacing(new Dimension(20, 3));
+	}
 
 	public class HoldingRowModel implements RowModel {
 
@@ -69,6 +91,38 @@ public class HoldingTable {
 			return 9;
 		}
 
+		@Override
+		public Class getColumnClass(int i) {
+			switch (i) {
+				default: return String.class;
+			}
+		}
+
+		@Override
+		public String getColumnName(int i) {
+			switch (i) {
+				case 0:
+					return closedMode ? "Bieżąca cena rynkowa" : "%";
+				case 1:
+					return closedMode ? "Cena zamknięcia" : "Cena bieżąca";
+				case 2:
+					return closedMode ? "Wartość zamknięcia" : "Wartość bieżąca";
+				case 3:
+					return "Ilość";
+				case 4:
+					return "Cena otwarcia";
+				case 5:
+					return "Wartość otwarcia";
+				case 6:
+					return "Prowizja";
+				case 7:
+					return "Zysk";
+				case 8:
+					return "Zysk %";
+				default: return "";
+			}
+		}
+		
 		@Override
 		public Object getValueFor(Object o, int i) {
 			Object userObject = ((DefaultMutableTreeNode) o).getUserObject();
@@ -101,13 +155,6 @@ public class HoldingTable {
 		}
 
 		@Override
-		public Class getColumnClass(int i) {
-			switch (i) {
-				default: return String.class;
-			}
-		}
-
-		@Override
 		public boolean isCellEditable(Object o, int i) {
 			return false;
 		}
@@ -115,31 +162,6 @@ public class HoldingTable {
 		@Override
 		public void setValueFor(Object o, int i, Object o1) {
 
-		}
-
-		@Override
-		public String getColumnName(int i) {
-			switch (i) {
-				case 0:
-					return closedMode ? "Bieżąca cena rynkowa" : "%";
-				case 1:
-					return closedMode ? "Cena zamknięcia" : "Cena bieżąca";
-				case 2:
-					return closedMode ? "Wartość zamknięcia" : "Wartość bieżąca";
-				case 3:
-					return "Ilość";
-				case 4:
-					return "Cena otwarcia";
-				case 5:
-					return "Wartość otwarcia";
-				case 6:
-					return "Prowizja";
-				case 7:
-					return "Zysk";
-				case 8:
-					return "Zysk %";
-				default: return "";
-			}
 		}
 	}
 }

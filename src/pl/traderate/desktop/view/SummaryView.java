@@ -65,6 +65,8 @@ public class SummaryView extends GenericView {
 							form.aggregatedCash.setText(viewModel.getAggregatedCash() == null ? "---" : viewModel.getAggregatedCash().toPlainString());
 							form.openHoldingsTreeTable.setModel(viewModel.getOpenHoldingsTreeTable());
 							form.closedHoldingsTreeTable.setModel(viewModel.getClosedHoldingsTreeTable());
+							HoldingTable.install(form.openHoldingsTreeTable);
+							HoldingTable.install(form.closedHoldingsTreeTable);
 							break;
 					}
 				}
