@@ -26,6 +26,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 public class MainForm extends GenericForm {
@@ -103,7 +105,14 @@ public class MainForm extends GenericForm {
 		frame.setMinimumSize(new Dimension(640, 550));
 		frame.setPreferredSize(new Dimension(1200, 800));
 		frame.setContentPane(root);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		final MainView parent = this.view;
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (parent.confirmUnsaved()) System.exit(0);
+			}
+		});
 		frame.setIconImage(icon);
 		frame.pack();
 		

@@ -78,11 +78,14 @@ public class MainView extends GenericView {
 							form.versionText.setText(viewModel.getVersion());
 							if (viewModel.getJournalName() == null || viewModel.getJournalOwner() == null) {
 								form.journalName.setText("[Brak otwartego dziennika]");
+								form.frame.setTitle("TradeRate.pl");
 							} else {
 								if (viewModel.isJournalUnsaved()) {
 									form.journalName.setText(viewModel.getJournalName() + " (" + viewModel.getJournalOwner() + ") *");
+									form.frame.setTitle("TradeRate.pl » " + viewModel.getJournalName() + "*");
 								} else {
 									form.journalName.setText(viewModel.getJournalName() + " (" + viewModel.getJournalOwner() + ")");
+									form.frame.setTitle("TradeRate.pl » " + viewModel.getJournalName());
 								}
 							}
 							break;
@@ -97,10 +100,12 @@ public class MainView extends GenericView {
 									form.saveJournalButton.setEnabled(true);
 									form.saveAsJournalButton.setEnabled(true);
 									form.journalName.setText(viewModel.getJournalName() + " (" + viewModel.getJournalOwner() + ") *");
+									form.frame.setTitle("TradeRate.pl » " + viewModel.getJournalName() + "*");
 								} else {
 									form.saveJournalButton.setEnabled(false);
 									form.saveAsJournalButton.setEnabled(false);
 									form.journalName.setText(viewModel.getJournalName() + " (" + viewModel.getJournalOwner() + ")");
+									form.frame.setTitle("TradeRate.pl » " + viewModel.getJournalName());
 								}
 								form.closeJournalButton.setEnabled(true);
 								form.updateButton.setEnabled(true);
@@ -143,6 +148,17 @@ public class MainView extends GenericView {
 		return form;
 	}
 
+	public boolean confirmUnsaved() {
+		if (viewModel.isJournalUnsaved()) {
+			if (JOptionPane.showConfirmDialog(form.frame, "Czy na pewno kontynuować bez zapisania pliku dziennika?", "Niezachowane zmiany", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
+				return true;
+			}
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 //:-- Listeners for GUI events -------------------------------------------------
 
 	public class OnManageButtonClicked implements ActionListener {
@@ -165,11 +181,13 @@ public class MainView extends GenericView {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String name = (String) JOptionPane.showInputDialog(form.frame, "<html>Podaj <b>nazwę</b> tworzonego dziennika:</html>", "Nowy dziennik", JOptionPane.PLAIN_MESSAGE);
-			String owner = (String) JOptionPane.showInputDialog(form.frame, "<html>Podaj <b>autora</b> tworzonego dziennika:</html>", "Nowy dziennik", JOptionPane.PLAIN_MESSAGE);
+			if (confirmUnsaved()) {
+				String name = (String) JOptionPane.showInputDialog(form.frame, "<html>Podaj <b>nazwę</b> tworzonego dziennika:</html>", "Nowy dziennik", JOptionPane.PLAIN_MESSAGE);
+				String owner = (String) JOptionPane.showInputDialog(form.frame, "<html>Podaj <b>autora</b> tworzonego dziennika:</html>", "Nowy dziennik", JOptionPane.PLAIN_MESSAGE);
 
-			if (name != null && owner != null) {
-				fireEvent(new Events.NewJournal(this, name, owner));
+				if (name != null && owner != null) {
+					fireEvent(new Events.NewJournal(this, name, owner));
+				}
 			}
 		}
 	}
@@ -178,11 +196,13 @@ public class MainView extends GenericView {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int state = form.fileChooser.showOpenDialog(form.openJournalButton);
+			if (confirmUnsaved()) {
+				int state = form.fileChooser.showOpenDialog(form.openJournalButton);
 
-			if (state == JFileChooser.APPROVE_OPTION) {
-				File file = form.fileChooser.getSelectedFile();
-				fireEvent(new Events.OpenJournal(this, file));
+				if (state == JFileChooser.APPROVE_OPTION) {
+					File file = form.fileChooser.getSelectedFile();
+					fireEvent(new Events.OpenJournal(this, file));
+				}
 			}
 		}
 	}
@@ -231,7 +251,9 @@ public class MainView extends GenericView {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			fireEvent(new Events.CloseJournal(this));
+			if (confirmUnsaved()) {
+				fireEvent(new Events.CloseJournal(this));
+			}
 		}
 	}
 
