@@ -92,6 +92,12 @@ public class SummaryViewModel extends GenericViewModel {
 		nodeType = NodeType.PORTFOLIO;
 		cashAvailable = portfolio.cashBalance;
 		aggregatedCash = portfolio.aggregatedCashBalance;
+		currentValue = portfolio.currentValue;
+		openValue = portfolio.openValue;
+		paperGain = portfolio.paperGain;
+		realizedGain = portfolio.realizedGain;
+		realizedIncome = portfolio.realizedIncome;
+		realizedCost = portfolio.realizedCost;
 		holdings = portfolio.aggregatedHoldings;
 		
 		updateHoldings();
@@ -104,6 +110,12 @@ public class SummaryViewModel extends GenericViewModel {
 		nodeType = NodeType.ACCOUNT;
 		cashAvailable = account.unallocatedCash;
 		aggregatedCash = account.cashBalance;
+		currentValue = account.currentValue;
+		openValue = account.openValue;
+		paperGain = account.paperGain;
+		realizedGain = account.realizedGain;
+		realizedIncome = account.realizedIncome;
+		realizedCost = account.realizedCost;
 		holdings = account.holdings;
 		
 		updateHoldings();
@@ -116,6 +128,12 @@ public class SummaryViewModel extends GenericViewModel {
 		nodeType = null;
 		cashAvailable = null;
 		aggregatedCash = null;
+		currentValue = null;
+		openValue = null;
+		paperGain = null;
+		realizedGain = null;
+		realizedIncome = null;
+		realizedCost = null;
 		holdings = null;
 
 		purgeHoldings();

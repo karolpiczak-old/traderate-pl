@@ -113,7 +113,7 @@ public class MainView extends GenericView {
 							break;
 						case INFO:
 							if (viewModel.getSelectedName() == null) {
-								form.infoNodeName.setText("Brak wybranego portfela");
+								form.infoNodeName.setText("---");
 								form.infoNodeName.setEnabled(false);
 								form.infoNodeCash.setText("---");
 								form.infoNodeCash.setEnabled(false);
@@ -124,18 +124,19 @@ public class MainView extends GenericView {
 							} else {
 								form.infoNodeName.setText(viewModel.getSelectedName());
 								form.infoNodeName.setEnabled(true);
-								form.infoNodeCashLabel.setText(viewModel.getSelectedType() == MainViewModel.SelectedType.PORTFOLIO ? "Dostępne/zagregowane środki pieniężne:" : "Niezaalokowane/całkowite środki pieniężne:");
+								form.infoNodeCashLabel.setText(viewModel.getSelectedType() == MainViewModel.SelectedType.ACCOUNT ? "Niezaalokowane/całkowite środki pieniężne:" : "Dostępne/zagregowane środki pieniężne:");
 								form.infoNodeCash.setText(viewModel.getSelectedCash() + " / " + viewModel.getSelectedAggregatedCash());
 								form.infoNodeCash.setEnabled(true);
-								form.infoNodeHoldings.setText("---");
+								form.infoNodeHoldings.setText(viewModel.getSelectedCurrentValue() == null ? "---" : viewModel.getSelectedCurrentValue() + " / " + viewModel.getSelectedPaperGain());
 								form.infoNodeHoldings.setEnabled(true);
-								form.infoNodeValue.setText("---");
-								form.infoNodeValue.setEnabled(false);
+								form.infoNodeValue.setText(viewModel.getSelectedValue() == null ? "---" : viewModel.getSelectedValue().toPlainString());
+								form.infoNodeValue.setEnabled(true);
 							}
 							break;
 					}
 				}
 			}
+
 		});
 	}
 

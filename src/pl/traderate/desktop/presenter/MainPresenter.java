@@ -138,6 +138,16 @@ public class MainPresenter extends GenericPresenter {
 		@Override
 		public void handleModelEvent(JournalUpdatedModelEvent e) {
 			viewModel.setJournalUnsaved(true);
+			try {
+				if (viewModel.getSelectedType() == MainViewModel.SelectedType.PORTFOLIO) {
+					viewModel.setSelectedNode(model.getPortfolio(viewModel.getSelectedID()));
+				}
+				if (viewModel.getSelectedType() == MainViewModel.SelectedType.ACCOUNT) {
+					viewModel.setSelectedNode(model.getAccount(viewModel.getSelectedID()));
+				}
+			} catch (JournalNotLoadedException | ObjectNotFoundException e1) {
+				e1.printStackTrace();
+			}
 		}
 
 		@Override
@@ -146,14 +156,29 @@ public class MainPresenter extends GenericPresenter {
 			try {
 				viewModel.setRootPortfolioNode(model.getPortfolioNodes());
 				viewModel.setAccountNodes(model.getAccounts());
-			} catch (JournalNotLoadedException e1) {
+				if (viewModel.getSelectedType() == MainViewModel.SelectedType.PORTFOLIO) {
+					viewModel.setSelectedNode(model.getPortfolio(viewModel.getSelectedID()));
+				}
+				if (viewModel.getSelectedType() == MainViewModel.SelectedType.ACCOUNT) {
+					viewModel.setSelectedNode(model.getAccount(viewModel.getSelectedID()));
+				}
+			} catch (JournalNotLoadedException | ObjectNotFoundException e1) {
 				e1.printStackTrace();
 			}
 		}
 
 		@Override
 		public void handleModelEvent(QuoteUpdatedModelEvent e) {
-
+			try {
+				if (viewModel.getSelectedType() == MainViewModel.SelectedType.PORTFOLIO) {
+					viewModel.setSelectedNode(model.getPortfolio(viewModel.getSelectedID()));
+				}
+				if (viewModel.getSelectedType() == MainViewModel.SelectedType.ACCOUNT) {
+					viewModel.setSelectedNode(model.getAccount(viewModel.getSelectedID()));
+				}
+			} catch (JournalNotLoadedException | ObjectNotFoundException e1) {
+				e1.printStackTrace();
+			}
 		}
 
 		@Override
@@ -400,7 +425,12 @@ public class MainPresenter extends GenericPresenter {
 				}
 
 				if (node.getUserObject() instanceof AccountDTO) {
-					AccountDTO account = (AccountDTO) node.getUserObject();
+					AccountDTO account = null;
+					try {
+						account = presenter.model.getAccount(((AccountDTO) node.getUserObject()).ID);
+					} catch (ObjectNotFoundException | JournalNotLoadedException e) {
+						e.printStackTrace();
+					}
 					presenter.summaryPresenter.handleViewEvent(new SummaryPresenter.Events.AccountSelected(this, account));
 					presenter.viewModel.setSelectedNode(account);
 				}

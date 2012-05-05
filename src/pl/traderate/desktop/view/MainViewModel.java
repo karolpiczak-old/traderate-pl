@@ -48,6 +48,14 @@ public class MainViewModel extends GenericViewModel {
 
 	private BigDecimal selectedAggregatedCash;
 
+	private BigDecimal selectedCurrentValue;
+
+	private BigDecimal selectedPaperGain;
+
+	private BigDecimal selectedValue;
+
+	private int selectedID;
+
 	private ArrayList<AccountDTO> accountNodes;
 
 	private DefaultTreeModel navigationTree;
@@ -129,6 +137,10 @@ public class MainViewModel extends GenericViewModel {
 			this.selectedName = portfolio.name;
 			this.selectedCash = portfolio.cashBalance;
 			this.selectedAggregatedCash = portfolio.aggregatedCashBalance;
+			this.selectedCurrentValue = portfolio.currentValue;
+			this.selectedPaperGain = portfolio.paperGain;
+			this.selectedValue = portfolio.value;
+			this.selectedID = portfolio.ID;
 			notifyChange(SyncType.INFO);
 		}
 		
@@ -138,6 +150,10 @@ public class MainViewModel extends GenericViewModel {
 			this.selectedName = account.name;
 			this.selectedCash = account.unallocatedCash;
 			this.selectedAggregatedCash = account.cashBalance;
+			this.selectedCurrentValue = account.currentValue;
+			this.selectedPaperGain = account.paperGain;
+			this.selectedValue = account.value;
+			this.selectedID = account.ID;
 			notifyChange(SyncType.INFO);
 		}
 	}
@@ -148,6 +164,11 @@ public class MainViewModel extends GenericViewModel {
 		this.selectedName = null;
 		this.selectedCash = null;
 		this.selectedAggregatedCash = null;
+		this.selectedCurrentValue = null;
+		this.selectedPaperGain = null;
+		this.selectedValue = null;
+		this.selectedID = -1;
+		notifyChange(SyncType.INFO);
 	}
 
 	private void populatePortfolioChildren(DefaultMutableTreeNode portfolioNode) {
@@ -252,6 +273,22 @@ public class MainViewModel extends GenericViewModel {
 
 	public BigDecimal getSelectedAggregatedCash() {
 		return selectedAggregatedCash;
+	}
+
+	public BigDecimal getSelectedCurrentValue() {
+		return selectedCurrentValue;
+	}
+
+	public BigDecimal getSelectedPaperGain() {
+		return selectedPaperGain;
+	}
+
+	public BigDecimal getSelectedValue() {
+		return selectedValue;
+	}
+
+	public int getSelectedID() {
+		return selectedID;
 	}
 
 	//:-- ViewModel sync types ---------------------------------------------------------

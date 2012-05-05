@@ -56,6 +56,10 @@ public class SummaryForm extends GenericForm {
 
 	Outline closedHoldingsTreeTable;
 
+	JLabel cashAvailableLabel;
+
+	JLabel aggregatedCashLabel;
+
 	public SummaryForm(GenericView view) {
 		super(view);
 		this.view = (SummaryView) super.view;

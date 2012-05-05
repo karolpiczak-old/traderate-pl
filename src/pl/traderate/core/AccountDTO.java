@@ -32,6 +32,20 @@ public class AccountDTO {
 	public final BigDecimal cashBalance;
 	
 	public final BigDecimal unallocatedCash;
+	
+	public final BigDecimal currentValue;
+
+	public final BigDecimal openValue;
+
+	public final BigDecimal paperGain;
+
+	public final BigDecimal realizedGain;
+
+	public final BigDecimal realizedIncome;
+
+	public final BigDecimal realizedCost;
+	
+	public final BigDecimal value;
 
 	public final HoldingsDTO holdings;
 
@@ -43,6 +57,27 @@ public class AccountDTO {
 		this.cashBalance = account.getCashBalance().setScale(2);
 		this.unallocatedCash = account.getUnallocatedCash().setScale(2);
 		this.holdings = new HoldingsDTO(account.getHoldings());
+		if (account.getHoldings() != null) {
+			this.currentValue = account.getHoldings().getCurrentValue();
+			this.openValue = account.getHoldings().getOpenValue();
+			this.paperGain = account.getHoldings().getPaperGain();
+			this.realizedGain = account.getHoldings().getRealizedGain();
+			this.realizedIncome = account.getHoldings().getRealizedIncome();
+			this.realizedCost = account.getHoldings().getRealizedCost();
+			if (this.currentValue != null) {
+				this.value = this.currentValue.add(this.cashBalance);
+			} else {
+				this.value = null;
+			}
+		} else {
+			this.currentValue = null;
+			this.openValue = null;
+			this.paperGain = null;
+			this.realizedGain = null;
+			this.realizedIncome = null;
+			this.realizedCost = null;
+			this.value = null;
+		}
 		this.entries = new ArrayList<>();
 	}
 

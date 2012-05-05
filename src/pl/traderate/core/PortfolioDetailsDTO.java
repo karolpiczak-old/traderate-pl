@@ -33,6 +33,20 @@ public class PortfolioDetailsDTO {
 
 	public final BigDecimal aggregatedCashBalance;
 
+	public final BigDecimal currentValue;
+
+	public final BigDecimal openValue;
+
+	public final BigDecimal paperGain;
+
+	public final BigDecimal realizedGain;
+
+	public final BigDecimal realizedIncome;
+
+	public final BigDecimal realizedCost;
+
+	public final BigDecimal value;
+
 	public final HoldingsDTO holdings;
 
 	public final HoldingsDTO aggregatedHoldings;
@@ -46,6 +60,27 @@ public class PortfolioDetailsDTO {
 		this.aggregatedCashBalance = portfolio.getAggregatedCashBalance().setScale(2);
 		this.holdings = new HoldingsDTO(portfolio.getHoldings());
 		this.aggregatedHoldings = new HoldingsDTO(portfolio.getAggregatedHoldings());
+		if (portfolio.getAggregatedHoldings() != null) {
+			this.currentValue = portfolio.getAggregatedHoldings().getCurrentValue();
+			this.openValue = portfolio.getAggregatedHoldings().getOpenValue();
+			this.paperGain = portfolio.getAggregatedHoldings().getPaperGain();
+			this.realizedGain = portfolio.getAggregatedHoldings().getRealizedGain();
+			this.realizedIncome = portfolio.getAggregatedHoldings().getRealizedIncome();
+			this.realizedCost = portfolio.getAggregatedHoldings().getRealizedCost();
+			if (this.currentValue != null) {
+				this.value = this.currentValue.add(this.aggregatedCashBalance);
+			} else {
+				this.value = null;
+			}
+		} else {
+			this.currentValue = null;
+			this.openValue = null;
+			this.paperGain = null;
+			this.realizedGain = null;
+			this.realizedIncome = null;
+			this.realizedCost = null;
+			this.value = null;
+		}
 		this.entries = new ArrayList<>();
 	}
 

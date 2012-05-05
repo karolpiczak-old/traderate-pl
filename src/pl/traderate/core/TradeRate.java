@@ -265,6 +265,7 @@ public final class TradeRate extends GenericModelEventSource {
 		assertJournalIsLoaded();
 		journal.removeEntry(entryID);
 		journal.update();
+		updateQuotes();
 
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}

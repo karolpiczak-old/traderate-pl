@@ -61,8 +61,20 @@ public class SummaryView extends GenericView {
 					switch (syncType) {
 						case NODE:
 							form.portfolioName.setText(viewModel.getNodeName() == null ? "" : viewModel.getNodeName());
+							
+							form.paperGain.setText(viewModel.getPaperGain() == null ? "---" : viewModel.getPaperGain().toPlainString());
+							form.currentValue.setText(viewModel.getCurrentValue() == null ? "---" : viewModel.getCurrentValue().toPlainString());
+							form.openValue.setText(viewModel.getOpenValue() == null ? "---" : viewModel.getOpenValue().toPlainString());
+
+							form.cashAvailableLabel.setText(viewModel.getNodeType() == SummaryViewModel.NodeType.ACCOUNT ? "Niezaalokowane środki pieniężne:" : "Dostępne środki pieniężne:");
+							form.aggregatedCashLabel.setText(viewModel.getNodeType() == SummaryViewModel.NodeType.ACCOUNT ? "Całkowite środki pieniężne:" : "Zagregowane środki pieniężne:");
 							form.cashAvailable.setText(viewModel.getCashAvailable() == null ? "---" : viewModel.getCashAvailable().toPlainString());
 							form.aggregatedCash.setText(viewModel.getAggregatedCash() == null ? "---" : viewModel.getAggregatedCash().toPlainString());
+
+							form.realizedGain.setText(viewModel.getRealizedGain() == null ? "---" : viewModel.getRealizedGain().toPlainString());
+							form.realizedIncome.setText(viewModel.getRealizedIncome() == null ? "---" : viewModel.getRealizedIncome().toPlainString());
+							form.realizedCost.setText(viewModel.getRealizedCost() == null ? "---" : viewModel.getRealizedCost().toPlainString());
+
 							form.openHoldingsTreeTable.setModel(viewModel.getOpenHoldingsTreeTable());
 							form.closedHoldingsTreeTable.setModel(viewModel.getClosedHoldingsTreeTable());
 							HoldingTable.install(form.openHoldingsTreeTable);

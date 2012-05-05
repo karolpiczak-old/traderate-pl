@@ -33,7 +33,7 @@ import java.util.TreeSet;
  *
  */
 final class HoldingList {
-
+	
 	private TreeSet<EquityHolding> equityHoldings;
 	private TreeSet<EquityHolding> closedEquityHoldings;
 
@@ -215,4 +215,84 @@ final class HoldingList {
 	TreeSet<EquityHolding> getClosedEquityHoldings() {
 		return closedEquityHoldings;
 	}
+
+	public BigDecimal getCurrentValue() {
+		BigDecimal value = BigDecimal.ZERO;
+		try {
+			for (EquityHolding holding : equityHoldings) {
+				value = value.add(holding.getMarketValue());
+			}
+		} catch (NullPointerException e) {
+			return null;
+		}
+
+		return value.setScale(2);
+	}
+
+	public BigDecimal getOpenValue() {
+		BigDecimal value = BigDecimal.ZERO;
+		try {
+			for (EquityHolding holding : equityHoldings) {
+				value = value.add(holding.getOpenValue());
+			}
+		} catch (NullPointerException e) {
+			return null;
+		}
+
+		return value.setScale(2);
+	}
+
+	public BigDecimal getPaperGain() {
+		BigDecimal value = BigDecimal.ZERO;
+		try {
+			for (EquityHolding holding : equityHoldings) {
+				value = value.add(holding.getPaperGain());
+			}
+		} catch (NullPointerException e) {
+			return null;
+		}
+
+		return value.setScale(2);
+	}
+
+	public BigDecimal getRealizedGain() {
+		BigDecimal value = BigDecimal.ZERO;
+		try {
+			for (EquityHolding holding : closedEquityHoldings) {
+				value = value.add(holding.getRealizedGain());
+			}
+		} catch (NullPointerException e) {
+			return null;
+		}
+
+		return value.setScale(2);
+	}
+
+	public BigDecimal getRealizedIncome() {
+		BigDecimal value = BigDecimal.ZERO;
+		try {
+			for (EquityHolding holding : closedEquityHoldings) {
+				value = value.add(holding.getCloseValue());
+			}
+		} catch (NullPointerException e) {
+			return null;
+		}
+
+		return value.setScale(2);
+	}
+
+	public BigDecimal getRealizedCost() {
+		BigDecimal value = BigDecimal.ZERO;
+		try {
+			for (EquityHolding holding : closedEquityHoldings) {
+				value = value.add(holding.getOpenValue());
+			}
+		} catch (NullPointerException e) {
+			return null;
+		}
+
+		return value.setScale(2);
+	}
+
+
 }
