@@ -359,8 +359,8 @@ class Portfolio implements Identifiable {
 		return nodeDTO == null ? new PortfolioNodeDTO(this) : nodeDTO;
 	}
 
-	public PortfolioDetailsDTO getDetailsDTO() {
-		return detailsDTO == null ? new PortfolioDetailsDTO(this) : detailsDTO;
+	public PortfolioDetailsDTO getDetailsDTO(ArrayList<Account> accounts) {
+		return detailsDTO == null ? new PortfolioDetailsDTO(this, new PortfolioCashAllocationsDTO(this, accounts)) : detailsDTO;
 	}
 
 	public ArrayList<PortfolioEntry> getEntries() {

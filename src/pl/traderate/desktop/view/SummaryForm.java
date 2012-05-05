@@ -48,8 +48,6 @@ public class SummaryForm extends GenericForm {
 
 	JLabel realizedTax;
 
-	JLabel taxDue;
-
 	JLabel taxPaid;
 
 	Outline openHoldingsTreeTable;
@@ -59,6 +57,10 @@ public class SummaryForm extends GenericForm {
 	JLabel cashAvailableLabel;
 
 	JLabel aggregatedCashLabel;
+
+	JLabel taxDue;
+
+	JTable allocationTable;
 
 	public SummaryForm(GenericView view) {
 		super(view);
@@ -70,5 +72,9 @@ public class SummaryForm extends GenericForm {
 
 	void show() {
 
+	}
+
+	private void createUIComponents() {
+		allocationTable = new JTable();
 	}
 }

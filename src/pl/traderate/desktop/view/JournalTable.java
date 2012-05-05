@@ -125,7 +125,7 @@ public class JournalTable implements TableModel {
 			case 1:
 				return new SimpleDateFormat("dd.MM.yyyy").format(entry.date);
 			case 2:
-				return entry.account.toString();
+				return entry.accountName;
 			case 3:
 				return entry.portfolio == null ? "---" : entry.portfolio.toString();
 			case 4:

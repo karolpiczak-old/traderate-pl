@@ -194,6 +194,7 @@ public final class TradeRate extends GenericModelEventSource {
 		assertJournalIsLoaded();
 		journal.addCashAllocationEntry(accountID, portfolioID, tags, date, comment, amount);
 		journal.update();
+		updateQuotes();
 
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}
@@ -212,6 +213,7 @@ public final class TradeRate extends GenericModelEventSource {
 		assertJournalIsLoaded();
 		journal.addCashDeallocationEntry(accountID, portfolioID, tags, date, comment, amount);
 		journal.update();
+		updateQuotes();
 
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}
@@ -231,6 +233,7 @@ public final class TradeRate extends GenericModelEventSource {
 		assertJournalIsLoaded();
 		journal.addCashDepositEntry(accountID, tags, date, comment, amount);
 		journal.update();
+		updateQuotes();
 
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}
@@ -250,6 +253,7 @@ public final class TradeRate extends GenericModelEventSource {
 		assertJournalIsLoaded();
 		journal.addCashWithdrawalEntry(accountID, tags, date, comment, amount);
 		journal.update();
+		updateQuotes();
 
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}
@@ -281,7 +285,7 @@ public final class TradeRate extends GenericModelEventSource {
 		assertJournalIsLoaded();
 		ArrayList<AccountDTO> accountDTOs = new ArrayList<>();
 		for (Account account : journal.getAccounts()) {
-			accountDTOs.add(account.getDTO());
+			accountDTOs.add(account.getDTO(journal.getOrderedPortfolios()));
 		}
 
 		return accountDTOs;
@@ -289,7 +293,7 @@ public final class TradeRate extends GenericModelEventSource {
 
 	public AccountDTO getAccount(int accountID) throws ObjectNotFoundException, JournalNotLoadedException {
 		assertJournalIsLoaded();
-		return journal.getAccount(accountID).getDTO();
+		return journal.getAccount(accountID).getDTO(journal.getOrderedPortfolios());
 	}
 
 	public ArrayList<JournalEntryDTO> getEntries() throws JournalNotLoadedException {
@@ -329,7 +333,7 @@ public final class TradeRate extends GenericModelEventSource {
 
 	public PortfolioDetailsDTO getPortfolio(int portfolioID) throws ObjectNotFoundException, JournalNotLoadedException {
 		assertJournalIsLoaded();
-		return journal.getPortfolio(portfolioID).getDetailsDTO();
+		return journal.getPortfolio(portfolioID).getDetailsDTO(journal.getAccounts());
 	}
 
 	/**

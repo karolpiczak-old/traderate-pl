@@ -414,6 +414,19 @@ class Journal {
 		return findObjectByID(portfolioID, portfolios);
 	}
 
+	public ArrayList<Portfolio> getOrderedPortfolios() {
+		ArrayList<Portfolio> portfolios = new ArrayList<>();
+		populatePortfolioList(portfolios, this.portfolios.get(0));
+		return portfolios;
+	}
+	
+	private void populatePortfolioList(ArrayList<Portfolio> portfolios, Portfolio portfolio) {
+		portfolios.add(portfolio);
+		for (Portfolio child : portfolio.getChildren()) {
+			populatePortfolioList(portfolios, child);
+		}
+	}
+
 	void update() {
 		for (Account account : accounts) {
 			account.update();

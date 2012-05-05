@@ -363,8 +363,8 @@ class Account implements Identifiable {
 		return holdings;
 	}
 
-	public AccountDTO getDTO() {
-		return DTO == null ? new AccountDTO(this) : DTO;
+	public AccountDTO getDTO(ArrayList<Portfolio> portfolios) {
+		return DTO == null ? new AccountDTO(this, new AccountCashAllocationsDTO(this, portfolios)) : DTO;
 	}
 
 	public ArrayList<JournalEntry> getEntries() {

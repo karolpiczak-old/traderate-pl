@@ -79,6 +79,8 @@ public class SummaryView extends GenericView {
 							form.closedHoldingsTreeTable.setModel(viewModel.getClosedHoldingsTreeTable());
 							HoldingTable.install(form.openHoldingsTreeTable);
 							HoldingTable.install(form.closedHoldingsTreeTable);
+							form.allocationTable.setModel(viewModel.getAllocationTable());
+							AllocationTable.install(form.allocationTable);
 							break;
 					}
 				}

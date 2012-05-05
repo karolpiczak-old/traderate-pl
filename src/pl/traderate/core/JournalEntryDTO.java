@@ -31,7 +31,7 @@ public class JournalEntryDTO implements Comparable<JournalEntryDTO> {
 	
 	public final String comment;
 	
-	public final AccountDTO account;
+	public final String accountName;
 
 	public PortfolioNodeDTO portfolio;
 
@@ -53,7 +53,7 @@ public class JournalEntryDTO implements Comparable<JournalEntryDTO> {
 		this.ID = entry.ID;
 		this.date = new Date(entry.date.getTime());
 		this.comment = entry.comment;
-		this.account = entry.account.getDTO();
+		this.accountName = entry.account.getName();
 		this.deleteFlag = Boolean.FALSE;
 
 		entry.apply(this);

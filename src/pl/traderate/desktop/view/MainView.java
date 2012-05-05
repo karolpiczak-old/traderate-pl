@@ -30,6 +30,7 @@ import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.math.BigDecimal;
 
 import static pl.traderate.desktop.presenter.MainPresenter.Events;
 
@@ -129,7 +130,19 @@ public class MainView extends GenericView {
 								form.infoNodeCash.setEnabled(true);
 								form.infoNodeHoldings.setText(viewModel.getSelectedCurrentValue() == null ? "---" : viewModel.getSelectedCurrentValue() + " / " + viewModel.getSelectedPaperGain());
 								form.infoNodeHoldings.setEnabled(true);
-								form.infoNodeValue.setText(viewModel.getSelectedValue() == null ? "---" : viewModel.getSelectedValue().toPlainString());
+								
+								String value;
+								if (viewModel.getSelectedValue() == null || viewModel.getSelectedValueChange() == null) {
+									value = "---";
+								} else {
+									value = viewModel.getSelectedValue().toPlainString();
+									if (viewModel.getSelectedValueChange().compareTo(BigDecimal.ZERO) > 0) {
+										value = value + " (+" + viewModel.getSelectedValueChange().toPlainString() + ")";
+									} else {
+										value = value + " (" + viewModel.getSelectedValueChange().toPlainString() + ")";
+									}
+								}
+								form.infoNodeValue.setText(value);
 								form.infoNodeValue.setEnabled(true);
 							}
 							break;

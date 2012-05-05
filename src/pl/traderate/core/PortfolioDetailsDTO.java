@@ -47,13 +47,17 @@ public class PortfolioDetailsDTO {
 
 	public final BigDecimal value;
 
+	public final BigDecimal valueChange;
+
 	public final HoldingsDTO holdings;
 
 	public final HoldingsDTO aggregatedHoldings;
 
 	public final ArrayList<EntryDTO> entries;
 
-	PortfolioDetailsDTO(Portfolio portfolio) {
+	public final PortfolioCashAllocationsDTO cashAllocationsDTO;
+
+	PortfolioDetailsDTO(Portfolio portfolio, PortfolioCashAllocationsDTO cashAllocationsDTO) {
 		this.ID = portfolio.getID();
 		this.name = portfolio.getName();
 		this.cashBalance = portfolio.getCashBalance().setScale(2);
@@ -72,6 +76,11 @@ public class PortfolioDetailsDTO {
 			} else {
 				this.value = null;
 			}
+			if (this.paperGain != null) {
+				this.valueChange = this.paperGain.add(this.realizedGain);
+			} else {
+				this.valueChange = null;
+			}
 		} else {
 			this.currentValue = null;
 			this.openValue = null;
@@ -80,8 +89,10 @@ public class PortfolioDetailsDTO {
 			this.realizedIncome = null;
 			this.realizedCost = null;
 			this.value = null;
+			this.valueChange = null;
 		}
 		this.entries = new ArrayList<>();
+		this.cashAllocationsDTO = cashAllocationsDTO;
 	}
 
 	@Override

@@ -54,6 +54,8 @@ public class MainViewModel extends GenericViewModel {
 
 	private BigDecimal selectedValue;
 
+	private BigDecimal selectedValueChange;
+
 	private int selectedID;
 
 	private ArrayList<AccountDTO> accountNodes;
@@ -140,6 +142,7 @@ public class MainViewModel extends GenericViewModel {
 			this.selectedCurrentValue = portfolio.currentValue;
 			this.selectedPaperGain = portfolio.paperGain;
 			this.selectedValue = portfolio.value;
+			this.selectedValueChange = portfolio.valueChange;
 			this.selectedID = portfolio.ID;
 			notifyChange(SyncType.INFO);
 		}
@@ -153,6 +156,7 @@ public class MainViewModel extends GenericViewModel {
 			this.selectedCurrentValue = account.currentValue;
 			this.selectedPaperGain = account.paperGain;
 			this.selectedValue = account.value;
+			this.selectedValueChange = account.valueChange;
 			this.selectedID = account.ID;
 			notifyChange(SyncType.INFO);
 		}
@@ -167,6 +171,7 @@ public class MainViewModel extends GenericViewModel {
 		this.selectedCurrentValue = null;
 		this.selectedPaperGain = null;
 		this.selectedValue = null;
+		this.selectedValueChange = null;
 		this.selectedID = -1;
 		notifyChange(SyncType.INFO);
 	}
@@ -285,6 +290,10 @@ public class MainViewModel extends GenericViewModel {
 
 	public BigDecimal getSelectedValue() {
 		return selectedValue;
+	}
+
+	public BigDecimal getSelectedValueChange() {
+		return selectedValueChange;
 	}
 
 	public int getSelectedID() {

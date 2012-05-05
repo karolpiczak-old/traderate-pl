@@ -26,6 +26,7 @@ import pl.traderate.core.HoldingsDTO;
 import pl.traderate.core.PortfolioDetailsDTO;
 import pl.traderate.desktop.presenter.SummaryPresenter;
 
+import javax.swing.table.TableModel;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -38,6 +39,8 @@ public class SummaryViewModel extends GenericViewModel {
 	protected String nodeName;
 	
 	protected NodeType nodeType;
+
+	protected TableModel allocationTable;
 
 	public enum NodeType {
 		ACCOUNT,
@@ -99,6 +102,7 @@ public class SummaryViewModel extends GenericViewModel {
 		realizedIncome = portfolio.realizedIncome;
 		realizedCost = portfolio.realizedCost;
 		holdings = portfolio.aggregatedHoldings;
+		allocationTable = new AllocationTable(portfolio);
 		
 		updateHoldings();
 		notifyChange(SyncType.NODE);
@@ -117,7 +121,8 @@ public class SummaryViewModel extends GenericViewModel {
 		realizedIncome = account.realizedIncome;
 		realizedCost = account.realizedCost;
 		holdings = account.holdings;
-		
+		allocationTable = new AllocationTable(account);
+
 		updateHoldings();
 		notifyChange(SyncType.NODE);
 	}
@@ -135,6 +140,7 @@ public class SummaryViewModel extends GenericViewModel {
 		realizedIncome = null;
 		realizedCost = null;
 		holdings = null;
+		allocationTable = new AllocationTable(null);
 
 		purgeHoldings();
 		notifyChange(SyncType.NODE);
@@ -209,6 +215,10 @@ public class SummaryViewModel extends GenericViewModel {
 
 	public OutlineModel getClosedHoldingsTreeTable() {
 		return closedHoldingsTreeTable;
+	}
+
+	public TableModel getAllocationTable() {
+		return allocationTable;
 	}
 
 	public int getNodeID() {
