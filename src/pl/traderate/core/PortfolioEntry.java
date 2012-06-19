@@ -26,6 +26,9 @@ import pl.traderate.core.exception.InternalLogicError;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * A journal entry related to a particular portfolio.
+ */
 abstract class PortfolioEntry extends JournalEntry {
 
 	protected Portfolio portfolio;
@@ -36,6 +39,9 @@ abstract class PortfolioEntry extends JournalEntry {
 		this.portfolio = portfolio;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void attach() throws EntryInsertionException {
 		account.addEntry(this);
@@ -52,6 +58,9 @@ abstract class PortfolioEntry extends JournalEntry {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void detach() throws EntryInsertionException {
 		account.removeEntry(this);

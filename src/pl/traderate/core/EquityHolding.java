@@ -27,18 +27,38 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.TreeSet;
 
+/**
+ * A holding in equities.
+ */
 class EquityHolding extends Holding {
 
+	/**
+	 * Position of this holding.
+	 */
 	protected TreeSet<EquityPosition> positions;
 
+	/**
+	 * All trades of this holding.
+	 */
 	protected TreeSet<EquityTrade> trades;
 
+	/**
+	 * Creates a new equities holding.
+	 *
+	 * @param ticker Name of the held instrument
+	 * @param closed True if holding has been closed
+	 */
 	EquityHolding(String ticker, boolean closed) {
 		super(ticker, closed);
 		positions = new TreeSet<>();
 		trades = new TreeSet<>();
 	}
 
+	/**
+	 * Creates a copy of a holding object.
+	 *
+	 * @param holding Holding object to copy
+	 */
 	EquityHolding(EquityHolding holding) {
 		this(holding.ticker, holding.closed);
 		
@@ -51,6 +71,11 @@ class EquityHolding extends Holding {
 		}
 	}
 
+	/**
+	 * Merges the given holding object with this holding.
+	 *
+	 * @param otherHolding A holding object to be merged with
+	 */
 	void merge(EquityHolding otherHolding) {
 		for (EquityPosition otherPosition : otherHolding.positions) {
 			EquityPosition thisPosition;
@@ -67,6 +92,9 @@ class EquityHolding extends Holding {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void update() {
 		for (EquityPosition position : positions) {
@@ -110,6 +138,9 @@ class EquityHolding extends Holding {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void updateQuotes() {
 		for (EquityPosition position : positions) {
@@ -136,32 +167,67 @@ class EquityHolding extends Holding {
 		}
 	}
 
+	/**
+	 * Adds an equity position to the position list.
+	 *
+	 * @param position Equity position to be added
+	 */
 	void attach(EquityPosition position) {
 		position.setParent(this);
 		positions.add(position);
 	}
 
+	/**
+	 * Removes an equity position from the position list.
+	 *
+	 * @param position Equity position to be removed.
+	 */
 	void detach(EquityPosition position) {
 		position.setParent(null);
 		positions.remove(position);
 	}
-	
+
+	/**
+	 * Adds an equity trade to the list of trades.
+	 *
+	 * @param trade Trade to be added
+	 */
 	void attach(EquityTrade trade) {
 		trades.add(trade);
 	}
-	
+
+	/**
+	 * Removes an equity trade from the list of trades.
+	 *
+	 * @param trade Trade to be removed
+	 */
 	void detach(EquityTrade trade) {
 		trades.remove(trade);
 	}
 
+	/**
+	 * Returns all positions of this holding.
+	 *
+	 * @return Equity position of this holding
+	 */
 	TreeSet<EquityPosition> getPositions() {
 		return positions;
 	}
 
+	/**
+	 * Returns all trades of this holding.
+	 *
+	 * @return Equity trades of this holding
+	 */
 	TreeSet<EquityTrade> getTrades() {
 		return trades;
 	}
 
+	/**
+	 * Checks if holding is empty.
+	 *
+	 * @return True if there are no positions
+	 */
 	boolean isEmpty() {
 		return positions.isEmpty();
 	}

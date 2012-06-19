@@ -48,45 +48,32 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
- *
+ * Main journal class.
  *
  * <b>Implementation details:</b>
  * Barricade function. All input should be sanitized inside implementations of
  * public methods of this class. Further internal calls to other classes in this
  * package assume that no additional checking is needed and passed values adhere to
- * expected standards (e.g. cash amount are not negative etc.).
+ * expected standards (e.g. cash amounts are not negative etc.).
  */
 class Journal {
 
-	/** */
 	private final ArrayList<JournalEntry> entries;
 
-	/** */
 	private final ArrayList<Account> accounts;
 
-	/** */
 	private final ArrayList<Portfolio> portfolios;
 
-	/** */
 	private final ArrayList<Tag> tags;
 
-	/** */
 	private String name;
 
-	/** */
 	private String owner;
 
-	/** */
 	private final Date creationDate;
 
-	/** */
 	private Date lastUpdateDate;
 
-	/**
-	 *
-	 * @param name
-	 * @param owner
-	 */
 	Journal(String name, String owner) {
 		entries = new ArrayList<JournalEntry>(1000);
 		accounts = new ArrayList<Account>(10);
@@ -105,10 +92,6 @@ class Journal {
 		portfolios.add(new Portfolio(this, "Portfel globalny"));
 	}
 
-	/**
-	 *
-	 * @param name
-	 */
 	void addAccount(String name) {
 		accounts.add(new Account(name));
 	}
@@ -117,10 +100,6 @@ class Journal {
 		accounts.add(new Account(name, accountID));
 	}
 
-	/**
-	 * 
-	 * @param accountID
-	 */
 	void removeAccount(int accountID) throws ObjectNotFoundException, NodeNotEmptyException {
 		Account account = findObjectByID(accountID, accounts);
 		
@@ -131,12 +110,6 @@ class Journal {
 		}
 	}
 
-	/**
-	 *
-	 * @param name
-	 * @param parentID
-	 * @throws ObjectNotFoundException
-	 */
 	void addPortfolio(String name, int parentID) throws ObjectNotFoundException {
 		portfolios.add(new Portfolio(this, name, findObjectByID(parentID, portfolios)));
 	}
@@ -145,10 +118,6 @@ class Journal {
 		portfolios.add(new Portfolio(this, name, portfolioID, findObjectByID(parentID, portfolios)));
 	}
 
-	/**
-	 *
-	 * @param portfolioID
-	 */
 	void removePortfolio(int portfolioID) throws ObjectNotFoundException, NodeNotEmptyException, GlobalPortfolioRemovalException {
 		Portfolio portfolio = findObjectByID(portfolioID, portfolios);
 
@@ -206,17 +175,6 @@ class Journal {
 		addEntry(entry);
 	}
 
-	/**
-	 *
-	 * @param accountID
-	 * @param portfolioID
-	 * @param tags
-	 * @param date
-	 * @param comment
-	 * @param amount
-	 * @throws ObjectNotFoundException
-	 * @throws EntryInsertionException
-	 */
 	void addCashAllocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertNumberIsPositive(amount);
 
@@ -232,17 +190,6 @@ class Journal {
 		addEntry(entry);
 	}
 
-	/**
-	 *
-	 * @param accountID
-	 * @param portfolioID
-	 * @param tags
-	 * @param date
-	 * @param comment
-	 * @param amount
-	 * @throws ObjectNotFoundException
-	 * @throws EntryInsertionException
-	 */
 	void addCashDeallocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertNumberIsPositive(amount);
 
@@ -258,17 +205,6 @@ class Journal {
 		addEntry(entry);
 	}
 
-	/**
-	 *
-	 * @param accountID
-	 * @param tags
-	 * @param date
-	 * @param comment
-	 * @param amount
-	 * @throws ObjectNotFoundException
-	 * @throws EntryInsertionException
-	 * @throws InvalidInputException
-	 */
 	void addCashDepositEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertNumberIsPositive(amount);
 
@@ -283,16 +219,6 @@ class Journal {
 		addEntry(entry);
 	}
 
-	/**
-	 *
-	 * @param accountID
-	 * @param tags
-	 * @param date
-	 * @param comment
-	 * @param amount
-	 * @throws ObjectNotFoundException
-	 * @throws EntryInsertionException
-	 */
 	void addCashWithdrawalEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertNumberIsPositive(amount);
 
@@ -307,89 +233,45 @@ class Journal {
 		addEntry(entry);
 	}
 
-	/**
-	 *
-	 * @param entryID
-	 * @throws ObjectNotFoundException
-	 * @throws EntryInsertionException
-	 */
 	void removeEntry(int entryID) throws ObjectNotFoundException, EntryInsertionException {
 		JournalEntry entry = findObjectByID(entryID, entries);
 		removeEntry(entry);
 	}
 
-	/**
-	 *
-	 * @param entry
-	 * @throws EntryInsertionException
-	 */
 	private void addEntry(JournalEntry entry) throws EntryInsertionException {
 		entry.attach();
 		entries.add(entry);
 	}
 
-	/**
-	 *
-	 * @param entry
-	 * @throws EntryInsertionException
-	 */
 	private void removeEntry(JournalEntry entry) throws EntryInsertionException {
 		entry.detach();
 		entries.remove(entry);
 	}
 
-	/**
-	 *
-	 * @return
-	 */
 	String getName() {
 		return name;
 	}
 
-	/**
-	 *
-	 * @param name
-	 */
 	void setName(String name) {
 		this.name = name;
 	}
 
-	/**
-	 *
-	 * @return
-	 */
 	String getOwner() {
 		return owner;
 	}
 
-	/**
-	 *
-	 * @param owner
-	 */
 	void setOwner(String owner) {
 		this.owner = owner;
 	}
 
-	/**
-	 *
-	 * @return
-	 */
 	Date getCreationDate() {
 		return new Date(creationDate.getTime());
 	}
 
-	/**
-	 *
-	 * @return
-	 */
 	Date getLastUpdateDate() {
 		return new Date(lastUpdateDate.getTime());
 	}
 
-	/**
-	 *
-	 * @param lastUpdateDate
-	 */
 	void setLastUpdateDate(Date lastUpdateDate) {
 		this.lastUpdateDate = new Date(lastUpdateDate.getTime());
 	}
@@ -446,15 +328,7 @@ class Journal {
 			portfolio.updateQuotes();
 		}
 	}
-	
-	/**
-	 *
-	 * @param objectID
-	 * @param arrayList
-	 * @param <T>
-	 * @return
-	 * @throws ObjectNotFoundException
-	 */
+
 	private <T extends Identifiable> T findObjectByID(int objectID, ArrayList<T> arrayList) throws ObjectNotFoundException {
 		T object = null;
 

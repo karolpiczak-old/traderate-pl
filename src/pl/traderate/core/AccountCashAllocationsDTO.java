@@ -22,6 +22,9 @@ package pl.traderate.core;
 
 import java.util.ArrayList;
 
+/**
+ * A Data Transfer Object with information about account cash allocations.
+ */
 public class AccountCashAllocationsDTO extends CashAllocationsDTO {
 
 	AccountCashAllocationsDTO(Account account, ArrayList<Portfolio> portfolios) {

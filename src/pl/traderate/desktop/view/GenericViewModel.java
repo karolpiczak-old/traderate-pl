@@ -24,6 +24,9 @@ import pl.traderate.desktop.presenter.GenericPresenter;
 
 import java.util.Observable;
 
+/**
+ * A generic view model.
+ */
 public abstract class GenericViewModel extends Observable {
 
 	protected GenericView view;
@@ -32,6 +35,11 @@ public abstract class GenericViewModel extends Observable {
 
 	}
 
+	/**
+	 * Notifies all observers about changes in the view model.
+	 *
+	 * @param arg Argument to be passed to observers
+	 */
 	protected void notifyChange(Object arg) {
 		setChanged();
 		notifyObservers(arg);

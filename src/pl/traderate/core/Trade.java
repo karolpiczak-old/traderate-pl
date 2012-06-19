@@ -25,12 +25,13 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Date;
 
+/**
+ * A generic trade in a financial instrument.
+ */
 abstract class Trade extends PerformanceData implements Comparable<Trade>, Identifiable {
 
-	/** */
 	protected static int numberOfTradesCreated;
 
-	/** */
 	protected final int ID;
 	
 	protected Position parent;

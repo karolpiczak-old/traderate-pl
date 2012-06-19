@@ -20,17 +20,28 @@
 
 package pl.traderate.core;
 
+/**
+ * A holding in derivative instruments.
+ *
+ * Not yet implemented.
+ */
 class DerivativeHolding extends Holding {
 
 	DerivativeHolding(String ticker, boolean closed) {
 		super(ticker, closed);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void update() {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void updateQuotes() {
 

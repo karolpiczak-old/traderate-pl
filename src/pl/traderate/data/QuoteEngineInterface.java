@@ -22,8 +22,17 @@ package pl.traderate.data;
 
 import java.math.BigDecimal;
 
+/**
+ * A generic quote engine.
+ */
 interface QuoteEngineInterface {
 
+	/**
+	 * Returns last price of the instrument.
+	 *
+	 * @param ticker Instrument ticker
+	 * @return Last price
+	 */
 	public BigDecimal getLast(String ticker);
 
 }

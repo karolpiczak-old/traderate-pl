@@ -20,6 +20,9 @@
 
 package pl.traderate.core.exception;
 
+/**
+ * An exception thrown when a non-empty node is being removed.
+ */
 public class NodeNotEmptyException extends Exception {
 
 }

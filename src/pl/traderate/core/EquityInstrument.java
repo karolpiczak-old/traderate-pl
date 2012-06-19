@@ -20,5 +20,8 @@
 
 package pl.traderate.core;
 
+/**
+ * An equity instrument.
+ */
 class EquityInstrument extends Instrument {
 }

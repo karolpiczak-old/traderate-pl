@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- *
+ * A journal entry of a generic purchase transaction.
  */
 abstract class BuyTransactionEntry extends TransactionEntry {
 

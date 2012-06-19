@@ -30,23 +30,36 @@ import java.util.Collections;
 import java.util.Date;
 
 /**
+ * An analytical portfolio of financial instruments.
  *
+ * <p>This object represents a pure virtual portfolio. Portfolios are nested in
+ * a tree structure with a unique predefined global portfolio as the root node.</p>
  */
 class Portfolio implements Identifiable {
 
-	/** */
+	/**
+	 * An auto increment counter.
+	 */
 	private static int numberOfPortfoliosCreated;
 
-	/** */
+	/**
+	 * Handle to the journal object.
+	 */
 	private final Journal journal;
 
-	/** */
+	/**
+	 * Portfolio ID.
+	 */
 	private final int ID;
 
-	/** */
+	/**
+	 * Portfolio name as displayed in navigation.
+	 */
 	private String name;
 
-	/** */
+	/**
+	 * List of journal entries related to this portfolio.
+	 */
 	private final ArrayList<PortfolioEntry> entries;
 
 	/**
@@ -57,33 +70,51 @@ class Portfolio implements Identifiable {
 	 */
 	private Portfolio parent;
 
-	/** */
+	/**
+	 * Children portfolios.
+	 */
 	private final ArrayList<Portfolio> children;
 
-	/** */
+	/**
+	 * List of portfolio holdings.
+	 */
 	private HoldingList holdings;
 
-	/** */
+	/**
+	 * List of holdings aggregated among this portfolio and all subportfolios.
+	 */
 	private HoldingList aggregatedHoldings;
 
-	/** */
+	/**
+	 * Amount of cash available.
+	 */
 	private BigDecimal cashBalance;
 
-	/** */
+	/**
+	 * Amount of cash available (including subportfolios).
+	 */
 	private BigDecimal aggregatedCashBalance;
 
-	/** */
+	/**
+	 * Date of the most recent journal entry.
+	 */
 	private Date latestEntryDate;
 
-	/** */
+	/**
+	 * A streamlined DTO version of this portfolio.
+	 */
 	private PortfolioNodeDTO nodeDTO;
 
-	/** */
+	/**
+	 * A full DTO version of this portfolio.
+	 */
 	private PortfolioDetailsDTO detailsDTO;
 
 	/**
+	 * Creates a new global portfolio.
 	 *
-	 * @param name
+	 * @param journal Main journal
+	 * @param name Portfolio name
 	 */
 	Portfolio(Journal journal, String name) {
 		this.journal = journal;
@@ -96,9 +127,11 @@ class Portfolio implements Identifiable {
 	}
 
 	/**
+	 * Creates a new portfolio.
 	 *
-	 * @param name
-	 * @param parent
+	 * @param journal Main journal
+	 * @param name Portfolio name
+	 * @param parent Parent portfolio
 	 */
 	Portfolio(Journal journal, String name, Portfolio parent) {
 		this(journal, name);
@@ -107,6 +140,16 @@ class Portfolio implements Identifiable {
 		parent.children.add(this);
 	}
 
+	/**
+	 * Creates a new portfolio with a predefined ID.
+	 *
+	 * Internal use only.
+	 *
+	 * @param journal Main journal
+	 * @param name Portfolio name
+	 * @param ID Desired new portfolio ID
+	 * @param parent Parent portfolio
+	 */
 	Portfolio(Journal journal, String name, int ID, Portfolio parent) {
 		this.journal = journal;
 		this.ID = ID;
@@ -121,10 +164,18 @@ class Portfolio implements Identifiable {
 		parent.children.add(this);
 	}
 
+	/**
+	 * Removes a portfolio from children list.
+	 *
+	 * @param portfolio Portfolio to be removed
+	 */
 	void removeChild(Portfolio portfolio) {
 		children.remove(portfolio);
 	}
 
+	/**
+	 * Initializes all portfolio aggregates.
+	 */
 	private void initVolatile() {
 		holdings = new HoldingList();
 		aggregatedHoldings = new HoldingList();
@@ -134,16 +185,12 @@ class Portfolio implements Identifiable {
 	}
 
 	/**
-	 *
+	 * Resets all calculated values.
 	 */
 	private void wipeCalculations() {
 		initVolatile();
 	}
 
-	/**
-	 *
-	 * @throws PortfolioRecalcException
-	 */
 	private void recalc() throws PortfolioRecalcException {
 		wipeCalculations();
 
@@ -168,11 +215,6 @@ class Portfolio implements Identifiable {
 		}
 	}
 
-	/**
-	 *
-	 * @param entry
-	 * @throws EntryInsertionException
-	 */
 	public void addEntry(PortfolioEntry entry) throws EntryInsertionException {
 		// Checks if entry date is newer or equal to latestEntryDate
 		if (entry.getDate().compareTo(latestEntryDate) >= 0) {
@@ -198,11 +240,6 @@ class Portfolio implements Identifiable {
 		}
 	}
 
-	/**
-	 *
-	 * @param entry
-	 * @throws EntryInsertionException
-	 */
 	public void removeEntry(PortfolioEntry entry) throws EntryInsertionException {
 		try {
 			entries.remove(entry);
@@ -240,27 +277,16 @@ class Portfolio implements Identifiable {
 		updateCashBalance();
 	}
 
-	/**
-	 *
-	 * @param entry
-	 */
 	public void applyEntry(CashAllocationEntry entry) {
 		updateCashBalance();
 		updateCashAggregates();
 	}
 
-	/**
-	 *
-	 * @param entry
-	 */
 	public void applyEntry(CashDeallocationEntry entry) {
 		updateCashBalance();
 		updateCashAggregates();
 	}
 
-	/**
-	 *
-	 */
 	private void updateCashBalance() {
 		cashBalance = BigDecimal.ZERO;
 		
@@ -268,11 +294,7 @@ class Portfolio implements Identifiable {
 			cashBalance = cashBalance.add(account.getCashAllocation(this.ID));
 		}
 	}
-	
-	/**
-	 *
-	 *
-	 */
+
 	private void updateCashAggregates() {
 		aggregatedCashBalance = cashBalance;
 
@@ -299,10 +321,6 @@ class Portfolio implements Identifiable {
 		}
 	}
 
-	/**
-	 *
-	 * @return
-	 */
 	public int getID() {
 		return ID;
 	}
@@ -319,18 +337,10 @@ class Portfolio implements Identifiable {
 		Portfolio.numberOfPortfoliosCreated = numberOfPortfoliosCreated;
 	}
 
-	/**
-	 *
-	 * @return
-	 */
 	String getName() {
 		return name;
 	}
 
-	/**
-	 *
-	 * @param name
-	 */
 	void setName(String name) {
 		this.name = name;
 	}

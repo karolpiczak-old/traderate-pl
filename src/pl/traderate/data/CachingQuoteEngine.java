@@ -27,8 +27,14 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 
+/**
+ * A generic implementation of a caching quote engine.
+ */
 class CachingQuoteEngine implements QuoteEngineInterface {
 
+	/**
+	 * Caching time in nanoseconds
+	 */
 	private long cachingNanoTime = 1000000000L * 30;
 
 	private HashMap<String, Quote> quotes;
@@ -37,6 +43,9 @@ class CachingQuoteEngine implements QuoteEngineInterface {
 		quotes = new HashMap<>();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public BigDecimal getLast(String ticker) {
 		Quote quote = quotes.get(ticker);
@@ -49,6 +58,12 @@ class CachingQuoteEngine implements QuoteEngineInterface {
 		return quote.lastPrice;
 	}
 
+	/**
+	 * Gets a live quote for a given ticker.
+	 *
+	 * @param ticker Instrument ticker
+	 * @return Current price of instrument
+	 */
 	private BigDecimal fetchQuote(String ticker) {
 		try {
 			URL feed;

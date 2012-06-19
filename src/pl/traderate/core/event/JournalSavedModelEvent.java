@@ -20,12 +20,18 @@
 
 package pl.traderate.core.event;
 
+/**
+ * A model event fired when a journal file is saved.
+ */
 public class JournalSavedModelEvent extends GenericModelEvent {
 
 	public JournalSavedModelEvent(Object source) {
 		super(source);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void accept(GenericModelEventListener listener) {
 		listener.handleModelEvent(this);

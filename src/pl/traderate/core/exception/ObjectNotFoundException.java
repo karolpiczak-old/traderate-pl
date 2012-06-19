@@ -20,6 +20,9 @@
 
 package pl.traderate.core.exception;
 
+/**
+ * An exception thrown when an object cannot be found.
+ */
 public class ObjectNotFoundException extends Exception {
 
 }

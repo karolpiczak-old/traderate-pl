@@ -30,6 +30,9 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+/**
+ * A table model of journal entries.
+ */
 public class JournalTable implements TableModel {
 
 	private ArrayList<JournalEntryDTO> entries;

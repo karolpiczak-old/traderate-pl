@@ -23,6 +23,9 @@ package pl.traderate.core;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+/**
+ * A stripped down portfolio Data Transfer Object for use in tree navigation.
+ */
 public class PortfolioNodeDTO {
 
 	public final int ID;

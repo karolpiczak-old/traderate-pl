@@ -48,6 +48,9 @@ public final class Router {
 		return instance;
 	}
 
+	/**
+	 * Starts the main application view.
+	 */
 	public void goHome() {
 		MainPresenter presenter = new MainPresenter(model);
 		presenter.show();

@@ -20,12 +20,18 @@
 
 package pl.traderate.core.event;
 
+/**
+ * A model event fired upon a change in the @{link Journal} model.
+ */
 public class JournalUpdatedModelEvent extends GenericModelEvent {
 
 	public JournalUpdatedModelEvent(Object source) {
 		super(source);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void accept(GenericModelEventListener listener) {
 		listener.handleModelEvent(this);

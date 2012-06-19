@@ -20,6 +20,12 @@
 
 package pl.traderate.core.exception;
 
+/**
+ * A runtime error thrown when some unexpected internal behaviour occurs.
+ *
+ * This error should not be thrown during normal operation.
+ * Should be thrown only as a last resort for debugging purposes.
+ */
 public class InternalLogicError extends Error {
 
 }

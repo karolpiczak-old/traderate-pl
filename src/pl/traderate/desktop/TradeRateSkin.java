@@ -33,7 +33,7 @@ import org.pushingpixels.substance.api.shaper.ClassicButtonShaper;
 import java.awt.*;
 
 /**
- * <code>Magellan</code> skin. This class is part of officially supported API.
+ * Modified <code>Magellan</code> skin. This class is part of officially supported API.
  * 
  * @author Kirill Grouchnikov
  * @since version 5.3

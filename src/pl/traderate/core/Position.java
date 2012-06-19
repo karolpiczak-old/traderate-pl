@@ -23,6 +23,9 @@ package pl.traderate.core;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+/**
+ * A generic position in a financial instrument.
+ */
 abstract class Position extends PerformanceData implements IdentifiableByName, Comparable<Position> {
 
 	protected Holding parent;

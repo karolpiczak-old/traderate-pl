@@ -20,6 +20,9 @@
 
 package pl.traderate.core.exception;
 
+/**
+ * An exception thrown when no journal file has been loaded.
+ */
 public class JournalNotLoadedException extends Exception {
 
 }

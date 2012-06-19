@@ -23,38 +23,96 @@ package pl.traderate.core;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+/**
+ * An account Data Transfer Object.
+ */
 public class AccountDTO {
-	
+
+	/**
+	 * Unique ID of this account.
+	 */
 	public final int ID;
-	
+
+	/**
+	 * Account name.
+	 */
 	public final String name;
-	
+
+	/**
+	 * Physical cash deposited on this account.
+	 */
 	public final BigDecimal cashBalance;
-	
+
+	/**
+	 * The virtual amount of cash that has not been allocated.
+	 */
 	public final BigDecimal unallocatedCash;
-	
+
+	/**
+	 * Current market value of account holdings.
+	 */
 	public final BigDecimal currentValue;
 
+	/**
+	 * Value of account holdings in open prices (cost basis).
+	 */
 	public final BigDecimal openValue;
 
+	/**
+	 * Unrealized gain from account holdings.
+	 */
 	public final BigDecimal paperGain;
 
+	/**
+	 * Profit realized on account holdings.
+	 */
 	public final BigDecimal realizedGain;
 
+	/**
+	 * Income realized on account transactions.
+	 */
 	public final BigDecimal realizedIncome;
 
+	/**
+	 * Cost basis of realized transactions.
+	 */
 	public final BigDecimal realizedCost;
-	
+
+	/**
+	 * Aggregate account value.
+	 *
+	 * Includes current market value of holdings and cash balance.
+	 */
 	public final BigDecimal value;
 
+	/**
+	 * Aggregate change in value.
+	 *
+	 * Includes unrealized and realized gains.
+	 */
 	public final BigDecimal valueChange;
 
+	/**
+	 * Holdings of this account in a DTO form.
+	 */
 	public final HoldingsDTO holdings;
 
+	/**
+	 * History of journal entries for this account.
+	 */
 	public final ArrayList<EntryDTO> entries;
 
+	/**
+	 * Cash allocations of this account in a DTO form.
+	 */
 	public final AccountCashAllocationsDTO cashAllocationsDTO;
 
+	/**
+	 * Creates a DTO of a given account object.
+	 *
+	 * @param account               Account object
+	 * @param cashAllocationsDTO    Cash allocation DTO for a given account
+	 */
 	AccountDTO(Account account, AccountCashAllocationsDTO cashAllocationsDTO) {
 		this.ID = account.getID();
 		this.name = account.getName();

@@ -20,6 +20,9 @@
 
 package pl.traderate.desktop.view;
 
+/**
+ * A generic application form.
+ */
 public abstract class GenericForm {
 
 	protected GenericView view;

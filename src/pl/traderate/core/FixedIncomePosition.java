@@ -20,17 +20,28 @@
 
 package pl.traderate.core;
 
+/**
+ * A fixed income position.
+ *
+ * Not yet implemented.
+ */
 class FixedIncomePosition extends Position {
 
 	FixedIncomePosition(String name, boolean closed) {
 		super(name, closed);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void update() {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void updateQuotes() {
 

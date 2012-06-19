@@ -36,7 +36,9 @@ import java.util.Date;
  */
 public final class TradeRate extends GenericModelEventSource {
 
-	/** */
+	/**
+	 * Main instance.
+	 */
 	private final static TradeRate instance = new TradeRate();
 
 	/**
@@ -46,6 +48,9 @@ public final class TradeRate extends GenericModelEventSource {
 	 */
 	private Journal journal;
 
+	/**
+	 * Name of the opened journal.
+	 */
 	private String journalName;
 
 	/**
@@ -58,18 +63,29 @@ public final class TradeRate extends GenericModelEventSource {
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns the single instance of this class.
 	 */
 	public static TradeRate getInstance() {
 		return instance;
 	}
 
+	/**
+	 * Creates a new journal.
+	 *
+	 * @param name Journal name
+	 * @param owner Name of the owner
+	 */
 	public void createJournal(String name, String owner) {
 		journal = new Journal(name, owner);
 		fireEvent(new JournalCreatedModelEvent(this));
 	}
 
+	/**
+	 * Opens a new journal from file.
+	 *
+	 * @param file Journal file
+	 * @throws JournalLoadException Thrown when loading fails.
+	 */
 	public void openJournal(File file) throws JournalLoadException {
 		Journal openedJournal = new Journal("", "");
 		openedJournal.loadFromFile(file);
@@ -77,12 +93,24 @@ public final class TradeRate extends GenericModelEventSource {
 		fireEvent(new JournalOpenedModelEvent(this));
 	}
 
+	/**
+	 * Saves the current journal to a destination file.
+	 *
+	 * @param file Destination
+	 * @throws JournalNotLoadedException Thrown when no journal is currently loaded.
+	 * @throws JournalSaveException Thrown when journal could not be saved.
+	 */
 	public void saveJournal(File file) throws JournalNotLoadedException, JournalSaveException {
 		assertJournalIsLoaded();
 		journal.saveToFile(file);
 		fireEvent(new JournalSavedModelEvent(this));
 	}
 
+	/**
+	 * Closes current journal.
+	 *
+	 * @throws JournalNotLoadedException Thrown when no journal is currently loaded.
+	 */
 	public void closeJournal() throws JournalNotLoadedException {
 		assertJournalIsLoaded();
 		journal = null;
@@ -90,9 +118,10 @@ public final class TradeRate extends GenericModelEventSource {
 	}
 
 	/**
+	 * Adds a new account.
 	 *
-	 * @param name
-	 * @throws JournalNotLoadedException
+	 * @param name Account name
+	 * @throws JournalNotLoadedException Thrown when no journal is currently loaded.
 	 */
 	public void addAccount(String name) throws JournalNotLoadedException {
 		assertJournalIsLoaded();
@@ -102,8 +131,12 @@ public final class TradeRate extends GenericModelEventSource {
 	}
 
 	/**
+	 * Removes an account.
 	 *
-	 * @param accountID
+	 * @param accountID ID of the account to be removed
+	 * @throws JournalNotLoadedException Thrown when no journal is currently loaded.
+	 * @throws NodeNotEmptyException Thrown when the account is not empty.
+	 * @throws ObjectNotFoundException Thrown when no account with a given ID was found.
 	 */
 	public void removeAccount(int accountID) throws JournalNotLoadedException, ObjectNotFoundException, NodeNotEmptyException {
 		assertJournalIsLoaded();
@@ -113,11 +146,12 @@ public final class TradeRate extends GenericModelEventSource {
 	}
 
 	/**
+	 * Adds a new portfolio.
 	 *
-	 * @param name
-	 * @param parentID
-	 * @throws JournalNotLoadedException
-	 * @throws ObjectNotFoundException
+	 * @param name Portfolio name
+	 * @param parentID ID of a parent portfolio
+	 * @throws JournalNotLoadedException Thrown when no journal is currently loaded.
+	 * @throws ObjectNotFoundException Thrown when parent portfolio could not be found.
 	 */
 	public void addPortfolio(String name, int parentID) throws JournalNotLoadedException, ObjectNotFoundException {
 		assertJournalIsLoaded();
@@ -127,8 +161,9 @@ public final class TradeRate extends GenericModelEventSource {
 	}
 
 	/**
+	 * Removes a portfolio.
 	 *
-	 * @param portfolioID
+	 * @param portfolioID ID of portfolio to be removed
 	 * @throws JournalNotLoadedException
 	 */
 	public void removePortfolio(int portfolioID) throws JournalNotLoadedException, ObjectNotFoundException, NodeNotEmptyException, GlobalPortfolioRemovalException {
@@ -138,18 +173,6 @@ public final class TradeRate extends GenericModelEventSource {
 		fireEvent(new NodesUpdatedModelEvent(this));
 	}
 
-	/**
-	 *
-	 * @param accountID
-	 * @param portfolioID
-	 * @param tags
-	 * @param date
-	 * @param comment
-	 * @param ticker
-	 * @param quantity
-	 * @param price
-	 * @param commission
-	 */
 	public void addBuyEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws JournalNotLoadedException, EntryInsertionException, ObjectNotFoundException, ObjectConstraintsException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addBuyEquityTransactionEntry(accountID, portfolioID, tags, date, comment, ticker, quantity, price, commission);
@@ -159,18 +182,6 @@ public final class TradeRate extends GenericModelEventSource {
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
-	/**
-	 *
-	 * @param accountID
-	 * @param portfolioID
-	 * @param tags
-	 * @param date
-	 * @param comment
-	 * @param ticker
-	 * @param quantity
-	 * @param price
-	 * @param commission
-	 */
 	public void addSellEquityTransactionEntry(int accountID, int portfolioID, String tags, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) throws JournalNotLoadedException, EntryInsertionException, ObjectNotFoundException, ObjectConstraintsException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addSellEquityTransactionEntry(accountID, portfolioID, tags, date, comment, ticker, quantity, price, commission);
@@ -180,16 +191,6 @@ public final class TradeRate extends GenericModelEventSource {
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
-	/**
-	 *
-	 * @param accountID
-	 * @param portfolioID
-	 * @param tags
-	 * @param date
-	 * @param comment
-	 * @param amount
-	 * @throws pl.traderate.core.exception.JournalNotLoadedException
-	 */
 	public void addCashAllocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addCashAllocationEntry(accountID, portfolioID, tags, date, comment, amount);
@@ -199,16 +200,6 @@ public final class TradeRate extends GenericModelEventSource {
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
-	/**
-	 *
-	 * @param accountID
-	 * @param portfolioID
-	 * @param tags
-	 * @param date
-	 * @param comment
-	 * @param amount
-	 * @throws pl.traderate.core.exception.JournalNotLoadedException
-	 */
 	public void addCashDeallocationEntry(int accountID, int portfolioID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addCashDeallocationEntry(accountID, portfolioID, tags, date, comment, amount);
@@ -218,17 +209,6 @@ public final class TradeRate extends GenericModelEventSource {
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
-	/**
-	 *
-	 * @param accountID
-	 * @param tags
-	 * @param date
-	 * @param comment
-	 * @param amount
-	 * @throws JournalNotLoadedException
-	 * @throws ObjectNotFoundException
-	 * @throws EntryInsertionException
-	 */
 	public void addCashDepositEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addCashDepositEntry(accountID, tags, date, comment, amount);
@@ -238,17 +218,6 @@ public final class TradeRate extends GenericModelEventSource {
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
-	/**
-	 *
-	 * @param accountID
-	 * @param tags
-	 * @param date
-	 * @param comment
-	 * @param amount
-	 * @throws JournalNotLoadedException
-	 * @throws ObjectNotFoundException
-	 * @throws EntryInsertionException
-	 */
 	public void addCashWithdrawalEntry(int accountID, String tags, Date date, String comment, BigDecimal amount) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException, InvalidInputException {
 		assertJournalIsLoaded();
 		journal.addCashWithdrawalEntry(accountID, tags, date, comment, amount);
@@ -258,13 +227,6 @@ public final class TradeRate extends GenericModelEventSource {
 		fireEvent(new JournalUpdatedModelEvent(this));
 	}
 
-	/**
-	 *
-	 * @param entryID
-	 * @throws JournalNotLoadedException
-	 * @throws ObjectNotFoundException
-	 * @throws EntryInsertionException
-	 */
 	public void removeEntry(int entryID) throws JournalNotLoadedException, ObjectNotFoundException, EntryInsertionException {
 		assertJournalIsLoaded();
 		journal.removeEntry(entryID);
@@ -336,10 +298,6 @@ public final class TradeRate extends GenericModelEventSource {
 		return journal.getPortfolio(portfolioID).getDetailsDTO(journal.getAccounts());
 	}
 
-	/**
-	 *
-	 * @throws JournalNotLoadedException
-	 */
 	private void assertJournalIsLoaded() throws JournalNotLoadedException {
 		if (journal == null) throw new JournalNotLoadedException();
 	}

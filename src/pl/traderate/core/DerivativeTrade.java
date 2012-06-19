@@ -23,12 +23,20 @@ package pl.traderate.core;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * A trade in financial derivatives.
+ *
+ * Not yet implemented.
+ */
 class DerivativeTrade extends Trade {
 
 	DerivativeTrade(Account account, Portfolio portfolio, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
 		super(account, portfolio, date, comment, ticker, quantity, price, commission);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void updateQuotes() {
 

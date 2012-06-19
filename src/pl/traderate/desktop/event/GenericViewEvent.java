@@ -24,6 +24,9 @@ import pl.traderate.desktop.presenter.*;
 
 import java.util.EventObject;
 
+/**
+ * A generic view event.
+ */
 public class GenericViewEvent extends EventObject {
 
 	public GenericViewEvent(Object source) {

@@ -20,6 +20,11 @@
 
 package pl.traderate.core.exception;
 
+/**
+ * An exception thrown when portfolio history recalculation is not possible.
+ *
+ * This means that current history for given portfolio is in an invalid state.
+ */
 public class PortfolioRecalcException extends Exception {
 
 }

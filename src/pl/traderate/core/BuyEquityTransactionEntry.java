@@ -27,6 +27,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * A journal entry of an equity purchase transaction.
+ */
 class BuyEquityTransactionEntry extends BuyTransactionEntry {
 
 	protected BuyEquityTransactionEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date,
@@ -34,21 +37,33 @@ class BuyEquityTransactionEntry extends BuyTransactionEntry {
 		super(account, portfolio, tags, date, comment, ticker, quantity, price, commission, position);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void apply(Account account) throws EntryInsertionException {
 		account.applyEntry(this);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void apply(Portfolio portfolio) throws EntryInsertionException {
 		portfolio.applyEntry(this);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void apply(JournalEntryDTO journalEntryDTO) {
 		journalEntryDTO.setType(this);
 	}
 
+	/**
+	 * Returns transaction value.
+	 */
 	public BigDecimal getCashValue() {
 		return price.multiply(quantity).add(commission);
 	}

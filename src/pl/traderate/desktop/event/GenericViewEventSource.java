@@ -23,6 +23,9 @@ package pl.traderate.desktop.event;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A generic view events generating object.
+ */
 public abstract class GenericViewEventSource {
 	
 	private List<GenericViewEventListener> eventListeners = new ArrayList<GenericViewEventListener>();

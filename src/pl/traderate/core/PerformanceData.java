@@ -22,6 +22,11 @@ package pl.traderate.core;
 
 import java.math.BigDecimal;
 
+/**
+ * Common performance related data.
+ *
+ * Should be encapsulated inside higher level objects.
+ */
 class PerformanceData {
 
 	protected BigDecimal quantity;

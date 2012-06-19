@@ -25,15 +25,32 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.TreeSet;
 
+/**
+ * A position in equities.
+ */
 class EquityPosition extends Position {
 
+	/**
+	 * Trades forming this position.
+	 */
 	protected TreeSet<EquityTrade> trades;
 
+	/**
+	 * Creates a new equity position.
+	 *
+	 * @param name Position name
+	 * @param closed True if position has been closed
+	 */
 	EquityPosition(String name, boolean closed) {
 		super(name, closed);
 		trades = new TreeSet<>();
 	}
 
+	/**
+	 * Creates a copy of an equity position.
+	 *
+	 * @param position Position to copy
+	 */
 	EquityPosition(EquityPosition position) {
 		this(position.name, position.closed);
 		
@@ -42,12 +59,20 @@ class EquityPosition extends Position {
 		}
 	}
 
+	/**
+	 * Merges this object with another equity position.
+	 *
+	 * @param otherPosition Position to be merged.
+	 */
 	void merge(EquityPosition otherPosition) {
 		for (EquityTrade otherTrade: otherPosition.trades) {
 			this.trades.add(new EquityTrade(otherTrade));
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void update() {
 		quantity = BigDecimal.ZERO;
@@ -88,6 +113,9 @@ class EquityPosition extends Position {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void updateQuotes() {
 		for (EquityTrade trade : trades) {
@@ -113,12 +141,21 @@ class EquityPosition extends Position {
 			paperGainPercentage = paperGain.divide(openValue, 4, RoundingMode.HALF_EVEN).multiply(new BigDecimal(100)).setScale(2, RoundingMode.HALF_EVEN);
 		}
 	}
-	
+
+	/**
+	 * Adds a trade to this position's trade list.
+	 *
+	 * @param trade
+	 */
 	void attach(EquityTrade trade) {
 		trade.setParent(this);
 		trades.add(trade);
 	}
-	
+
+	/**
+	 * Removes a trade from the list of trades.
+	 * @param trade
+	 */
 	void detach(EquityTrade trade) {
 		trade.setParent(null);
 		trades.remove(trade);
@@ -127,6 +164,11 @@ class EquityPosition extends Position {
 		}
 	}
 
+	/**
+	 * Returns all trades of this position.
+	 *
+	 * @return Equity trades
+	 */
 	TreeSet<EquityTrade> getTrades() {
 		return trades;
 	}

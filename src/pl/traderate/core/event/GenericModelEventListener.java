@@ -20,6 +20,9 @@
 
 package pl.traderate.core.event;
 
+/**
+ * An interface implemented by all model event listeners.
+ */
 public interface GenericModelEventListener {
 
 	public void visitModelEvent(GenericModelEvent e);

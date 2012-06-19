@@ -24,8 +24,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * A journal entry of a generic cash operation.
+ */
 abstract class CashOperationEntry extends OperationEntry {
 
+	/**
+	 * Cash value of this operation.
+	 */
 	protected BigDecimal amount;
 
 	protected CashOperationEntry(Account account, ArrayList<Tag> tags, Date date, String comment, BigDecimal amount) {
@@ -34,6 +40,10 @@ abstract class CashOperationEntry extends OperationEntry {
 		this.amount = amount;
 	}
 
+	/**
+	 * Return cash amount of this operation.
+	 * @return Operation cash value
+	 */
 	public BigDecimal getAmount() {
 		return amount;
 	}

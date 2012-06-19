@@ -23,6 +23,9 @@ package pl.traderate.core;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * A DTO version of a journal entry.
+ */
 public class JournalEntryDTO implements Comparable<JournalEntryDTO> {
 
 	public final int ID;

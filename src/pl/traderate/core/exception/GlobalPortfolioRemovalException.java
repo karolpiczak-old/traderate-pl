@@ -20,6 +20,11 @@
 
 package pl.traderate.core.exception;
 
+/**
+ * An exception thrown when a removal of the global portfolio is requested.
+ *
+ * Per design, global portfolio cannot be removed.
+ */
 public class GlobalPortfolioRemovalException extends Exception {
 
 }

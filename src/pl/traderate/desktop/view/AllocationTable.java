@@ -33,6 +33,9 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+/**
+ * A table model of node cash allocations.
+ */
 public class AllocationTable implements TableModel {
 
 	private Type type;

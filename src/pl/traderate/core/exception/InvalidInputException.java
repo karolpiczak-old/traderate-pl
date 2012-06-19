@@ -20,6 +20,9 @@
 
 package pl.traderate.core.exception;
 
+/**
+ * An exception thrown when supplied input parameters are not valid type/range.
+ */
 public class InvalidInputException extends Exception {
 
 }

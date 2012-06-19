@@ -20,8 +20,16 @@
 
 package pl.traderate.core.event;
 
+/**
+ * A generic implementation of the {@link GenericModelEventListener} interface.
+ */
 public abstract class GenericModelEventListenerAdapter implements GenericModelEventListener {
 
+	/**
+	 * Visits given model event.
+	 *
+	 * @param e Model event
+	 */
 	@Override
 	public void visitModelEvent(GenericModelEvent e) {
 		e.accept(this);

@@ -20,17 +20,28 @@
 
 package pl.traderate.core;
 
+/**
+ * A fixed income holding.
+ *
+ * Not yet implemented.
+ */
 class FixedIncomeHolding extends Holding {
 
 	FixedIncomeHolding(String ticker, boolean closed) {
 		super(ticker, closed);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void update() {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void updateQuotes() {
 

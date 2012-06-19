@@ -33,6 +33,9 @@ import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * A table model of equity holdings.
+ */
 public class HoldingTable {
 
 	boolean closedMode;
@@ -66,7 +69,12 @@ public class HoldingTable {
 	public DefaultOutlineModel getOutlineModel() {
 		return outlineModel;
 	}
-	
+
+	/**
+	 * Formats Outline renderer.
+	 *
+	 * @param outline Outline to be formatted
+	 */
 	public static void install(Outline outline) {
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);

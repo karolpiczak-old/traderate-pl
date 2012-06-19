@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- *
+ * A generic financial transaction.
  */
 abstract class TransactionEntry extends PortfolioEntry {
 

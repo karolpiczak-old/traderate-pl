@@ -33,6 +33,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Journal data presenter.
+ *
+ * Presents operation and transaction history.
+ */
 public class JournalPresenter extends GenericPresenter {
 
 	protected JFrame parentFrame;

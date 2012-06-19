@@ -23,6 +23,9 @@ package pl.traderate.core;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * A generic account operation.
+ */
 abstract class OperationEntry extends JournalEntry {
 
 	protected OperationEntry(Account account, ArrayList<Tag> tags, Date date, String comment) {

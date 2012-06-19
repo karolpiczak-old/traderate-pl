@@ -20,6 +20,11 @@
 
 package pl.traderate.core.exception;
 
+/**
+ * An exception thrown when account history recalculation is not possible.
+ *
+ * This means that current history for given account is in an invalid state.
+ */
 public class AccountRecalcException extends Exception {
 
 }

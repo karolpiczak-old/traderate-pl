@@ -20,17 +20,28 @@
 
 package pl.traderate.core;
 
+/**
+ * A position in financial derivatives.
+ *
+ * Not yet implemented.
+ */
 class DerivativePosition extends Position {
 
 	DerivativePosition(String name, boolean closed) {
 		super(name, closed);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void update() {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void updateQuotes() {
 

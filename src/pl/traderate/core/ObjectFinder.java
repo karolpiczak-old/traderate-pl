@@ -24,8 +24,20 @@ import pl.traderate.core.exception.ObjectNotFoundException;
 
 import java.util.TreeSet;
 
+/**
+ * A helper object with a template function to find objects by name.
+ */
 public class ObjectFinder {
 
+	/**
+	 * Finds an object by its name.
+	 *
+	 * @param objectName Searched name
+	 * @param sortedSet Object set
+	 * @param <T> Object type
+	 * @return First object found
+	 * @throws ObjectNotFoundException Thrown when no object was found.
+	 */
 	static <T extends IdentifiableByName> T findByName(String objectName, TreeSet<T> sortedSet) throws ObjectNotFoundException {
 		T object = null;
 

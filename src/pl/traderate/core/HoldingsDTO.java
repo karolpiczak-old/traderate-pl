@@ -23,6 +23,9 @@ package pl.traderate.core;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+/**
+ * A DTO version of a HoldingList.
+ */
 public class HoldingsDTO {
 
 	public final ArrayList<EquityHoldingDTO> equityHoldings = new ArrayList<>();

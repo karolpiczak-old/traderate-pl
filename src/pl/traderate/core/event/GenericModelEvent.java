@@ -22,12 +22,20 @@ package pl.traderate.core.event;
 
 import java.util.EventObject;
 
+/**
+ * An undefined model event.
+ */
 public class GenericModelEvent extends EventObject {
 
 	public GenericModelEvent(Object source) {
 		super(source);
 	}
 
+	/**
+	 * Relays event handling to listener (visitor pattern).
+	 *
+	 * @param listener Visiting listener
+	 */
 	public void accept(GenericModelEventListener listener) {
 		listener.handleModelEvent(this);
 	}

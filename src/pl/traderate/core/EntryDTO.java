@@ -20,6 +20,9 @@
 
 package pl.traderate.core;
 
+/**
+ * A journal entry Data Transfer Object.
+ */
 public class EntryDTO {
 
 }

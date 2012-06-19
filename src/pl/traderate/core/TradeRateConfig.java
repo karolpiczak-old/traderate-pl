@@ -36,6 +36,11 @@ public final class TradeRateConfig {
 
 	}
 
+	/**
+	 * Checks if deferred computation mode is active.
+	 *
+	 * @return True if in batch loading mode
+	 */
 	public static boolean isDeferredComputationMode() {
 		return deferredComputationMode;
 	}
@@ -43,7 +48,7 @@ public final class TradeRateConfig {
 	static void setDeferredComputationMode(boolean deferredComputationMode) {
 		TradeRateConfig.deferredComputationMode = deferredComputationMode;
 	}
-	
+
 	public static String getVersion() {
 		return "TradeRate.pl 12.05";
 	}

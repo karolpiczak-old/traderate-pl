@@ -23,12 +23,20 @@ package pl.traderate.core;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * A fixed income trade.
+ *
+ * Not yet implemented.
+ */
 class FixedIncomeTrade extends Trade {
 
 	FixedIncomeTrade(Account account, Portfolio portfolio, Date date, String comment, String ticker, BigDecimal quantity, BigDecimal price, BigDecimal commission) {
 		super(account, portfolio, date, comment, ticker, quantity, price, commission);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	void updateQuotes() {
 

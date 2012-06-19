@@ -23,7 +23,7 @@ package pl.traderate.core;
 import java.util.ArrayList;
 
 /**
- *
+ * A generic financial holding.
  */
 abstract class Holding extends PerformanceData implements IdentifiableByName, Comparable<Holding> {
 

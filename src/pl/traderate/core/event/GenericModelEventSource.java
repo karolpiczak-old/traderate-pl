@@ -23,6 +23,9 @@ package pl.traderate.core.event;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An abstract model event generating object.
+ */
 public abstract class GenericModelEventSource {
 
 	private List<GenericModelEventListener> eventListeners = new ArrayList<GenericModelEventListener>();

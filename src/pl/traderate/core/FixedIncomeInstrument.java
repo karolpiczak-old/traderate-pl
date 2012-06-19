@@ -20,5 +20,11 @@
 
 package pl.traderate.core;
 
+/**
+ * A fixed income instrument.
+ *
+ * Not yet implemented.
+ */
 class FixedIncomeInstrument extends Instrument {
+
 }

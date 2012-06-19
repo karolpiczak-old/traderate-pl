@@ -20,5 +20,10 @@
 
 package pl.traderate.core;
 
+/**
+ * A financial derivative instrument.
+ *
+ * Not yet implemented.
+ */
 class DerivativeInstrument extends Instrument {
 }

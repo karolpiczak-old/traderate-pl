@@ -26,6 +26,9 @@ import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.event.GenericViewEventListener;
 import pl.traderate.desktop.view.GenericViewModel;
 
+/**
+ * A generic presenter.
+ */
 public abstract class GenericPresenter implements GenericViewEventListener {
 
 	protected TradeRate model;

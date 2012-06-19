@@ -28,7 +28,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 /**
- *
+ * A generic type of a journal entry.
  */
 abstract class JournalEntry implements Serializable, Identifiable {
 

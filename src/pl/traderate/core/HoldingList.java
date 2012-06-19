@@ -30,11 +30,18 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 /**
- *
+ * A list of financial holdings for a given account or portfolio.
  */
 final class HoldingList {
-	
+
+	/**
+	 * Open holdings in equities.
+	 */
 	private TreeSet<EquityHolding> equityHoldings;
+
+	/**
+	 * Closed holdings in equities.
+	 */
 	private TreeSet<EquityHolding> closedEquityHoldings;
 
 	HoldingList() {
@@ -56,6 +63,11 @@ final class HoldingList {
 		update();
 	}
 
+	/**
+	 * Merges this list with another holding list.
+	 *
+	 * @param holdingList Holdings to be merged with
+	 */
 	void merge(HoldingList holdingList) {
 		for (EquityHolding otherHolding : holdingList.equityHoldings) {
 			EquityHolding thisHolding;
@@ -78,6 +90,12 @@ final class HoldingList {
 		}
 	}
 
+	/**
+	 * Adds a new purchase transaction to the holding list.
+	 *
+	 * @param entry An equity purchase journal entry
+	 * @throws EntryInsertionException Thrown when entry processing fails.
+	 */
 	void open(BuyEquityTransactionEntry entry) throws EntryInsertionException {
 		EquityTrade trade = new EquityTrade(entry.account, entry.portfolio, entry.date, entry.comment, entry.ticker, entry.quantity, entry.price, entry.commission);
 
@@ -103,6 +121,12 @@ final class HoldingList {
 		holding.attach(trade);
 	}
 
+	/**
+	 * Processes a new sell transaction.
+	 *
+	 * @param entry An equity sell journal entry
+	 * @throws EntryInsertionException Thrown when processing fails.
+	 */
 	void close(SellEquityTransactionEntry entry) throws EntryInsertionException {
 		EquityHolding holding;
 
@@ -154,7 +178,10 @@ final class HoldingList {
 			}
 		}
 	}
-	
+
+	/**
+	 * Updates holding aggregates.
+	 */
 	void update() {
 		for (EquityHolding holding : equityHoldings) {
 			holding.update();
@@ -165,6 +192,9 @@ final class HoldingList {
 		}
 	}
 
+	/**
+	 * Updates prices of all holdings.
+	 */
 	void updateQuotes() {
 		for (EquityHolding holding : equityHoldings) {
 			holding.updateQuotes();

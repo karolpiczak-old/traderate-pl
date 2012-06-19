@@ -23,16 +23,35 @@ package pl.traderate.core;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+/**
+ * A cash allocations DTO.
+ */
 public abstract class CashAllocationsDTO {
 
+	/**
+	 * List of individual cash allocations.
+	 */
 	public ArrayList<Allocation> allocations;
 
 	protected CashAllocationsDTO() {
 		allocations = new ArrayList<>();
 	}
 
+	/**
+	 * An individual cash allocation.
+	 *
+	 * Holds information about allocated amount and portfolio name.
+	 */
 	public class Allocation {
+
+		/**
+		 * Portfolio name.
+		 */
 		public String name;
+
+		/**
+		 * Allocated amount.
+		 */
 		public BigDecimal amount;
 
 		public Allocation(BigDecimal amount, String name) {

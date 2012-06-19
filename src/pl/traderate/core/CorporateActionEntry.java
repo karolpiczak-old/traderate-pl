@@ -23,6 +23,9 @@ package pl.traderate.core;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * A journal entry of a generic corporate action.
+ */
 abstract class CorporateActionEntry extends JournalEntry {
 
 	protected CorporateActionEntry(Account account, ArrayList<Tag> tags, Date date, String comment) {

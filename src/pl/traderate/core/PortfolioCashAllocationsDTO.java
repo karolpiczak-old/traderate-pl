@@ -22,6 +22,9 @@ package pl.traderate.core;
 
 import java.util.ArrayList;
 
+/**
+ * Sources of cash allocations for a given portfolio.
+ */
 public class PortfolioCashAllocationsDTO extends CashAllocationsDTO {
 
 	PortfolioCashAllocationsDTO(Portfolio portfolio, ArrayList<Account> accounts) {

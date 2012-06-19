@@ -24,8 +24,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * A journal entry of a generic cash reallocation operation.
+ */
 abstract class CashReallocationEntry extends PortfolioEntry {
 
+	/**
+	 * Cash value of this operation.
+	 */
 	protected BigDecimal amount;
 
 	protected CashReallocationEntry(Account account, Portfolio portfolio, ArrayList<Tag> tags, Date date, String comment, BigDecimal amount) {
@@ -34,6 +40,10 @@ abstract class CashReallocationEntry extends PortfolioEntry {
 		this.amount = amount;
 	}
 
+	/**
+	 * Returns the amount of this operation.
+	 * @return Operation cash value
+	 */
 	public BigDecimal getAmount() {
 		return amount;
 	}

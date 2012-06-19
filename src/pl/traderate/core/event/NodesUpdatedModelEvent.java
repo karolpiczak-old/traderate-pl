@@ -20,12 +20,18 @@
 
 package pl.traderate.core.event;
 
+/**
+ * A model event fired when a navigation tree node (any account or portfolio) gets updated.
+ */
 public class NodesUpdatedModelEvent extends GenericModelEvent {
 
 	public NodesUpdatedModelEvent(Object source) {
 		super(source);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void accept(GenericModelEventListener listener) {
 		listener.handleModelEvent(this);

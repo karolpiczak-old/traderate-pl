@@ -20,6 +20,9 @@
 
 package pl.traderate.core.exception;
 
+/**
+ * An exception thrown when supplied input parameters do not meet specific object constraints.
+ */
 public class ObjectConstraintsException extends Exception {
 
 }

@@ -27,6 +27,9 @@ import javax.swing.*;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * A generic view object.
+ */
 public abstract class GenericView extends GenericViewEventSource implements Observer {
 
 	GenericForm form;

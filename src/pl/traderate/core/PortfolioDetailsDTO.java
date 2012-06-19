@@ -23,6 +23,9 @@ package pl.traderate.core;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+/**
+ * A comprehensive version of a Portfolio DTO.
+ */
 public class PortfolioDetailsDTO {
 
 	public final int ID;

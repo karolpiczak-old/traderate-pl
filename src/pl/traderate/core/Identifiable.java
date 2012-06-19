@@ -20,7 +20,15 @@
 
 package pl.traderate.core;
 
+/**
+ * An interface defining an object that can be uniquely identified by an ID.
+ */
 interface Identifiable {
 
+	/**
+	 * Returns this object's ID.
+	 *
+	 * @return Object ID
+	 */
 	int getID();
 }

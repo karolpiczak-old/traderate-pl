@@ -20,12 +20,18 @@
 
 package pl.traderate.core.event;
 
+/**
+ * A model event fired when price quotes are updated.
+ */
 public class QuoteUpdatedModelEvent extends GenericModelEvent {
 
 	public QuoteUpdatedModelEvent(Object source) {
 		super(source);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void accept(GenericModelEventListener listener) {
 		listener.handleModelEvent(this);

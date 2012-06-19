@@ -30,6 +30,11 @@ import pl.traderate.desktop.event.GenericViewEvent;
 import pl.traderate.desktop.view.GenericView;
 import pl.traderate.desktop.view.SummaryViewModel;
 
+/**
+ * Node summary presenter.
+ *
+ * Presents a detailed view of an account or portfolio.
+ */
 public class SummaryPresenter extends GenericPresenter {
 
 	protected SummaryViewModel viewModel;

@@ -20,6 +20,9 @@
 
 package pl.traderate.desktop.event;
 
+/**
+ * A generic object listening for view events.
+ */
 public interface GenericViewEventListener {
 
 	public void handleViewEvent(GenericViewEvent e);

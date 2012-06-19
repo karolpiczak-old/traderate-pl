@@ -20,6 +20,9 @@
 
 package pl.traderate.core.exception;
 
+/**
+ * An exception thrown when a new entry cannot be inserted for some reason.
+ */
 public class EntryInsertionException extends Exception {
 
 }

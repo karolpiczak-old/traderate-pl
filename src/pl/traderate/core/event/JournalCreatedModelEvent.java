@@ -20,12 +20,18 @@
 
 package pl.traderate.core.event;
 
+/**
+ * A model event fired when a new journal is created.
+ */
 public class JournalCreatedModelEvent extends GenericModelEvent {
 
 	public JournalCreatedModelEvent(Object source) {
 		super(source);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void accept(GenericModelEventListener listener) {
 		listener.handleModelEvent(this);

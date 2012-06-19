@@ -61,9 +61,6 @@ public class MainView extends GenericView {
 		});
 	}
 
-	/**
-	 *
-	 */
 	protected void syncViewModel(final Object arg) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

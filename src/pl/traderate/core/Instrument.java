@@ -20,5 +20,8 @@
 
 package pl.traderate.core;
 
+/**
+ * A generic financial instrument.
+ */
 abstract class Instrument {
 }

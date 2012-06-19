@@ -38,6 +38,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Main application presenter.
+ *
+ * Presents the main and navigation views and renders additional GUI via subpresenters.
+ */
 public class MainPresenter extends GenericPresenter {
 
 	protected MainViewModel viewModel;
